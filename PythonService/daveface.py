@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, abort, make_response, request
+import trainer, predictor
 
 app = Flask(__name__)
 
@@ -12,11 +13,17 @@ def index():
 
 @app.route('/train')
 def train():
-    return "train"
+    if trainer.train():
+        return "Success!"
+    else:
+        return "Fail..."
 
 @app.route('/predict')
 def predict():
-    return "predict"
+    if predictor.predict():
+        return "Success!"
+    else:
+        return "Fail..."
 
 if __name__ == '__main__':
     app.run(debug=True)
