@@ -45,8 +45,6 @@ def train(input_folder_path, model_folder_name):
                 file_path_to = os.path.join(subdir, file_name_split[0] + "_2" + file_name_split[1])
                 print("Only 1 image found for training... Duplicating ", file_path_from)
                 copyfile(file_path_from, file_path_to)
-
-    # TODO: duplicate picture if only 1 exists
     
     print("Training...")
     
