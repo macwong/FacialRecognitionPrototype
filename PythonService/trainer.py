@@ -17,13 +17,20 @@ def train(input_folder_path, model_folder_name):
     print("Input Folder Path:", input_folder_path)
     print("Model Folder Name:", model_folder_name)
     
+    
     print("Checking Directories...")
     if os.path.exists(input_folder_path) == False:
         return False, "Invalid input folder!"
     
+    
+    print("Aligning faces...")
     train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
     processed_dir = os.path.join(train_data_path, "processed")
     
     align.align_faces(AlignOptions(input_folder_path, processed_dir))
+    
+    
+    print("Training...")
+    
     
     return True, ""

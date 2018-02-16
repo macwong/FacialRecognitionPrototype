@@ -1,2 +1,5 @@
 def predict():
-    return False
+    return True
+
+def predict_all():
+    return True

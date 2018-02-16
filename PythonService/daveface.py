@@ -41,12 +41,21 @@ def train():
             }), code
 
 
-@app.route('/predict')
+@app.route('/daveface/predict', methods=['POST'])
 def predict():
     if predictor.predict():
         return "Success!"
     else:
         return "Fail..."
+    
+@app.route('/daveface/predictall', methods=['POST'])
+def predict_all():
+    if predictor.predict_all():
+        return "Success!"
+    else:
+        return "Fail..."
+    
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
