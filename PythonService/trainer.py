@@ -25,9 +25,11 @@ def train(input_folder_path, model_folder_name):
     
     print("Aligning faces...")
     train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
-    processed_dir = os.path.join(train_data_path, "processed")
+    processed_dir = os.path.join(train_data_path, model_folder_name)
+    processed_dir = os.path.join(processed_dir, "data")
     
     align.align_faces(AlignOptions(input_folder_path, processed_dir))
+    
     
     
     print("Training...")
