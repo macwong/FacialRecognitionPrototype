@@ -1,2 +1,2 @@
-def train():
+def train(folder):
     return True
