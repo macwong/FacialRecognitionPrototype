@@ -43,10 +43,30 @@ def train():
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():
-    if predictor.predict():
-        return "Success!"
-    else:
-        return "Fail..."
+    print("Predicting started...")
+    returnValue = "Fail..."
+    
+    requestData = request.get_json()
+    
+    if not requestData or not 'image' in requestData:
+        print("Invalid JSON request data...", returnValue)
+        abort(400)
+        
+    image = requestData["image"]
+    
+    success, error = predictor.predict(image)
+    code = 400
+    
+    if success:
+        returnValue = "Success!"
+        code = 201
+
+    print("Predicting ended...", returnValue)
+    
+    return jsonify({
+            'success': success,
+            'error': error
+            }), code
 
 
 if __name__ == '__main__':
