@@ -31,6 +31,7 @@ def train(input_folder_path, model_folder_name):
     
     align.align_faces(AlignOptions(input_folder_path, processed_dir))
 
+    # TODO: duplicate picture if only 1 exists
     
     print("Training...")
     
