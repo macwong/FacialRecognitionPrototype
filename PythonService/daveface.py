@@ -11,21 +11,21 @@ def not_found(error):
 def index():
     return "Hello, World!"
 
-@app.route('/train', methods=['POST'])
+@app.route('/daveface/train', methods=['POST'])
 def train():
     print("Training started...")
     returnValue = "Fail..."
 
     requestData = request.get_json()
     
-    if not requestData or not 'folder' in requestData:
+    if not requestData or not 'input_folder_path' in requestData or not 'model_folder_name' in requestData:
         print("Invalid JSON request data...", returnValue)
         abort(400)
 
-    folder = requestData['folder']
-    print("Folder location:", folder)
+    input_folder_path = requestData['input_folder_path']
+    model_folder_name = requestData['model_folder_name']
     
-    if trainer.train(folder):
+    if trainer.train(input_folder_path, model_folder_name):
         returnValue = "Success!"
         
     print("Training ended...", returnValue)
