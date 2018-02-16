@@ -47,15 +47,7 @@ def predict():
         return "Success!"
     else:
         return "Fail..."
-    
-@app.route('/daveface/predictall', methods=['POST'])
-def predict_all():
-    if predictor.predict_all():
-        return "Success!"
-    else:
-        return "Fail..."
-    
-    
+
 
 if __name__ == '__main__':
     app.run(debug=True)
