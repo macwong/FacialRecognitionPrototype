@@ -1,6 +1,7 @@
 import os
 from shutil import copyfile
 import Helpers.align_dataset as align
+import classifier
 
 class AlignOptions():
     def __init__(self, input_dir, output_dir):
@@ -25,14 +26,16 @@ def train(input_folder_path, model_folder_name):
     
     print("Aligning faces...")
     train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
-    processed_dir = os.path.join(train_data_path, model_folder_name)
-    processed_dir = os.path.join(processed_dir, "data")
+    model_dir = os.path.join(train_data_path, model_folder_name)
+    processed_dir = os.path.join(model_dir, "data")
     
     align.align_faces(AlignOptions(input_folder_path, processed_dir))
-    
-    
+
     
     print("Training...")
     
+    classifier.classifier(mode = "TRAIN", 
+           data_dir = processed_dir, 
+           classifier_filename = os.path.join(model_dir, "classifier.pkl"))
     
     return True, ""
