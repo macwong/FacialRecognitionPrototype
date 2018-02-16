@@ -3,15 +3,14 @@ from shutil import copyfile
 import Helpers.align_dataset as align
 
 class AlignOptions():
-    def __init__(self):
-        self.input_dir = ""
-        self.output_dir = ""
-        self.image_size = 182
-        self.margin = 44
-        self.random_order = False
-        self.gpu_memory_fraction = 1.0
+    def __init__(self, input_dir, output_dir):
+        self.input_dir = input_dir
+        self.output_dir = output_dir
+        self.image_size = 160
+        self.margin = 32
+        self.random_order = True
+        self.gpu_memory_fraction = 0.25
         self.detect_multiple_faces = False
-        
         
 
 def train(input_folder_path, model_folder_name):
@@ -22,9 +21,13 @@ def train(input_folder_path, model_folder_name):
     if os.path.exists(input_folder_path) == False:
         return False, "Invalid input folder!"
     
+    train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
+    input_dir = os.path.join(train_data_path, "test_input")
+    output_dir = os.path.join(train_data_path, "processed")
+    
 #    os.listdir(input_folder_path)
         
-    align.align_faces(AlignOptions())
+    align.align_faces(AlignOptions(input_dir, output_dir))
         
     
 
