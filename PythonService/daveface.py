@@ -18,7 +18,11 @@ def train():
 
     requestData = request.get_json()
     
-    if not requestData or not 'input_folder_path' in requestData or not 'model_folder_name' in requestData:
+    if (
+        not requestData 
+        or not 'input_folder_path' in requestData 
+        or not 'model_folder_name' in requestData
+    ):
         print("Invalid JSON request data...", returnValue)
         abort(400)
 
