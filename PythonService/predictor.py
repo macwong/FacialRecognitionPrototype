@@ -34,7 +34,8 @@ def predict(image):
     
     image = image_split[1]
 
-    file_name = str(uuid.uuid4()) + extension
+    file_guid = str(uuid.uuid4())
+    file_name = file_guid + extension
     file_path = os.path.join(temp_data_path, file_name)
     imgdata = base64.b64decode(image)
     
@@ -44,7 +45,18 @@ def predict(image):
     print("Align image to work with classifier")
     temp_predict = os.path.join(train_data_path, "temp_predict")
     align.align_faces(AlignOptions(temp_path, temp_predict))
-    
     shutil.rmtree(temp_path)
+    
+    print("Classify image")
+    temp_predict_data = os.path.join(temp_predict, "data")
+    pred_file_path = os.path.join(temp_predict_data, file_guid + ".png")
+    
+    if not os.path.exists(pred_file_path):
+        return False, "Could not detect face"
+    
+    print(pred_file_path)
+    
+    print("Cleanup...")
+#    shutil.rmtree(temp_predict)
     
     return True, ""
