@@ -3,6 +3,7 @@ import shutil
 import base64
 from mimetypes import guess_extension
 import uuid
+from classifier import classifier
 import Helpers.align_dataset as align
 from align_options import AlignOptions
 
@@ -54,7 +55,14 @@ def predict(image):
     if not os.path.exists(pred_file_path):
         return False, "Could not detect face"
     
-    print(pred_file_path)
+    model_folder = "test_model"
+    model_path = os.path.join(train_data_path, model_folder)
+    classifier_file = os.path.join(model_path, "classifier.pkl")
+    
+    classifier(mode = 'CLASSIFY', 
+           model = "D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb",
+           data_dir = temp_predict,
+           classifier_filename = classifier_file)
     
     print("Cleanup...")
 #    shutil.rmtree(temp_predict)

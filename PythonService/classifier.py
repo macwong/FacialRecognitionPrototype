@@ -30,6 +30,9 @@ class WrongAnswer():
         self.train_dirpath = train_dirpath
         self.actual_dirpath = actual_dirpath
 
+def predict():
+    pass
+    
 def classifier(mode, # = 'CLASSIFY', 
                data_dir, # = '../data/subset/train', 
                classifier_filename, # = '../data/subset/subset_classifier.pkl', 
@@ -108,7 +111,18 @@ def classifier(mode, # = 'CLASSIFY',
                     pickle.dump((model, class_names), outfile)
                 print('Saved classifier model to file "%s"' % classifier_filename_exp)
                 
-            elif (mode=='CLASSIFY'):
+            elif (mode == 'CLASSIFY'):
+                print('Testing classifier')
+                with open(classifier_filename_exp, 'rb') as infile:
+                    (model, class_names) = pickle.load(infile)
+                    
+                print('Loaded classifier model from file "%s"' % classifier_filename_exp)
+
+                predictions = model.predict_proba(emb_array)
+
+                print(predictions)                    
+                pass
+            elif (mode=='CLASSIFYALL'):
                 # Classify images
                 print('Testing classifier')
                 with open(classifier_filename_exp, 'rb') as infile:
