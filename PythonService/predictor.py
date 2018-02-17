@@ -62,6 +62,7 @@ def predict(image):
     classifier(mode = 'CLASSIFY', 
            model = "D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb",
            data_dir = temp_predict,
+           train_data_dir = os.path.join(model_path, "data"),
            classifier_filename = classifier_file)
     
     print("Cleanup...")

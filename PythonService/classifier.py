@@ -38,7 +38,7 @@ def classifier(mode, # = 'CLASSIFY',
                classifier_filename, # = '../data/subset/subset_classifier.pkl', 
                model = '../data/models/20170512-110547.pb', 
                use_split_dataset = False, 
-               test_data_dir = '../data/subset/test', 
+               train_data_dir = None, 
                batch_size=90, 
                image_size=160, 
                seed=666, 
@@ -120,7 +120,21 @@ def classifier(mode, # = 'CLASSIFY',
 
                 predictions = model.predict_proba(emb_array)
 
-                print(predictions)                    
+                best_class_indices = np.argmax(predictions, axis=1)
+                best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
+#                print(predictions)
+#                print(best_class_indices)
+#                print(best_class_probabilities)
+                
+                classify_list = os.listdir(train_data_dir)
+                print(train_data_dir)
+                print(len(classify_list))
+                
+#                for i in range(len(best_class_indices)):
+#                    print(os.path.dirname(paths[best_class_indices[i]]))
+#                    print(os.path.dirname(paths[i]))
+#                    print(paths[i])
+#                    print(best_class_indices[i])
                 pass
             elif (mode=='CLASSIFYALL'):
                 # Classify images
