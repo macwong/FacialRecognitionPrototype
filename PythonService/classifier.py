@@ -122,20 +122,12 @@ def classifier(mode, # = 'CLASSIFY',
 
                 best_class_indices = np.argmax(predictions, axis=1)
                 best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
-#                print(predictions)
-#                print(best_class_indices)
-#                print(best_class_probabilities)
                 
-                classify_list = os.listdir(train_data_dir)
-                print(train_data_dir)
-                print(len(classify_list))
+                classify_list = next(os.walk(train_data_dir))[1]
                 
-#                for i in range(len(best_class_indices)):
-#                    print(os.path.dirname(paths[best_class_indices[i]]))
-#                    print(os.path.dirname(paths[i]))
-#                    print(paths[i])
-#                    print(best_class_indices[i])
-                pass
+                for i in range(len(best_class_indices)):
+                    print(classify_list[best_class_indices[i]])
+                    
             elif (mode=='CLASSIFYALL'):
                 # Classify images
                 print('Testing classifier')
