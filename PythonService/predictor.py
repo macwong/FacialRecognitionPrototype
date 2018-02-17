@@ -16,18 +16,25 @@ def predict(image):
     print("Convert base64 image to temp file")
 
     # wb... 'w' = open for writing, 'b' = binary mode
-#    extension = guess_extension(image)
-#    print(image)
-#    print(extension)
+    image_split = image.split(',', 1)
     
-    image_prefix = "data:image/jpeg;base64,"
-    image = image[len(image_prefix):]
-    print(image)
-    file_name = str(uuid.uuid4()) + ".jpg"
+    prefix = image_split[0]
+    prefix = prefix[len("data:"):len(prefix) - len("base64,")]
+    extension = guess_extension(prefix)
+
+    if extension == None:
+        return False, "Not a valid file mime type"
+    
+    image = image_split[1]
+
+    file_name = str(uuid.uuid4()) + extension
     file_path = os.path.join(temp_path, file_name)
     imgdata = base64.b64decode(image)
     
     with open(file_path, "wb") as fh:
         fh.write(imgdata)
+        
+    
+    
     
     return True, ""
