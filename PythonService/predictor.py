@@ -59,11 +59,13 @@ def predict(image):
     model_path = os.path.join(train_data_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
-    classifier(mode = 'CLASSIFY', 
+    results = classifier(mode = 'CLASSIFY', 
            model = "D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb",
            data_dir = temp_predict,
            train_data_dir = os.path.join(model_path, "data"),
            classifier_filename = classifier_file)
+    
+    print(results)
     
     print("Cleanup...")
 #    shutil.rmtree(temp_predict)

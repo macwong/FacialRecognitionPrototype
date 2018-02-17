@@ -125,8 +125,13 @@ def classifier(mode, # = 'CLASSIFY',
                 
                 classify_list = next(os.walk(train_data_dir))[1]
                 
+                pred_names = []
                 for i in range(len(best_class_indices)):
-                    print(classify_list[best_class_indices[i]])
+                    pred_name = classify_list[best_class_indices[i]]
+                    pred_names.append(pred_name)
+                    print(pred_name)
+                    
+                return pred_names
                     
             elif (mode=='CLASSIFYALL'):
                 # Classify images
@@ -167,7 +172,7 @@ def classifier(mode, # = 'CLASSIFY',
                 accuracy = np.mean(np.equal(best_class_indices, labels))
                 print('\nAccuracy: %.3f' % accuracy)
             
-    return results
+    return None
 
             
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
