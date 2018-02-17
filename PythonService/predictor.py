@@ -1,4 +1,5 @@
 import os
+import shutil
 import base64
 from mimetypes import guess_extension
 import uuid
@@ -41,6 +42,9 @@ def predict(image):
         fh.write(imgdata)
         
     print("Align image to work with classifier")
-    align.align_faces(AlignOptions(temp_path, os.path.join(train_data_path, "temp_predict")))
+    temp_predict = os.path.join(train_data_path, "temp_predict")
+    align.align_faces(AlignOptions(temp_path, temp_predict))
+    
+    shutil.rmtree(temp_path)
     
     return True, ""
