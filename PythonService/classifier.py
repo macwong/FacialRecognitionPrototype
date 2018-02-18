@@ -131,7 +131,7 @@ def classifier(mode, # = 'CLASSIFY',
                     pred_names.append(pred_name)
                     print(pred_name)
                     
-                return pred_names
+                return True, pred_names, ""
                     
             elif (mode=='CLASSIFYALL'):
                 # Classify images
@@ -172,7 +172,7 @@ def classifier(mode, # = 'CLASSIFY',
                 accuracy = np.mean(np.equal(best_class_indices, labels))
                 print('\nAccuracy: %.3f' % accuracy)
             
-    return None
+    return True, None, ""
 
             
 def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
