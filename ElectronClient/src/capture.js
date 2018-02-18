@@ -10,11 +10,12 @@ navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
 
 window.addEventListener("DOMContentLoaded", () => {
     const videoEl = document.getElementById("video");
+    const $resultsContainer = $(document).find(".resultsContainer");
     // const canvasEl = document.getElementById("canvas");
     // const ctx = canvasEl.getContext("2d");
 
     $(videoEl).click((e) => {
-        captureImage(videoEl);
+        captureImage(videoEl, $resultsContainer);
     });
     // canvasEl.addEventListener("click", () => {
     //     console.log("test")
@@ -22,7 +23,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // });
 });
 
-function captureImage(videoEl) {
+function captureImage(videoEl, $resultsContainer) {
     var canvas = document.createElement("canvas");
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
@@ -33,12 +34,39 @@ function captureImage(videoEl) {
         url: "http://localhost:5000/daveface/predict",
         type: "POST",
         data: JSON.stringify({
-            imgBase64: dataURL
+            image: dataURL
         }),
         contentType: "application/json; charset=utf-8",
         dataType:"json"
     }).done((result) => {
-        console.log(result);
+        if(String.prototype.toLowerCase.call(result.success) === "true") {
+            var arrayLength = result.predictions.length;
+
+            if (arrayLength === 0) {
+                $resultsContainer.text("Dude! You're invisible!");
+            }
+            else {
+                var displayString = "Hello "
+                for (var i = 0; i < arrayLength; i++) {
+                    console.log(result.predictions[i]);
+                    //Do something
+                    if (i === 0) {
+                        displayString += result.predictions[i];
+                    }
+                    else if (i + 1 === arrayLength && i > 0) {
+                        displayString += " and " + result.predictions[i];
+                    }
+                    else {
+                        displayString += ", " + result.predictions[i];
+                    }
+                }
+
+                $resultsContainer.text(displayString);
+            }
+        }
+        else {
+            $resultsContainer.text(result.error);
+        }
     });
     // var img = document.createElement("img");
     // img.src = canvas.toDataURL();

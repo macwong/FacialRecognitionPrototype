@@ -14,13 +14,13 @@ html, body {
     flex-direction: column;
     height: 100%;
   }
-  /* .videoContainer {
+  .videoContainer {
     flex: 1;
     display: flex;
     position: relative;
     justify-content: center;
     align-items: center;
-  } */
+  }
   .video, .canvas {
     position: absolute;
     top: 20px;
@@ -30,11 +30,13 @@ html, body {
   .canvas {
       display: none;
   }
-  /* .canvas {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 853px;
-} */
+
+.resultsContainer {
+    background-color: black;
+    color: white;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+}
