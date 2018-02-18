@@ -3,6 +3,7 @@ from shutil import copyfile
 import Helpers.align_dataset as align
 import classifier
 from align_options import AlignOptions
+from mygraph import MyGraph
         
 def train(input_folder_path, model_folder_name):
     print("Input Folder Path:", input_folder_path)
@@ -40,7 +41,8 @@ def train(input_folder_path, model_folder_name):
     
     classifier.classifier(mode = "TRAIN", 
            model = "D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb",
-           data_dir = processed_dir, 
+           data_dir = processed_dir,
+           session = MyGraph(),
            classifier_filename = os.path.join(model_dir, "classifier.pkl"))
     
     return True, ""
