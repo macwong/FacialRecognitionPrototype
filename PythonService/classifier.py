@@ -19,7 +19,6 @@ from sklearn.svm import SVC
 from matplotlib.pyplot import imshow
 import matplotlib.pyplot as plt
 from PIL import Image
-from tensorflow.python.platform import gfile
 
 class WrongAnswer():
     def __init__(self, predicted, actual, test_filepath, train_dirpath, actual_dirpath):
@@ -75,7 +74,7 @@ def classifier(mode, # = 'CLASSIFY',
             
 #             Load the model
             print('Loading feature extraction model')
-            load_model(model)                
+            facenet.load_model(model)
 
             # Get input and output tensors
             images_placeholder = tf.get_default_graph().get_tensor_by_name("input:0")
@@ -187,30 +186,3 @@ def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_clas
             train_set.append(facenet.ImageClass(cls.name, paths[:nrof_train_images_per_class]))
             test_set.append(facenet.ImageClass(cls.name, paths[nrof_train_images_per_class:]))
     return train_set, test_set
-
-class ModelSettings():
-    current_model_path = None
-    current_model_string = None
-
-def load_model(model):
-    # Check if the model is a model directory (containing a metagraph and a checkpoint file)
-    #  or if it is a protobuf file with a frozen graph
-    graph_def = tf.GraphDef()
-
-    if model != ModelSettings.current_model_path or ModelSettings.current_model_string is None:
-        
-        model_exp = os.path.expanduser(model)
-        if (os.path.isfile(model_exp)):
-            print('Model filename: %s' % model_exp)
-            with gfile.FastGFile(model_exp,'rb') as f:
-                print("Read model from file")
-                ModelSettings.current_model_path = model
-                ModelSettings.current_model_string = f.read()
-                
-    else:
-        print("Get cached model")
-    
-    graph_def.ParseFromString(ModelSettings.current_model_string)
-    tf.import_graph_def(graph_def, name='')
-            
-        
