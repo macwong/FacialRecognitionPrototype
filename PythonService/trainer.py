@@ -19,7 +19,7 @@ def train(input_folder_path, model_folder_name):
     model_dir = os.path.join(train_data_path, model_folder_name)
     processed_dir = os.path.join(model_dir, "data")
     
-    align.align_faces(AlignOptions(input_folder_path, processed_dir, True))
+    align.align_faces(AlignOptions(input_folder_path, processed_dir))
     
     directories = os.listdir(processed_dir)
     
