@@ -6,6 +6,42 @@ import uuid
 from classifier import classifier
 import Helpers.align_dataset as align
 from align_options import AlignOptions
+import tensorflow as tf
+from tensorflow.python.platform import gfile
+
+class MyGraph():
+    def __init__(self):
+        # Check if the model is a model directory (containing a metagraph and a checkpoint file)
+        #  or if it is a protobuf file with a frozen graph
+        model_exp = os.path.expanduser("D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb")
+        if (os.path.isfile(model_exp)):
+            print('Model filename: %s' % model_exp)
+            with gfile.FastGFile(model_exp,'rb') as f:
+                graph_def = tf.GraphDef()
+                graph_def.ParseFromString(f.read())
+                
+            graph = tf.Graph()
+            with graph.as_default():
+                tf.import_graph_def(graph_def, name='')
+                
+        #    graph.finalize()
+            
+            # Create the session that we'll use to execute the model
+        #    sess_config = tf.ConfigProto(
+        #        log_device_placement=False,
+        #        allow_soft_placement = True,
+        #        gpu_options = tf.GPUOptions(
+        #            per_process_gpu_memory_fraction=1
+        #        )
+        #    )
+                
+            self.sess = tf.Session(graph=graph)
+            
+            self.images_placeholder = graph.get_tensor_by_name("input:0")
+            self.embeddings = graph.get_tensor_by_name("embeddings:0")
+            self.phase_train_placeholder = graph.get_tensor_by_name("phase_train:0")
+                    
+
 
 def predict(image):
     train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
@@ -63,6 +99,7 @@ def predict(image):
     success, predictions, error = classifier(mode = 'CLASSIFY', 
            model = "D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb",
            data_dir = temp_predict,
+           session = MyGraph(),
            train_data_dir = os.path.join(model_path, "data"),
            classifier_filename = classifier_file)
 
