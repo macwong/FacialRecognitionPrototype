@@ -3,9 +3,6 @@ const video = require("./video")
 navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
     var cam = document.getElementById('video')
     cam.src = URL.createObjectURL(stream);
-    // cam.onloadedmetadata = (e) => {
-    //     cam.play();
-    // };
 }).catch(() =>  {
     alert('could not connect stream');
 });
