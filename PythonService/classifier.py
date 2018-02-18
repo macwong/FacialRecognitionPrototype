@@ -191,28 +191,26 @@ def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_clas
 class ModelSettings():
     current_model_path = None
     current_model_string = None
-    graph_def = None
 
 def load_model(model):
     # Check if the model is a model directory (containing a metagraph and a checkpoint file)
     #  or if it is a protobuf file with a frozen graph
-    if model != ModelSettings.current_model_path or ModelSettings.graph_def == None:
+    graph_def = tf.GraphDef()
+
+    if model != ModelSettings.current_model_path or ModelSettings.current_model_string is None:
+        
         model_exp = os.path.expanduser(model)
         if (os.path.isfile(model_exp)):
             print('Model filename: %s' % model_exp)
-            
             with gfile.FastGFile(model_exp,'rb') as f:
                 print("Read model from file")
-                ModelSettings.graph_def = tf.GraphDef()
                 ModelSettings.current_model_path = model
                 ModelSettings.current_model_string = f.read()
-                ModelSettings.graph_def.ParseFromString(ModelSettings.current_model_string)
                 
     else:
         print("Get cached model")
     
-    tf.import_graph_def(ModelSettings.graph_def, name='')
-    
-    print("Finish loading model")
+    graph_def.ParseFromString(ModelSettings.current_model_string)
+    tf.import_graph_def(graph_def, name='')
             
         
