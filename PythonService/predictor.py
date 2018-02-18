@@ -66,6 +66,6 @@ def predict(image):
            classifier_filename = classifier_file)
 
     print("Cleanup...")
-#    shutil.rmtree(temp_predict)
+    shutil.rmtree(temp_predict)
     
     return True, predictions, ""
