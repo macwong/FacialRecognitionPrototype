@@ -52,11 +52,11 @@ def predict():
     
     requestData = request.get_json()
     
-    if not requestData or not 'image' in requestData:
+    if not requestData or not 'imgBase64' in requestData:
         print("Invalid JSON request data...", returnValue)
         abort(400)
         
-    image = requestData["image"]
+    image = requestData["imgBase64"]
     
     success, predictions, error = predictor.predict(image)
     code = 400
