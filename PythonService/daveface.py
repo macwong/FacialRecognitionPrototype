@@ -58,7 +58,7 @@ def predict():
         
     image = requestData["image"]
     
-    success, error = predictor.predict(image)
+    success, predictions, error = predictor.predict(image)
     code = 400
     
     if success:
@@ -69,6 +69,7 @@ def predict():
     
     return jsonify({
             'success': success,
+            'predictions': predictions,
             'error': error
             }), code
 
