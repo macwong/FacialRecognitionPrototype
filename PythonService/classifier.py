@@ -32,7 +32,7 @@ class WrongAnswer():
 
 def predict():
     pass
-    
+
 def classifier(mode, # = 'CLASSIFY', 
                data_dir, # = '../data/subset/train', 
                classifier_filename, # = '../data/subset/subset_classifier.pkl', 
@@ -72,10 +72,10 @@ def classifier(mode, # = 'CLASSIFY',
             print('Number of classes: %d' % len(dataset))
             print('Number of images: %d' % len(paths))
             
-            # Load the model
+#             Load the model
             print('Loading feature extraction model')
             facenet.load_model(model)
-            
+
             # Get input and output tensors
             images_placeholder = tf.get_default_graph().get_tensor_by_name("input:0")
             embeddings = tf.get_default_graph().get_tensor_by_name("embeddings:0")

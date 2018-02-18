@@ -24,6 +24,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function captureImage(videoEl, $resultsContainer) {
+    $resultsContainer.text("Loading...")
     var canvas = document.createElement("canvas");
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
@@ -37,7 +38,8 @@ function captureImage(videoEl, $resultsContainer) {
             image: dataURL
         }),
         contentType: "application/json; charset=utf-8",
-        dataType:"json"
+        dataType:"json",
+        
     }).done((result) => {
         if(String.prototype.toLowerCase.call(result.success) === "true") {
             var arrayLength = result.predictions.length;
