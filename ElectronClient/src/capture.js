@@ -8,28 +8,19 @@ navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
     alert('could not connect stream');
 });
 
-window.addEventListener("DOMContentLoaded", () => {
+$(document).ready(() => {
     const videoEl = document.getElementById("video");
     const $resultsContainer = $(document).find(".resultsContainer");
-    // const canvasEl = document.getElementById("canvas");
-    // const ctx = canvasEl.getContext("2d");
-
-    $(videoEl).click((e) => {
-        captureImage(videoEl, $resultsContainer);
-    });
-    // canvasEl.addEventListener("click", () => {
-    //     console.log("test")
-    //     video.captureBytes(ctx, videoEl, canvasEl);
-    // });
+    $resultsContainer.text("Loading...")
+    
+    captureImage(videoEl, $resultsContainer);
 });
 
 function captureImage(videoEl, $resultsContainer) {
-    $resultsContainer.text("Loading...")
     var canvas = document.createElement("canvas");
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
     canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height);
-    // console.log(canvas.toDataURL())
     var dataURL = canvas.toDataURL('image/jpeg', 1.0);
     $.ajax({
         url: "http://localhost:5000/daveface/predict",
@@ -69,8 +60,10 @@ function captureImage(videoEl, $resultsContainer) {
         else {
             $resultsContainer.text(result.error);
         }
+
+        // When one request is done, do it all over again...
+        captureImage(videoEl, $resultsContainer);
+    }).fail(() => {
+        captureImage(videoEl, $resultsContainer);
     });
-    // var img = document.createElement("img");
-    // img.src = canvas.toDataURL();
-    // $("body").append(img);
 }
