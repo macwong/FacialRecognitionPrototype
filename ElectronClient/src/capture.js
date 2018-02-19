@@ -2,18 +2,19 @@ const video = require("./video")
 const $ = require("jquery")
 
 navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
-    var cam = document.getElementById('video')
-    cam.src = URL.createObjectURL(stream);
-}).catch(() =>  {
-    alert('could not connect stream');
-});
-
-$(document).ready(() => {
     const videoEl = document.getElementById("video");
     const $resultsContainer = $(document).find(".resultsContainer");
     $resultsContainer.text("Loading...")
-    
-    captureImage(videoEl, $resultsContainer);
+
+    var cam = document.getElementById('video')
+    cam.src = URL.createObjectURL(stream);
+
+    cam.onloadedmetadata = function(e) {
+        captureImage(videoEl, $resultsContainer);
+
+    };
+}).catch(() =>  {
+    alert('could not connect stream');
 });
 
 function captureImage(videoEl, $resultsContainer) {
