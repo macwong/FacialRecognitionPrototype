@@ -40,7 +40,6 @@ def train(input_folder_path, model_folder_name):
     print("Training...")
     
     classifier.classifier(mode = "TRAIN", 
-           model = "D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb",
            data_dir = processed_dir,
            session = MyGraph(),
            classifier_filename = os.path.join(model_dir, "classifier.pkl"))

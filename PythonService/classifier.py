@@ -38,7 +38,6 @@ def classifier(mode, # = 'CLASSIFY',
                data_dir, # = '../data/subset/train', 
                session,
                classifier_filename, # = '../data/subset/subset_classifier.pkl', 
-               model = '../data/models/20170512-110547.pb', 
                use_split_dataset = False, 
                train_data_dir = None, 
                batch_size=90, 
@@ -70,14 +69,6 @@ def classifier(mode, # = 'CLASSIFY',
     print('Number of classes: %d' % len(dataset))
     print('Number of images: %d' % len(paths))
     
-#             Load the model
-#            print('Loading feature extraction model')
-#            facenet.load_model(model)
-
-    # Get input and output tensors
-#            images_placeholder = tf.get_default_graph().get_tensor_by_name("input:0")
-#            embeddings = tf.get_default_graph().get_tensor_by_name("embeddings:0")
-#            phase_train_placeholder = tf.get_default_graph().get_tensor_by_name("phase_train:0")
     embedding_size = session.embeddings.get_shape()[1]
     
     # Run forward pass to calculate embeddings
