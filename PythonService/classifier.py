@@ -38,7 +38,6 @@ def classifier(mode, # = 'CLASSIFY',
                data_dir, # = '../data/subset/train', 
                session,
                classifier_filename, # = '../data/subset/subset_classifier.pkl', 
-               use_split_dataset = False, 
                train_data_dir = None, 
                batch_size=90, 
                image_size=160, 
@@ -48,15 +47,7 @@ def classifier(mode, # = 'CLASSIFY',
   
     np.random.seed(seed=seed)
     
-    if use_split_dataset:
-        dataset_tmp = facenet.get_dataset(data_dir)
-        train_set, test_set = split_dataset(dataset_tmp, min_nrof_images_per_class, nrof_train_images_per_class)
-        if (mode=='TRAIN'):
-            dataset = train_set
-        elif (mode=='CLASSIFY'):
-            dataset = test_set
-    else:
-        dataset = facenet.get_dataset(data_dir)
+    dataset = facenet.get_dataset(data_dir)
 
     # Check that there are at least one training image per class
     for cls in dataset:
@@ -64,7 +55,7 @@ def classifier(mode, # = 'CLASSIFY',
 
     paths, labels = facenet.get_image_paths_and_labels(dataset)
     
-    results = pd.DataFrame([len(dataset)], columns=['Classes'])
+#    results = pd.DataFrame([len(dataset)], columns=['Classes'])
     
     print('Number of classes: %d' % len(dataset))
     print('Number of images: %d' % len(paths))
@@ -116,11 +107,9 @@ def classifier(mode, # = 'CLASSIFY',
         best_class_indices = np.argmax(predictions, axis=1)
         best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
         
-        classify_list = next(os.walk(train_data_dir))[1]
-        
         pred_names = []
         for i in range(len(best_class_indices)):
-            pred_name = classify_list[best_class_indices[i]]
+            pred_name = class_names[best_class_indices[i]]
             pred_names.append(pred_name)
             print(pred_name)
             
@@ -168,14 +157,3 @@ def classifier(mode, # = 'CLASSIFY',
     return True, None, ""
 
             
-def split_dataset(dataset, min_nrof_images_per_class, nrof_train_images_per_class):
-    train_set = []
-    test_set = []
-    for cls in dataset:
-        paths = cls.image_paths
-        # Remove classes with less than min_nrof_images_per_class
-        if len(paths)>=min_nrof_images_per_class:
-            np.random.shuffle(paths)
-            train_set.append(facenet.ImageClass(cls.name, paths[:nrof_train_images_per_class]))
-            test_set.append(facenet.ImageClass(cls.name, paths[nrof_train_images_per_class:]))
-    return train_set, test_set
