@@ -51,7 +51,6 @@ def predict(image):
     
     print("Classify image")
     temp_predict_data = os.path.join(temp_predict, "data")
-#    pred_file_path = os.path.join(temp_predict_data, file_guid + ".png")
     
     if not os.path.exists(temp_predict_data):
         return False, None, "Could not detect face"
@@ -72,4 +71,4 @@ def predict(image):
     print("Cleanup...")
     shutil.rmtree(temp_predict)
     
-    return True, predictions, ""
+    return success, predictions, error

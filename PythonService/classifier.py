@@ -83,6 +83,10 @@ def classifier(mode, # = 'CLASSIFY',
     # Run forward pass to calculate embeddings
     print('Calculating features for images')
     nrof_images = len(paths)
+    
+    if nrof_images == 0:
+        return False, None, "Nobody's home"
+
     nrof_batches_per_epoch = int(math.ceil(1.0*nrof_images / batch_size))
     emb_array = np.zeros((nrof_images, embedding_size))
     for i in range(nrof_batches_per_epoch):

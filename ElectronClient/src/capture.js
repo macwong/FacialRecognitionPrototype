@@ -63,7 +63,9 @@ function captureImage(videoEl, $resultsContainer) {
 
         // When one request is done, do it all over again...
         captureImage(videoEl, $resultsContainer);
-    }).fail(() => {
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        $resultsContainer.text(jqXHR.responseJSON.error);
+        
         captureImage(videoEl, $resultsContainer);
     });
 }
