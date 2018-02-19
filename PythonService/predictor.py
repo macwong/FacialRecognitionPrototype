@@ -64,7 +64,6 @@ def predict(image):
     success, predictions, error = classifier(mode = 'CLASSIFY', 
            data_dir = temp_predict,
            session = MyGraph(),
-           train_data_dir = os.path.join(model_path, "data"),
            classifier_filename = classifier_file)
 
     print("Cleanup...")
