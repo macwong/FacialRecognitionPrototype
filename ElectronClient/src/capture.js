@@ -42,12 +42,14 @@ function captureImage(videoEl, $resultsContainer) {
             else {
                 var displayString = "Hello "
                 var dataURI = "data:image/png;base64,"
+
+                $resultsContainer.empty();
+
                 for (var i = 0; i < arrayLength; i++) {
                     let $image = $("<img />")
                     $image.prop("src", dataURI + result.predictions[i].image);
-                    console.log($image);
                     $resultsContainer.html($image);
-                    
+
                     if (i === 0) {
                         displayString += result.predictions[i].pred_name;
                     }
