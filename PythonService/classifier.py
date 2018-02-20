@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import base64
 import tensorflow as tf
 import numpy as np
 import argparse
@@ -109,8 +110,16 @@ def classifier(mode, # = 'CLASSIFY',
         pred_names = []
         for i in range(len(best_class_indices)):
             pred_name = class_names[best_class_indices[i]]
-            pred_names.append(pred_name)
+            
+            with open(paths[i], "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read())
+                encoded_string = encoded_string.decode('utf-8')
+            
             print(pred_name)
+            pred_names.append({
+                "pred_name": pred_name,
+                "image": encoded_string
+            })
             
         return True, pred_names, ""
             

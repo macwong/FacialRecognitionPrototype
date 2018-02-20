@@ -41,17 +41,18 @@ function captureImage(videoEl, $resultsContainer) {
             }
             else {
                 var displayString = "Hello "
+                // console.log(result.predictions)
+                
                 for (var i = 0; i < arrayLength; i++) {
-                    console.log(result.predictions[i]);
                     //Do something
                     if (i === 0) {
-                        displayString += result.predictions[i];
+                        displayString += result.predictions[i].pred_name;
                     }
                     else if (i + 1 === arrayLength && i > 0) {
-                        displayString += " and " + result.predictions[i];
+                        displayString += " and " + result.predictions[i].pred_name;
                     }
                     else {
-                        displayString += ", " + result.predictions[i];
+                        displayString += ", " + result.predictions[i].pred_name;
                     }
                 }
 
