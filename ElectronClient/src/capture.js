@@ -41,22 +41,24 @@ function captureImage(videoEl, $resultsContainer) {
             }
             else {
                 var displayString = "Hello "
-                // console.log(result.predictions)
-                
+                var dataURI = "data:image/png;base64,"
                 for (var i = 0; i < arrayLength; i++) {
-                    //Do something
+                    let $image = $("<img />")
+                    $image.prop("src", dataURI + result.predictions[i].image);
+                    console.log($image);
+                    $resultsContainer.html($image);
+                    
                     if (i === 0) {
                         displayString += result.predictions[i].pred_name;
                     }
-                    else if (i + 1 === arrayLength && i > 0) {
+                    else if (i + 1 === arrayLength && i > 0) { 
                         displayString += " and " + result.predictions[i].pred_name;
-                    }
-                    else {
                         displayString += ", " + result.predictions[i].pred_name;
                     }
                 }
 
-                $resultsContainer.text(displayString);
+                
+                // $resultsContainer.text(displayString);
             }
         }
         else {

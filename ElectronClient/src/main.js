@@ -2,7 +2,6 @@ const electron = require("electron");
 const path = require('path')
 const url = require('url')
 const { app, BrowserWindow } = electron;
-const $ = require('jquery');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -12,7 +11,7 @@ function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 693,
-        height: 655,
+        height: 685,
         // resizable: false
     });
   
@@ -22,6 +21,8 @@ function createWindow() {
         protocol: 'file:',
         slashes: true
     }));
+
+    mainWindow.webContents.openDevTools();
   
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
@@ -33,8 +34,6 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
-
-    mainWindow.$ = $;
 }
 
 // This method will be called when Electron has finished
