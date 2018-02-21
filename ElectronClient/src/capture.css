@@ -43,4 +43,13 @@ html, body {
 
 .caption {
   max-width: 150px;
+  color: black;
+  text-align: center;
+}
+
+.person {
+  background-color: white;
+  padding: 5px;
+  flex: 1;
+  max-width: 160px;
 }

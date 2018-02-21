@@ -22,10 +22,10 @@ function createWindow() {
         slashes: true
     }));
 
-    mainWindow.webContents.openDevTools();
-  
+    
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools();
+    mainWindow.maximize();
   
     // Emitted when the window is closed.
     mainWindow.on('closed', () => {
