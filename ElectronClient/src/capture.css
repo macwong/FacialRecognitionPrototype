@@ -38,5 +38,9 @@ html, body {
     position: relative;
     justify-content: center;
     align-items: center;
-    height: 180px;
+    height: 210px;
+}
+
+.caption {
+  max-width: 150px;
 }

@@ -57,7 +57,8 @@ def predict(image):
     
 #    model_folder = "test_model"
 #    model_folder = "lfw500"
-    model_folder = "lfw614"
+#    model_folder = "lfw614"
+    model_folder = "lfw615"
     model_path = os.path.join(train_data_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
     

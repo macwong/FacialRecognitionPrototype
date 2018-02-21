@@ -46,20 +46,31 @@ function captureImage(videoEl, $resultsContainer) {
                 $resultsContainer.empty();
 
                 for (var i = 0; i < arrayLength; i++) {
-                    let $image = $("<img />")
-                    $image.prop("src", dataURI + result.predictions[i].image);
-                    $resultsContainer.html($image);
+                    // if (i === 0) {
+                    //     displayString += result.predictions[i].pred_name;
+                    // }
+                    // else if (i + 1 === arrayLength && i > 0) { 
+                    //     displayString += " and " + result.predictions[i].pred_name;
+                    // }
+                    // else {
+                    //     displayString += ", " + result.predictions[i].pred_name;
+                    // }
 
-                    if (i === 0) {
-                        displayString += result.predictions[i].pred_name;
-                    }
-                    else if (i + 1 === arrayLength && i > 0) { 
-                        displayString += " and " + result.predictions[i].pred_name;
-                        displayString += ", " + result.predictions[i].pred_name;
-                    }
+                    let $figure = $("<figure></figure>");
+                    $figure.addClass("person");
+
+                    let $image = $("<img />");
+                    $image.prop("src", dataURI + result.predictions[i].image);
+
+                    let $figCaption = $("<figcaption></figcaption>");
+                    $figCaption.addClass("caption");
+                    $figCaption.text(result.predictions[i].pred_name);
+
+                    $figure.append($image);
+                    $figure.append($figCaption);
+                    $resultsContainer.append($figure);
                 }
 
-                
                 // $resultsContainer.text(displayString);
             }
         }
