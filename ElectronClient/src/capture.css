@@ -41,6 +41,35 @@ html, body {
     height: 210px;
 }
 
+.resultsOverlay,
+.resultsContents {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.resultsOverlay {
+  z-index: -10;
+}
+
+.resultsContents {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resultsOverlay {
+    background-color: rgba(1.0, 1.0, 1.0, 1.0);
+    color: white;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    height: 210px;
+}
+
 .caption {
   max-width: 150px;
   color: black;

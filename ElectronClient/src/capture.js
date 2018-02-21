@@ -3,21 +3,21 @@ const $ = require("jquery")
 
 navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
     const videoEl = document.getElementById("video");
-    const $resultsContainer = $(document).find(".resultsContainer");
-    $resultsContainer.text("Loading...")
+    const $resultsContents = $(document).find(".resultsContents");
+    $resultsContents.text("Loading...")
 
     var cam = document.getElementById('video')
     cam.src = URL.createObjectURL(stream);
 
     cam.onloadedmetadata = function(e) {
-        captureImage(videoEl, $resultsContainer);
+        captureImage(videoEl, $resultsContents);
 
     };
 }).catch(() =>  {
     alert('could not connect stream');
 });
 
-function captureImage(videoEl, $resultsContainer) {
+function captureImage(videoEl, $resultsContents) {
     var canvas = document.createElement("canvas");
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
@@ -37,13 +37,13 @@ function captureImage(videoEl, $resultsContainer) {
             var arrayLength = result.predictions.length;
 
             if (arrayLength === 0) {
-                $resultsContainer.text("Dude! You're invisible!");
+                $resultsContents.text("Dude! You're invisible!");
             }
             else {
                 var displayString = "Hello "
                 var dataURI = "data:image/png;base64,"
 
-                $resultsContainer.empty();
+                $resultsContents.empty();
 
                 for (var i = 0; i < arrayLength; i++) {
                     // if (i === 0) {
@@ -68,21 +68,21 @@ function captureImage(videoEl, $resultsContainer) {
 
                     $figure.append($image);
                     $figure.append($figCaption);
-                    $resultsContainer.append($figure);
+                    $resultsContents.append($figure);
                 }
 
                 // $resultsContainer.text(displayString);
             }
         }
         else {
-            $resultsContainer.text(result.error);
+            $resultsContents.text(result.error);
         }
 
         // When one request is done, do it all over again...
-        captureImage(videoEl, $resultsContainer);
+        captureImage(videoEl, $resultsContents);
     }).fail((jqXHR, textStatus, errorThrown) => {
-        $resultsContainer.text(jqXHR.responseJSON.error);
+        $resultsContents.text(jqXHR.responseJSON.error);
         
-        captureImage(videoEl, $resultsContainer);
+        captureImage(videoEl, $resultsContents);
     });
 }
