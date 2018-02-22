@@ -6,6 +6,8 @@ const fs = require("fs");
 const { dialog } = electron.remote;
 
 let isVideo = true;
+let defaultWidth;
+let defaultHeight;
 
 $(document).ready(() => {
     const videoEl = document.getElementById("video");
@@ -76,8 +78,8 @@ $(document).ready(() => {
 function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
-    var defaultWidth = videoEl.videoWidth;
-    var defaultHeight = videoEl.videoHeight;
+    defaultWidth = videoEl.videoWidth;
+    defaultHeight = videoEl.videoHeight;
 
     if (isVideo) {
         canvasEl.width = defaultWidth;
