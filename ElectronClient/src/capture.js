@@ -88,6 +88,7 @@ $(document).ready(() => {
                         canvasTop = (defaultHeight - canvasHeight) / 2;
                     }
 
+                    ctx.clearRect(0, 0, defaultWidth, defaultHeight);
                     ctx.drawImage(img, canvasLeft, canvasTop, canvasWidth, canvasHeight);
                     captureImage(videoEl, canvasEl, $resultsContainer);
                 }
