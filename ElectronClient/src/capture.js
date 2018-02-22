@@ -22,7 +22,7 @@ $(document).ready(() => {
 function captureImage(videoEl, $resultsContainer) {
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
-    var canvas = document.createElement("canvas");
+    var canvas = $(".videoContainer").find("canvas")[0];
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
     canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height);
@@ -37,7 +37,7 @@ function captureImage(videoEl, $resultsContainer) {
         dataType:"json",
         
     }).done((result) => {
-        $resultsOverlay.css('opacity', '0.0');
+        $resultsOverlay.stop(true).css('opacity', '0.0');
 
         if(String.prototype.toLowerCase.call(result.success) === "true") {
             var arrayLength = result.predictions.length;
@@ -46,13 +46,11 @@ function captureImage(videoEl, $resultsContainer) {
                 $resultsContents.text("Dude! You're invisible!");
             }
             else {
-                var displayString = "Hello "
                 var dataURI = "data:image/png;base64,"
 
                 $resultsContents.empty();
 
                 for (var i = 0; i < arrayLength; i++) {
-                    console.log(i);
                     let $figure = $("<figure></figure>");
                     $figure.addClass("person");
 
@@ -67,19 +65,26 @@ function captureImage(videoEl, $resultsContainer) {
                     $figure.append($figCaption);
                     $resultsContents.append($figure);
                 }
+
+                fadeStuff($resultsOverlay);
             }
         }
         else {
             $resultsContents.text(result.error);
         }
 
-        // $resultsOverlay.fadeTo("slow", 1.0);
 
         // When one request is done, do it all over again...
         captureImage(videoEl, $resultsContainer);
     }).fail((jqXHR, textStatus, errorThrown) => {
+        $resultsOverlay.stop(true).css('opacity', '0.0');
+        
         $resultsContents.text(jqXHR.responseJSON.error);
         
         captureImage(videoEl, $resultsContainer);
     });
+}
+
+function fadeStuff($resultsOverlay) {
+    $resultsOverlay.fadeTo(7500, 1.0);
 }
