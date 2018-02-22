@@ -1,23 +1,27 @@
 const video = require("./video")
 const $ = require("jquery")
 
-navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
-    const videoEl = document.getElementById("video");
-    const $resultsContents = $(document).find(".resultsContents");
-    $resultsContents.text("Loading...")
+$(document).ready(() => {
+    navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
+        const videoEl = document.getElementById("video");
+        const $resultsContainer = $(document).find(".resultsContainer");
+        $resultsContainer.find(".resultsContents").text("Loading...")
 
-    var cam = document.getElementById('video')
-    cam.src = URL.createObjectURL(stream);
+        var cam = document.getElementById('video')
+        cam.src = URL.createObjectURL(stream);
 
-    cam.onloadedmetadata = function(e) {
-        captureImage(videoEl, $resultsContents);
+        cam.onloadedmetadata = function(e) {
+            captureImage(videoEl, $resultsContainer);
 
-    };
-}).catch(() =>  {
-    alert('could not connect stream');
+        };
+    }).catch(() =>  {
+        alert('could not connect stream');
+    });
 });
 
-function captureImage(videoEl, $resultsContents) {
+function captureImage(videoEl, $resultsContainer) {
+    var $resultsContents = $resultsContainer.find(".resultsContents");
+    var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     var canvas = document.createElement("canvas");
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
@@ -33,6 +37,8 @@ function captureImage(videoEl, $resultsContents) {
         dataType:"json",
         
     }).done((result) => {
+        $resultsOverlay.css('opacity', '0.0');
+
         if(String.prototype.toLowerCase.call(result.success) === "true") {
             var arrayLength = result.predictions.length;
 
@@ -46,16 +52,7 @@ function captureImage(videoEl, $resultsContents) {
                 $resultsContents.empty();
 
                 for (var i = 0; i < arrayLength; i++) {
-                    // if (i === 0) {
-                    //     displayString += result.predictions[i].pred_name;
-                    // }
-                    // else if (i + 1 === arrayLength && i > 0) { 
-                    //     displayString += " and " + result.predictions[i].pred_name;
-                    // }
-                    // else {
-                    //     displayString += ", " + result.predictions[i].pred_name;
-                    // }
-
+                    console.log(i);
                     let $figure = $("<figure></figure>");
                     $figure.addClass("person");
 
@@ -70,19 +67,19 @@ function captureImage(videoEl, $resultsContents) {
                     $figure.append($figCaption);
                     $resultsContents.append($figure);
                 }
-
-                // $resultsContainer.text(displayString);
             }
         }
         else {
             $resultsContents.text(result.error);
         }
 
+        // $resultsOverlay.fadeTo("slow", 1.0);
+
         // When one request is done, do it all over again...
-        captureImage(videoEl, $resultsContents);
+        captureImage(videoEl, $resultsContainer);
     }).fail((jqXHR, textStatus, errorThrown) => {
         $resultsContents.text(jqXHR.responseJSON.error);
         
-        captureImage(videoEl, $resultsContents);
+        captureImage(videoEl, $resultsContainer);
     });
 }
