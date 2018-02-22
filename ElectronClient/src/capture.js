@@ -37,7 +37,6 @@ $(document).ready(() => {
                     captureImage(videoEl, canvasEl, $resultsContainer);
                 }
                 else if ($(this).parent().hasClass("option-image")) {
-                    clearOverlay($resultsContainer.find(".resultsOverlay"));
                     $(canvasEl).show();
                     $(videoEl).hide();
                     isVideo = false;
