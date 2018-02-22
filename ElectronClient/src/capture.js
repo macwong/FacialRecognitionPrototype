@@ -1,17 +1,20 @@
 const video = require("./video")
 const $ = require("jquery")
 
+let isVideo = true;
+
 $(document).ready(() => {
+    const videoEl = document.getElementById("video");
+    const $resultsContainer = $(document).find(".resultsContainer");
+    
     navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
-        const videoEl = document.getElementById("video");
-        const $resultsContainer = $(document).find(".resultsContainer");
         $resultsContainer.find(".resultsContents").text("Loading...")
 
         var cam = document.getElementById('video')
         cam.src = URL.createObjectURL(stream);
 
         cam.onloadedmetadata = function(e) {
-            // captureImage(videoEl, $resultsContainer);
+            captureImage(videoEl, $resultsContainer);
 
         };
     }).catch(() =>  {
@@ -25,12 +28,25 @@ $(document).ready(() => {
                     $(this).removeClass("checked");
                 });
                 $(this).parent().addClass("checked");
+
+                if ($(this).parent().hasClass("option-video")) {
+                    isVideo = true;
+                    console.log("video on!")
+                    captureImage(videoEl, $resultsContainer);
+                }
+                else if ($(this).parent().hasClass("option-image")) {
+                    isVideo = false;
+                }
             }
         });
     });
 });
 
 function captureImage(videoEl, $resultsContainer) {
+    if (!isVideo) {
+        return;
+    }
+
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     var canvas = $(".videoContainer").find("canvas")[0];
