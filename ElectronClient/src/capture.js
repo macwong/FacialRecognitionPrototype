@@ -67,6 +67,8 @@ $(document).ready(() => {
                 img.onload = function() {
                     var canvasWidth = defaultWidth;
                     var canvasHeight = defaultHeight;
+                    var canvasLeft = 0;
+                    var canvasTop = 0;
                     var imageWidth = img.width;
                     var imageHeight = img.height;
 
@@ -79,20 +81,14 @@ $(document).ready(() => {
                     
                     if (proportions < defaultProportions) {
                         canvasWidth = canvasWidth * proportions;
+                        canvasLeft = (defaultWidth - canvasWidth) / 2;
                     }
                     else if (proportions < defaultProportions) {
                         canvasHeight = canvasHeight * proportions;
+                        canvasTop = (defaultHeight - canvasHeight) / 2;
                     }
 
-                    // if (imageHeight > defaultHeight) {
-                    //     canvasHeight = imageHeight;
-                    // }
-
-                    // if (imageWidth > defaultWidth) {
-                    //     canvasWidth = imageWidth;
-                    // }
-
-                    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                    ctx.drawImage(img, canvasLeft, canvasTop, canvasWidth, canvasHeight);
                     captureImage(videoEl, canvasEl, $resultsContainer);
                 }
 
