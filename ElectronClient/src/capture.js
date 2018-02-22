@@ -64,55 +64,32 @@ $(document).ready(() => {
                 var img = new Image();
                 img.onload = function() {
                     ctx.drawImage(img, 0, 0);
+                    captureImage(videoEl, canvasEl, $resultsContainer);
                 }
 
                 img.src = filePaths[0];
-
-                // canvasEl.width = img.width;
-                // canvasEl.height = img.height;
-                // $resultsContainer.html($image)
-
-                
-                // ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
-                // fs.readFile(filePaths[0], 'utf-8', (err, data) => {
-                //     if (err) {
-                //         console.log("Error:", err);
-                //     }
-                //     else {
-                //         console.log(filePaths[0]);
-                //         var img = new Image(); // Create a new Image
-                //         img.src = data;
-                //         canvasEl.width = img.width;
-                //         canvasEl.height = img.height;
-                //         console.log(data.substring(0, 20));
-                //         var ctx = canvasEl.getContext('2d');
-                //         ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-                //         ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
-                //         console.log("dsfjdsflj")
-                //         // fabric.Image.fromURL(filePaths[0], function (image) {
-
-                //         //     // image.set({
-                //         //     //     scaleX: 0.5,
-                //         //     //     scaleY: 0.5
-                //         //     // })
-            
-            
-                //         //     canvasEl.add(image);
-                //         // })
-                //     }
-                // });
             }
         );
-        console.log(e);
     });
 });
 
 function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
-    canvasEl.width = videoEl.videoWidth;
-    canvasEl.height = videoEl.videoHeight;
-    canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+    var defaultWidth = videoEl.videoWidth;
+    var defaultHeight = videoEl.videoHeight;
+
+    if (isVideo) {
+        canvasEl.width = defaultWidth;
+        canvasEl.height = defaultHeight;
+        canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+    }
+    else {
+        console.log(canvasEl.width);
+        console.log(canvasEl.height);
+        // canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+    }
+
     var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
     $.ajax({
         url: "http://localhost:5000/daveface/predict",
