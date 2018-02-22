@@ -11,11 +11,22 @@ $(document).ready(() => {
         cam.src = URL.createObjectURL(stream);
 
         cam.onloadedmetadata = function(e) {
-            captureImage(videoEl, $resultsContainer);
+            // captureImage(videoEl, $resultsContainer);
 
         };
     }).catch(() =>  {
         alert('could not connect stream');
+    });
+
+    $(".segmented label input[type=radio]").each(function(){
+        $(this).on("change", function(){
+            if($(this).is(":checked")){
+               $(this).parent().siblings().each(function(){
+                    $(this).removeClass("checked");
+                });
+                $(this).parent().addClass("checked");
+            }
+        });
     });
 });
 
