@@ -31,11 +31,15 @@ $(document).ready(() => {
                 $(this).parent().addClass("checked");
 
                 if ($(this).parent().hasClass("option-video")) {
+                    $(videoEl).show();
+                    $(canvasEl).hide();
                     isVideo = true;
-                    console.log("video on!")
                     captureImage(videoEl, canvasEl, $resultsContainer);
                 }
                 else if ($(this).parent().hasClass("option-image")) {
+                    clearOverlay($resultsContainer.find(".resultsOverlay"));
+                    $(canvasEl).show();
+                    $(videoEl).hide();
                     isVideo = false;
                 }
             }
@@ -44,10 +48,6 @@ $(document).ready(() => {
 });
 
 function captureImage(videoEl, canvasEl, $resultsContainer) {
-    if (!isVideo) {
-        return;
-    }
-
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     canvasEl.width = videoEl.videoWidth;
@@ -64,7 +64,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         dataType:"json",
         
     }).done((result) => {
-        $resultsOverlay.stop(true).css('opacity', '0.0');
+        clearOverlay($resultsOverlay);
 
         if(String.prototype.toLowerCase.call(result.success) === "true") {
             var arrayLength = result.predictions.length;
@@ -93,25 +93,34 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                     $resultsContents.append($figure);
                 }
 
-                fadeStuff($resultsOverlay);
+                if (isVideo) {
+                    fadeStuff($resultsOverlay);
+                }
             }
         }
         else {
             $resultsContents.text(result.error);
         }
 
-
-        // When one request is done, do it all over again...
-        captureImage(videoEl, canvasEl, $resultsContainer);
+        if (isVideo) {
+            // When one request is done, do it all over again...
+            captureImage(videoEl, canvasEl, $resultsContainer);
+        }
     }).fail((jqXHR, textStatus, errorThrown) => {
-        $resultsOverlay.stop(true).css('opacity', '0.0');
+        clearOverlay($resultsOverlay);
         
         $resultsContents.text(jqXHR.responseJSON.error);
         
-        captureImage(videoEl, canvasEl, $resultsContainer);
+        if (isVideo) {
+            captureImage(videoEl, canvasEl, $resultsContainer);
+        }
     });
 }
 
 function fadeStuff($resultsOverlay) {
     $resultsOverlay.fadeTo(7500, 1.0);
+}
+
+function clearOverlay($resultsOverlay) {
+    $resultsOverlay.stop(true).css('opacity', '0.0');
 }
