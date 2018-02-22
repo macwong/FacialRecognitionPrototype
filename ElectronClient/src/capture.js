@@ -54,9 +54,7 @@ $(document).ready(() => {
             {
                 defaultPath: 'c:/',
                 filters: [
-                    { name: 'All Files', extensions: ['*'] },
-                    { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
-                    { name: 'Movies', extensions: ['mkv', 'avi', 'mp4'] }
+                    { name: 'Images', extensions: ['jpg', 'png', 'gif'] }
                   ],
                 properties: ['openFile']
             }
