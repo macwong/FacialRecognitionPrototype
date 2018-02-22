@@ -72,10 +72,6 @@ $(document).ready(() => {
                     var imageWidth = img.width;
                     var imageHeight = img.height;
 
-                    // 10 x 10 = 1
-                    // 12 x 10 = 1.2
-                    // 8 x 10 = 0.8
-
                     var proportions = imageWidth / imageHeight;
                     var defaultProportions = defaultWidth / defaultHeight;
                     
@@ -90,6 +86,7 @@ $(document).ready(() => {
 
                     ctx.clearRect(0, 0, defaultWidth, defaultHeight);
                     ctx.drawImage(img, canvasLeft, canvasTop, canvasWidth, canvasHeight);
+                    fadeStuff($resultsContainer.find(".resultsOverlay"));
                     captureImage(videoEl, canvasEl, $resultsContainer);
                 }
 
@@ -109,10 +106,6 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         canvasEl.width = defaultWidth;
         canvasEl.height = defaultHeight;
         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
-    }
-    else {
-        console.log(canvasEl.width);
-        console.log(canvasEl.height);
     }
 
     var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
