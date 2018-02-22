@@ -65,27 +65,35 @@ $(document).ready(() => {
                 var ctx = canvasEl.getContext('2d');
                 var img = new Image();
                 img.onload = function() {
-                    var canvasWidth = defaultWidth;
-                    var canvasHeight = defaultHeight;
                     var canvasLeft = 0;
                     var canvasTop = 0;
                     var imageWidth = img.width;
                     var imageHeight = img.height;
 
-                    var proportions = imageWidth / imageHeight;
-                    var defaultProportions = defaultWidth / defaultHeight;
-                    
-                    if (proportions < defaultProportions) {
-                        canvasWidth = canvasWidth * proportions;
-                        canvasLeft = (defaultWidth - canvasWidth) / 2;
-                    }
-                    else if (proportions < defaultProportions) {
-                        canvasHeight = canvasHeight * proportions;
-                        canvasTop = (defaultHeight - canvasHeight) / 2;
-                    }
+                    var ratio = 0;
 
+                    // Check if the current width is larger than the max
+                    if(imageWidth > defaultWidth){
+                        ratio = defaultWidth / imageWidth;   // get ratio for scaling image
+                        $(this).css("width", defaultWidth); // Set new width
+                        $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
+                        imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+                        imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+                    }
+                    
+                    // Check if current height is larger than max
+                    if(imageHeight > defaultHeight){
+                        ratio = defaultHeight / imageHeight; // get ratio for scaling image
+                        $(this).css("height", defaultHeight);   // Set new height
+                        $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
+                        imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+                        imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+                    }
+                    
+                    canvasLeft = (defaultWidth - imageWidth) / 2;
+                    canvasTop = (defaultHeight - imageHeight) / 2;
                     ctx.clearRect(0, 0, defaultWidth, defaultHeight);
-                    ctx.drawImage(img, canvasLeft, canvasTop, canvasWidth, canvasHeight);
+                    ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
                     fadeStuff($resultsContainer.find(".resultsOverlay"));
                     captureImage(videoEl, canvasEl, $resultsContainer);
                 }
