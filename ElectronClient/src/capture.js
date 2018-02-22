@@ -2,7 +2,8 @@ const electron = require("electron");
 const { remote } = electron;
 const video = require("./video");
 const $ = require("jquery");
-const { dialog } = electron.remote
+const fs = require("fs");
+const { dialog } = electron.remote;
 
 let isVideo = true;
 
@@ -57,6 +58,49 @@ $(document).ready(() => {
                     { name: 'Images', extensions: ['jpg', 'png', 'gif'] }
                   ],
                 properties: ['openFile']
+            },
+            function (filePaths) {
+                var ctx = canvasEl.getContext('2d');
+                var img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                }
+
+                img.src = filePaths[0];
+
+                // canvasEl.width = img.width;
+                // canvasEl.height = img.height;
+                // $resultsContainer.html($image)
+
+                
+                // ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
+                // fs.readFile(filePaths[0], 'utf-8', (err, data) => {
+                //     if (err) {
+                //         console.log("Error:", err);
+                //     }
+                //     else {
+                //         console.log(filePaths[0]);
+                //         var img = new Image(); // Create a new Image
+                //         img.src = data;
+                //         canvasEl.width = img.width;
+                //         canvasEl.height = img.height;
+                //         console.log(data.substring(0, 20));
+                //         var ctx = canvasEl.getContext('2d');
+                //         ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+                //         ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
+                //         console.log("dsfjdsflj")
+                //         // fabric.Image.fromURL(filePaths[0], function (image) {
+
+                //         //     // image.set({
+                //         //     //     scaleX: 0.5,
+                //         //     //     scaleY: 0.5
+                //         //     // })
+            
+            
+                //         //     canvasEl.add(image);
+                //         // })
+                //     }
+                // });
             }
         );
         console.log(e);
