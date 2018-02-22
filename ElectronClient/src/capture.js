@@ -5,8 +5,9 @@ let isVideo = true;
 
 $(document).ready(() => {
     const videoEl = document.getElementById("video");
+    const canvasEl = document.getElementById("canvas");
     const $resultsContainer = $(document).find(".resultsContainer");
-    
+
     navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
         $resultsContainer.find(".resultsContents").text("Loading...")
 
@@ -14,7 +15,7 @@ $(document).ready(() => {
         cam.src = URL.createObjectURL(stream);
 
         cam.onloadedmetadata = function(e) {
-            captureImage(videoEl, $resultsContainer);
+            captureImage(videoEl, canvasEl, $resultsContainer);
 
         };
     }).catch(() =>  {
@@ -32,7 +33,7 @@ $(document).ready(() => {
                 if ($(this).parent().hasClass("option-video")) {
                     isVideo = true;
                     console.log("video on!")
-                    captureImage(videoEl, $resultsContainer);
+                    captureImage(videoEl, canvasEl, $resultsContainer);
                 }
                 else if ($(this).parent().hasClass("option-image")) {
                     isVideo = false;
@@ -42,18 +43,17 @@ $(document).ready(() => {
     });
 });
 
-function captureImage(videoEl, $resultsContainer) {
+function captureImage(videoEl, canvasEl, $resultsContainer) {
     if (!isVideo) {
         return;
     }
 
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
-    var canvas = $(".videoContainer").find("canvas")[0];
-    canvas.width = videoEl.videoWidth;
-    canvas.height = videoEl.videoHeight;
-    canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height);
-    var dataURL = canvas.toDataURL('image/jpeg', 1.0);
+    canvasEl.width = videoEl.videoWidth;
+    canvasEl.height = videoEl.videoHeight;
+    canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+    var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
     $.ajax({
         url: "http://localhost:5000/daveface/predict",
         type: "POST",
@@ -102,13 +102,13 @@ function captureImage(videoEl, $resultsContainer) {
 
 
         // When one request is done, do it all over again...
-        captureImage(videoEl, $resultsContainer);
+        captureImage(videoEl, canvasEl, $resultsContainer);
     }).fail((jqXHR, textStatus, errorThrown) => {
         $resultsOverlay.stop(true).css('opacity', '0.0');
         
         $resultsContents.text(jqXHR.responseJSON.error);
         
-        captureImage(videoEl, $resultsContainer);
+        captureImage(videoEl, canvasEl, $resultsContainer);
     });
 }
 
