@@ -1,5 +1,8 @@
-const video = require("./video")
-const $ = require("jquery")
+const electron = require("electron");
+const { remote } = electron;
+const video = require("./video");
+const $ = require("jquery");
+const { dialog } = electron.remote
 
 let isVideo = true;
 
@@ -43,6 +46,22 @@ $(document).ready(() => {
                 }
             }
         });
+    });
+
+    $(canvasEl).click((e) => {
+        dialog.showOpenDialog(
+            remote.getCurrentWindow(),
+            {
+                defaultPath: 'c:/',
+                filters: [
+                    { name: 'All Files', extensions: ['*'] },
+                    { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+                    { name: 'Movies', extensions: ['mkv', 'avi', 'mp4'] }
+                  ],
+                properties: ['openFile']
+            }
+        );
+        console.log(e);
     });
 });
 
