@@ -12,6 +12,14 @@
           <canvas class="canvas" id="canvas" width="853" height="480" style="display: none;"></canvas>
         </div>
         <div class="controlsContainer">
+          <div class="models">
+              <select>
+                  <!-- This method is nice because it doesn't require extra div tags, but it also doesn't retain the style across all browsers. -->
+                  <option>Select a model</option>
+                  <option>Option 1</option>
+                  <option>Option 2</option>
+                </select>
+          </div>
           <div class="segmented">
               <label class="checked option-video"><input type="radio" name="segmented" checked />Video</label>
               <label class="option-image"><input type="radio" name="segmented" />Image</label>
