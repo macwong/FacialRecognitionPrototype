@@ -9,10 +9,24 @@ let isVideo = true;
 let defaultWidth;
 let defaultHeight;
 
+function getModels() {
+    let $models = $(document).find(".models");
+
+    $.ajax({
+        url: "http://localhost:5000/daveface/getmodels",
+        type: "GET",
+        dataType:"json"
+    }).done((result) => {
+        console.log(result);
+    });
+}
+
 $(document).ready(() => {
     const videoEl = document.getElementById("video");
     const canvasEl = document.getElementById("canvas");
     const $resultsContainer = $(document).find(".resultsContainer");
+
+    getModels();
 
     navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
         $resultsContainer.find(".resultsContents").text("Loading...")

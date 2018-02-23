@@ -72,6 +72,13 @@ def predict():
             'predictions': predictions,
             'error': error
             }), code
+    
+    
+@app.route('/daveface/getmodels', methods=['GET'])
+def getmodels():
+    return jsonify({
+        'success': True
+    })
 
 
 if __name__ == '__main__':
