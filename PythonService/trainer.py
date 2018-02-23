@@ -4,6 +4,7 @@ import Helpers.align_dataset as align
 import classifier
 from align_options import AlignOptions
 from mygraph import MyGraph
+from daveglobals import Globals
         
 def train(input_folder_path, model_folder_name):
     print("Input Folder Path:", input_folder_path)
@@ -16,8 +17,7 @@ def train(input_folder_path, model_folder_name):
     
     
     print("Aligning faces...")
-    train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
-    model_dir = os.path.join(train_data_path, model_folder_name)
+    model_dir = os.path.join(Globals.model_path, model_folder_name)
     processed_dir = os.path.join(model_dir, "data")
     
     align.align_faces(AlignOptions(input_folder_path, processed_dir))

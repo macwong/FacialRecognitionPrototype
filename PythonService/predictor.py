@@ -7,13 +7,13 @@ from classifier import classifier
 import Helpers.align_dataset as align
 from align_options import AlignOptions
 from mygraph import MyGraph
+from daveglobals import Globals
 
 def predict(image):
-    train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
-    temp_path = os.path.join(train_data_path, "temp")
+    temp_path = os.path.join(Globals.data_path, "temp")
     temp_data_path = os.path.join(temp_path, "data")
     
-    if not os.path.exists(train_data_path):
+    if not os.path.exists(Globals.data_path):
         return False, None, "Training Data Path not found"
     
     if not os.path.exists(temp_path):
@@ -45,7 +45,7 @@ def predict(image):
         fh.write(imgdata)
         
     print("Align image to work with classifier")
-    temp_predict = os.path.join(train_data_path, "temp_predict")
+    temp_predict = os.path.join(Globals.data_path, "temp_predict")
     align.align_faces(AlignOptions(temp_path, temp_predict, True))
     shutil.rmtree(temp_path)
     
@@ -61,7 +61,7 @@ def predict(image):
 #    model_folder = "lfw615"
     model_folder = "timdata"
     
-    model_path = os.path.join(train_data_path, model_folder)
+    model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
     success, predictions, error = classifier(mode = 'CLASSIFY', 

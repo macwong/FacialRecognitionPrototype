@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, abort, make_response, request
 import trainer, predictor
 import os
+from daveglobals import Globals
 
 app = Flask(__name__)
 
@@ -77,11 +78,9 @@ def predict():
     
 @app.route('/daveface/getmodels', methods=['GET'])
 def getmodels():
-    # Look for the models folder
-    train_data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
+    directories = [os.path.join(Globals.model_path, o) for o in os.listdir(Globals.model_path) 
+                    if os.path.isdir(os.path.join(Globals.model_path,o))]
     
-    directories = [os.path.join(train_data_path, o) for o in os.listdir(train_data_path) 
-                    if os.path.isdir(os.path.join(train_data_path,o))]
     return jsonify({
         'success': True,
         'models': directories
