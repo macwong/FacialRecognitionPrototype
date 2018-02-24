@@ -9,6 +9,7 @@ import os
 import math
 import pickle
 from sklearn.svm import SVC
+from predictor import PredictResponse
 
 class WrongAnswer():
     def __init__(self, predicted, actual, test_filepath, train_dirpath, actual_dirpath):
@@ -109,7 +110,7 @@ def prediction(data_dir, session, classifier_filename, verbose):
             "image": encoded_string
         })
         
-    return True, pred_names, ""
+    return PredictResponse("", True, pred_names)
 
 
             

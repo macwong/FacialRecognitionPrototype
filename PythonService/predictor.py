@@ -18,11 +18,11 @@ class PredictionInfo():
         pass
 
 class PredictResponse():
-    def __init__(super, error = ""):
-        super.success = False
-        super.predictions = None
+    def __init__(super, error = "", success = False, predictions = None, top_predictions = None):
+        super.success = success
+        super.predictions = predictions
         super.error = ""
-        super.top_predictions = None
+        super.top_predictions = top_predictions
         
 def predict(image, model_folder, verbose):
     temp_path = os.path.join(Globals.data_path, "temp")
@@ -73,13 +73,9 @@ def predict(image, model_folder, verbose):
     model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
-    success, predictions, error = classifier.prediction(temp_predict, MyGraph(), classifier_file, verbose)
+    predict_response = classifier.prediction(temp_predict, MyGraph(), classifier_file, verbose)
 
     print("Cleanup...")
     shutil.rmtree(temp_predict)
-    
-    predict_response = PredictResponse(error)
-    predict_response.success = success
-    predict_response.predictions = predictions
     
     return predict_response
