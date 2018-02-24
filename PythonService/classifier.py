@@ -11,16 +11,6 @@ import pickle
 from sklearn.svm import SVC
 from predictor import PredictResponse
 
-class WrongAnswer():
-    def __init__(self, predicted, actual, test_filepath, train_dirpath, actual_dirpath):
-        self.predicted = predicted
-        self.predicted_name = os.path.basename(train_dirpath)
-        self.actual = actual
-        self.actual_name = os.path.basename(actual_dirpath)
-        self.test_filepath = test_filepath
-        self.train_dirpath = train_dirpath
-        self.actual_dirpath = actual_dirpath
-
 def get_features(data_dir, session, classifier_filename, batch_size=90, image_size=160, seed=666):
     np.random.seed(seed=seed)
     
@@ -99,6 +89,11 @@ def prediction(data_dir, session, classifier_filename, verbose):
     pred_names = []
     for i in range(len(best_class_indices)):
         pred_name = class_names[best_class_indices[i]]
+        all_pred = predictions[i]
+        top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:3]
+        
+        for top_index in top_indices:
+            print(class_names[top_index])
         
         with open(paths[i], "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read())
@@ -110,7 +105,8 @@ def prediction(data_dir, session, classifier_filename, verbose):
             "image": encoded_string
         })
         
-    return PredictResponse("", True, pred_names)
-
+    predict_response = PredictResponse("", True, pred_names)
+    
+    return predict_response
 
             
