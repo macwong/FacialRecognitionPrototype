@@ -122,12 +122,12 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 copyto_path = os.path.join(temp_predicted_path, folder_name)
                 copy_tree(pred_info.photo_path, copyto_path)
                 
-                # Get the feature embeddings for the prediction, and get the average value
+                # Get the feature embeddings for the prediction's training data, and get the average value
                 predicted_features = get_features(temp_predicted_path, session, "")
-#                shutil.rmtree(copyto_path)
-                print(copyto_path)
+                shutil.rmtree(copyto_path)
                 
-                print(predicted_features)
+                predicted_mean = np.mean(predicted_features.emb_array, axis=0)
+                print(predicted_mean)
                 # Calculate the distance between the predicted and actual embeddings
                 
                 # Set the distance in the PredictionInfo object

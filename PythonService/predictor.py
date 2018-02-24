@@ -83,6 +83,6 @@ def predict(image, model_folder, verbose):
     
     predict_response = classifier.prediction(temp_predict, MyGraph(), classifier_file, model_path, verbose)
     print("Cleanup...")
-#    shutil.rmtree(temp_predict)
+    shutil.rmtree(temp_predict)
     
     return predict_response
