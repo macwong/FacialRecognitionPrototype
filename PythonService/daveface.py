@@ -73,19 +73,19 @@ def predict_internal(predict_func, verbose):
     image = requestData["image"]
     model = requestData["model"]
     
-    success, predictions, error = predict_func(image, model, verbose)
+    predict_response = predict_func(image, model, verbose)
     code = 400
     
-    if success:
+    if predict_response.success:
         returnValue = "Success!"
         code = 201
 
     print("Predicting ended...", returnValue)
     
     return jsonify({
-            'success': success,
-            'predictions': predictions,
-            'error': error
+            'success': predict_response.success,
+            'predictions': predict_response.predictions,
+            'error': predict_response.error
             }), code
 
 @app.route('/daveface/getmodels', methods=['GET'])

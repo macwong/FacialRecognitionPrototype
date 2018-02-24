@@ -9,12 +9,18 @@ from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
 
+class PredictResponse():
+    def __init__(super, error = ""):
+        super.success = False
+        super.predictions = None
+        super.error = ""
+        
 def predict(image, model_folder, verbose):
     temp_path = os.path.join(Globals.data_path, "temp")
     temp_data_path = os.path.join(temp_path, "data")
     
     if not os.path.exists(Globals.data_path):
-        return False, None, "Training Data Path not found"
+        return PredictResponse("Training Data Path not found")
     
     if not os.path.exists(temp_path):
         os.makedirs(temp_path)
@@ -32,7 +38,7 @@ def predict(image, model_folder, verbose):
     extension = guess_extension(prefix)
 
     if extension == None:
-        return False, None, "Not a valid file mime type"
+        return PredictResponse("Not a valid file mime type")
     
     image = image_split[1]
 
@@ -53,7 +59,7 @@ def predict(image, model_folder, verbose):
     temp_predict_data = os.path.join(temp_predict, "data")
     
     if not os.path.exists(temp_predict_data):
-        return False, None, "Could not detect face"
+        return PredictResponse("Could not detect face")
     
     model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
@@ -66,4 +72,8 @@ def predict(image, model_folder, verbose):
     print("Cleanup...")
     shutil.rmtree(temp_predict)
     
-    return success, predictions, error
+    predict_response = PredictResponse(error)
+    predict_response.success = success
+    predict_response.predictions = predictions
+    
+    return predict_response
