@@ -3,7 +3,7 @@ import shutil
 import base64
 from mimetypes import guess_extension
 import uuid
-from classifier import classifier
+import classifier
 import Helpers.align_dataset as align
 from align_options import AlignOptions
 from mygraph import MyGraph
@@ -73,10 +73,10 @@ def predict(image, model_folder, verbose):
     model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
-    success, predictions, error = classifier(mode = 'CLASSIFY', 
-           data_dir = temp_predict,
-           session = MyGraph(),
-           classifier_filename = classifier_file)
+    success, predictions, error = classifier.prediction(
+        data_dir = temp_predict,
+        session = MyGraph(),
+        classifier_filename = classifier_file)
 
     print("Cleanup...")
     shutil.rmtree(temp_predict)

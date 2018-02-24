@@ -39,7 +39,7 @@ def train(input_folder_path, model_folder_name):
     
     print("Training...")
     
-    classifier.classifier(mode = "TRAIN", 
+    classifier.train(
            data_dir = processed_dir,
            session = MyGraph(),
            classifier_filename = os.path.join(model_dir, "classifier.pkl"))
