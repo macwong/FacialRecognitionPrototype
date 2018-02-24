@@ -10,6 +10,8 @@ import math
 import pickle
 from sklearn.svm import SVC
 from predictor import PredictResponse, PredictionInfo
+from distutils.dir_util import copy_tree
+import shutil
 
 class FeatureEmbeddings():
     def __init__(self, success, error, dataset = None, emb_array = None, labels = None, paths = None, classifier_filename_exp = None):
@@ -80,7 +82,6 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     features = get_features(data_dir, session, classifier_filename)
 
     if features.success == False:
-        print(features.error)
         return PredictResponse(features.error)
     
     print('Testing classifier')
@@ -97,6 +98,11 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     pred_names = []
     pred_info_all = []
     
+    temp_predicted_path = os.path.join(data_dir, "predicted")
+    
+    if not os.path.exists(temp_predicted_path):
+        os.makedirs(temp_predicted_path)
+        
     for i in range(len(best_class_indices)):
         pred_name = class_names[best_class_indices[i]]
         all_pred = predictions[i]
@@ -109,10 +115,18 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 pred_info = PredictionInfo()
                 pred_info.name = class_names[top_index]
                 pred_info.probability = all_pred[top_index]
-                pred_info.photo_path = os.path.join(model_path, "data", pred_info.name.replace(' ', '_'))
+                folder_name = pred_info.name.replace(' ', '_')
+                pred_info.photo_path = os.path.join(model_path, "data", folder_name)
+                
+                # Create temp photo path for predicted values
+                copyto_path = os.path.join(temp_predicted_path, folder_name)
+                copy_tree(pred_info.photo_path, copyto_path)
                 
                 # Get the feature embeddings for the prediction, and get the average value
-                predicted_features = get_features(pred_info.photo_path, session, "")
+                predicted_features = get_features(temp_predicted_path, session, "")
+#                shutil.rmtree(copyto_path)
+                print(copyto_path)
+                
                 print(predicted_features)
                 # Calculate the distance between the predicted and actual embeddings
                 
