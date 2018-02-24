@@ -3,24 +3,12 @@ from __future__ import division
 from __future__ import print_function
 
 import base64
-import tensorflow as tf
 import numpy as np
-import argparse
 import Helpers.facenet.facenet as facenet
-import Helpers.facenet.lfw
 import os
-import sys
 import math
-import pandas as pd
-from sklearn import metrics
-from scipy.optimize import brentq
-from scipy import interpolate
 import pickle
 from sklearn.svm import SVC
-from matplotlib.pyplot import imshow
-import matplotlib.pyplot as plt
-from PIL import Image
-from tensorflow.python.platform import gfile
 
 class WrongAnswer():
     def __init__(self, predicted, actual, test_filepath, train_dirpath, actual_dirpath):
@@ -32,7 +20,7 @@ class WrongAnswer():
         self.train_dirpath = train_dirpath
         self.actual_dirpath = actual_dirpath
 
-def get_features(data_dir, session, classifier_filename, batch_size, image_size, seed):
+def get_features(data_dir, session, classifier_filename, batch_size=90, image_size=160, seed=666):
     np.random.seed(seed=seed)
     
     dataset = facenet.get_dataset(data_dir)
@@ -70,21 +58,12 @@ def get_features(data_dir, session, classifier_filename, batch_size, image_size,
     return emb_array, labels, dataset, classifier_filename_exp, paths
 
 
-def train(
-    data_dir,
-    session,
-    classifier_filename,
-    batch_size=90, 
-    image_size=160, 
-    seed=666):
+def train(data_dir, session, classifier_filename):
     
     emb_array, labels, dataset, classifier_filename_exp, paths = get_features(
         data_dir,
         session,
-        classifier_filename,
-        batch_size, 
-        image_size, 
-        seed)
+        classifier_filename)
     
     # Train classifier
     print('Training classifier')
@@ -99,34 +78,11 @@ def train(
         pickle.dump((model, class_names), outfile)
     print('Saved classifier model to file "%s"' % classifier_filename_exp)
 
-def prediction(
-    data_dir,
-    session,
-    classifier_filename,
-    batch_size=90, 
-    image_size=160, 
-    seed=666):
-
-    return prediction_internal(data_dir, session, classifier_filename, batch_size, image_size, seed)
-
-def prediction_verbose(
-    data_dir,
-    session,
-    classifier_filename,
-    batch_size=90, 
-    image_size=160, 
-    seed=666):
- 
-    return prediction_internal(data_dir, session, classifier_filename, batch_size, image_size, seed)
-    
-def prediction_internal(data_dir, session, classifier_filename, batch_size, image_size, seed):
+def prediction(data_dir, session, classifier_filename, verbose):
     emb_array, labels, dataset, classifier_filename_exp, paths = get_features(
         data_dir,
         session,
-        classifier_filename,
-        batch_size, 
-        image_size, 
-        seed)
+        classifier_filename)
     
     print('Testing classifier')
     with open(classifier_filename_exp, 'rb') as infile:

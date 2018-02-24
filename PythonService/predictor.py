@@ -73,10 +73,7 @@ def predict(image, model_folder, verbose):
     model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
-    success, predictions, error = classifier.prediction(
-        data_dir = temp_predict,
-        session = MyGraph(),
-        classifier_filename = classifier_file)
+    success, predictions, error = classifier.prediction(temp_predict, MyGraph(), classifier_file, verbose)
 
     print("Cleanup...")
     shutil.rmtree(temp_predict)
