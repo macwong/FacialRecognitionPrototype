@@ -49,6 +49,9 @@ def train():
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():
+    return predict_internal(predictor.predict)
+    
+def predict_internal(predict_func):
     print("Predicting started...")
     returnValue = "Fail..."
     
@@ -65,7 +68,7 @@ def predict():
     image = requestData["image"]
     model = requestData["model"]
     
-    success, predictions, error = predictor.predict(image, model)
+    success, predictions, error = predict_func(image, model)
     code = 400
     
     if success:
@@ -79,8 +82,7 @@ def predict():
             'predictions': predictions,
             'error': error
             }), code
-    
-    
+
 @app.route('/daveface/getmodels', methods=['GET'])
 def getmodels():
     directories = [
