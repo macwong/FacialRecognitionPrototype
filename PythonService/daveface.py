@@ -49,9 +49,14 @@ def train():
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():
-    return predict_internal(predictor.predict)
+    return predict_internal(predictor.predict, False)
+
+@app.route('/daveface/predict_verbose', methods=['POST'])
+def predict_verbose():
+    return predict_internal(predictor.predict, True)
     
-def predict_internal(predict_func):
+
+def predict_internal(predict_func, verbose):
     print("Predicting started...")
     returnValue = "Fail..."
     
@@ -68,7 +73,7 @@ def predict_internal(predict_func):
     image = requestData["image"]
     model = requestData["model"]
     
-    success, predictions, error = predict_func(image, model)
+    success, predictions, error = predict_func(image, model, verbose)
     code = 400
     
     if success:

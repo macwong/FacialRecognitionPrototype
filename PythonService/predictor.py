@@ -9,7 +9,7 @@ from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
 
-def predict(image, model_folder):
+def predict(image, model_folder, verbose):
     temp_path = os.path.join(Globals.data_path, "temp")
     temp_data_path = os.path.join(temp_path, "data")
     
