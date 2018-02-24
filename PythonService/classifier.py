@@ -127,8 +127,10 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 shutil.rmtree(copyto_path)
                 
                 predicted_mean = np.mean(predicted_features.emb_array, axis=0)
-                print(predicted_mean)
+                
                 # Calculate the distance between the predicted and actual embeddings
+                dist = np.sqrt(np.sum(np.square(np.subtract(features.emb_array, predicted_mean))))
+                print(dist)
                 
                 # Set the distance in the PredictionInfo object
                 # pred_info.distance = 
