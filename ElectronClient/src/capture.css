@@ -220,7 +220,7 @@ select {
 .input-toggle-handle {
   display: block;
   width: 84px;
-  height: 41px;
+  height: 31px;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#51c2d7), to(#51dacf));
   background-image: linear-gradient(#51c2d7, #51dacf);
   border-radius: 10em;
@@ -237,7 +237,7 @@ select {
   top: 6px;
   left: 8px;
   width: 32px;
-  height: 32px;
+  height: 20px;
   -webkit-transition: .4s ease;
   transition: .4s ease;
   background: #fff;
