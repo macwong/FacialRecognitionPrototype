@@ -9,11 +9,20 @@ from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
 
+class PredictionInfo():
+    def __init__(super):
+        super.name = ""
+        super.photo_path = ""
+        super.probability = 0
+        super.distance = 0
+        pass
+
 class PredictResponse():
     def __init__(super, error = ""):
         super.success = False
         super.predictions = None
         super.error = ""
+        super.top_predictions = None
         
 def predict(image, model_folder, verbose):
     temp_path = os.path.join(Globals.data_path, "temp")

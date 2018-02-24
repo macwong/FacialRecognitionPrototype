@@ -35,16 +35,7 @@ class WrongAnswer():
 def predict():
     pass
 
-def classifier(mode, # = 'CLASSIFY', 
-               data_dir, # = '../data/subset/train', 
-               session,
-               classifier_filename, # = '../data/subset/subset_classifier.pkl', 
-               batch_size=90, 
-               image_size=160, 
-               seed=666, 
-               min_nrof_images_per_class=20, 
-               nrof_train_images_per_class=10):
-  
+def get_features(data_dir, session, classifier_filename, batch_size, image_size, seed):
     np.random.seed(seed=seed)
     
     dataset = facenet.get_dataset(data_dir)
@@ -54,8 +45,6 @@ def classifier(mode, # = 'CLASSIFY',
         assert(len(cls.image_paths)>0, 'There must be at least one image for each class in the dataset')            
 
     paths, labels = facenet.get_image_paths_and_labels(dataset)
-    
-#    results = pd.DataFrame([len(dataset)], columns=['Classes'])
     
     print('Number of classes: %d' % len(dataset))
     print('Number of images: %d' % len(paths))
@@ -80,7 +69,60 @@ def classifier(mode, # = 'CLASSIFY',
         emb_array[start_index:end_index,:] = session.sess.run(session.embeddings, feed_dict=feed_dict)
     
     classifier_filename_exp = os.path.expanduser(classifier_filename)
+    
+    return emb_array, labels, dataset, classifier_filename_exp, paths
 
+
+def classifier(mode,
+               data_dir,
+               session,
+               classifier_filename,
+               batch_size=90, 
+               image_size=160, 
+               seed=666):
+  
+#    np.random.seed(seed=seed)
+#    
+#    dataset = facenet.get_dataset(data_dir)
+#
+#    # Check that there are at least one training image per class
+#    for cls in dataset:
+#        assert(len(cls.image_paths)>0, 'There must be at least one image for each class in the dataset')            
+#
+#    paths, labels = facenet.get_image_paths_and_labels(dataset)
+#    
+#    print('Number of classes: %d' % len(dataset))
+#    print('Number of images: %d' % len(paths))
+#    
+#    embedding_size = session.embeddings.get_shape()[1]
+#    
+#    # Run forward pass to calculate embeddings
+#    print('Calculating features for images')
+#    nrof_images = len(paths)
+#    
+#    if nrof_images == 0:
+#        return False, None, "Nobody's home"
+#
+#    nrof_batches_per_epoch = int(math.ceil(1.0*nrof_images / batch_size))
+#    emb_array = np.zeros((nrof_images, embedding_size))
+#    for i in range(nrof_batches_per_epoch):
+#        start_index = i*batch_size
+#        end_index = min((i+1)*batch_size, nrof_images)
+#        paths_batch = paths[start_index:end_index]
+#        images = facenet.load_data(paths_batch, False, False, image_size)
+#        feed_dict = { session.images_placeholder:images, session.phase_train_placeholder:False }
+#        emb_array[start_index:end_index,:] = session.sess.run(session.embeddings, feed_dict=feed_dict)
+#    
+#    classifier_filename_exp = os.path.expanduser(classifier_filename)
+
+    emb_array, labels, dataset, classifier_filename_exp, paths = get_features(
+               data_dir,
+               session,
+               classifier_filename,
+               batch_size, 
+               image_size, 
+               seed) 
+    
     if (mode=='TRAIN'):
         # Train classifier
         print('Training classifier')
@@ -105,7 +147,7 @@ def classifier(mode, # = 'CLASSIFY',
         predictions = model.predict_proba(emb_array)
 
         best_class_indices = np.argmax(predictions, axis=1)
-        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
+#        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
         
         pred_names = []
         for i in range(len(best_class_indices)):
@@ -133,13 +175,11 @@ def classifier(mode, # = 'CLASSIFY',
 
         predictions = model.predict_proba(emb_array)
         best_class_indices = np.argmax(predictions, axis=1)
-        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
+#        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
         
         for i in range(len(best_class_indices)):
-            msg = "WRONG!!!"
-            
             if np.equal(best_class_indices[i], labels[i]):
-                msg = "Correct"
+                pass
             else:
                 wrong = WrongAnswer(best_class_indices[i], 
                                     labels[i], 
@@ -152,12 +192,6 @@ def classifier(mode, # = 'CLASSIFY',
                 print(wrong.test_filepath)
                 print(wrong.train_dirpath)
                 print(wrong.actual_dirpath)
-                
-                
-#                     print("\nReading " + os.path.basename(paths[i]) + "... " + msg)
-
-#                     print('%4d  %s: %.3f' % (i, class_names[best_class_indices[i]], best_class_probabilities[i]))
-
             
         accuracy = np.mean(np.equal(best_class_indices, labels))
         print('\nAccuracy: %.3f' % accuracy)
