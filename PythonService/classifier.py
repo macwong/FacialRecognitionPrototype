@@ -128,6 +128,9 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 shutil.rmtree(copyto_path)
                 
                 # Calculate the distance between the predicted and actual embeddings
+                # The following URL has a basic example of the formula
+                # https://www.mathway.com/popular-problems/Basic%20Math/35308
+                # Our implementation just happens to have a few more coordinates (128 rather than 2)
                 dist = 0
                 
                 for emb in predicted_features.emb_array:
