@@ -82,6 +82,8 @@ html, body {
   padding: 5px;
   flex: 1;
   max-width: 160px;
+  -webkit-margin-start: 5px;
+  -webkit-margin-end: 5px;
 }
 
 .controlsContainer {
