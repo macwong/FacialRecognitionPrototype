@@ -8,8 +8,9 @@ const { dialog } = electron.remote;
 let isVideo = true;
 let defaultWidth;
 let defaultHeight;
+let currentModel;
 
-function getModels() {
+function getModels(callback) {
     let $models = $(document).find(".models");
 
     $.ajax({
@@ -22,10 +23,19 @@ function getModels() {
         for (var i = 0; i < result.models.length; i++) {
             let $option = $("<option></option>");
             $option.text(result.models[i]);
+            $option.val(result.models[i]);
             $select.append($option);
         }
 
         $models.html($select);
+
+        currentModel = $select.find("option:first").val();
+
+        $select.change((e) => {
+            currentModel = $select.val();
+        })
+
+        callback();
     });
 }
 
@@ -34,20 +44,20 @@ $(document).ready(() => {
     const canvasEl = document.getElementById("canvas");
     const $resultsContainer = $(document).find(".resultsContainer");
 
-    getModels();
-
-    navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
-        $resultsContainer.find(".resultsContents").text("Loading...")
-
-        var cam = document.getElementById('video')
-        cam.src = URL.createObjectURL(stream);
-
-        cam.onloadedmetadata = function(e) {
-            captureImage(videoEl, canvasEl, $resultsContainer);
-
-        };
-    }).catch(() =>  {
-        alert('could not connect stream');
+    getModels(() => {
+        navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
+            $resultsContainer.find(".resultsContents").text("Loading...")
+    
+            var cam = document.getElementById('video')
+            cam.src = URL.createObjectURL(stream);
+    
+            cam.onloadedmetadata = function(e) {
+                captureImage(videoEl, canvasEl, $resultsContainer);
+    
+            };
+        }).catch(() =>  {
+            alert('could not connect stream');
+        });
     });
 
     $(".segmented label input[type=radio]").each(function(){
@@ -143,7 +153,8 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         url: "http://localhost:5000/daveface/predict",
         type: "POST",
         data: JSON.stringify({
-            image: dataURL
+            image: dataURL,
+            model: currentModel
         }),
         contentType: "application/json; charset=utf-8",
         dataType:"json",

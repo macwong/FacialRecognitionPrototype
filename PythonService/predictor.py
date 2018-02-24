@@ -9,7 +9,7 @@ from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
 
-def predict(image):
+def predict(image, model_folder):
     temp_path = os.path.join(Globals.data_path, "temp")
     temp_data_path = os.path.join(temp_path, "data")
     
@@ -54,12 +54,6 @@ def predict(image):
     
     if not os.path.exists(temp_predict_data):
         return False, None, "Could not detect face"
-    
-#    model_folder = "test_model"
-#    model_folder = "lfw500"
-#    model_folder = "lfw614"
-#    model_folder = "lfw615"
-    model_folder = "timdata"
     
     model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
