@@ -1,3 +1,7 @@
+import os
+from pathlib import Path
+
 class Globals():
-    data_path = "D:\_GithubTest\FacialRecognitionPrototype\data"
-    model_path = "D:\_GithubTest\FacialRecognitionPrototype\models"
+    app_path = str(Path(os.getcwd()).parent)
+    data_path = os.path.join(app_path, "data")
+    model_path = os.path.join(app_path, "models")
