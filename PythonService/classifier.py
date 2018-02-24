@@ -10,7 +10,14 @@ import math
 import pickle
 from sklearn.svm import SVC
 from predictor import PredictResponse, PredictionInfo
-from daveglobals import Globals
+
+class FeatureEmbeddings():
+    def __init__(self, dataset, emb_array, labels, paths, classifier_filename_exp):
+        self.dataset = dataset
+        self.emb_array = emb_array
+        self.labels = labels
+        self.paths = paths
+        self.classifier_filename_exp = classifier_filename_exp
 
 def get_features(data_dir, session, classifier_filename, batch_size=90, image_size=160, seed=666):
     np.random.seed(seed=seed)
@@ -47,42 +54,36 @@ def get_features(data_dir, session, classifier_filename, batch_size=90, image_si
     
     classifier_filename_exp = os.path.expanduser(classifier_filename)
     
-    return emb_array, labels, dataset, classifier_filename_exp, paths
+    return FeatureEmbeddings(dataset, emb_array, labels, paths, classifier_filename_exp)
 
 
 def train(data_dir, session, classifier_filename):
     
-    emb_array, labels, dataset, classifier_filename_exp, paths = get_features(
-        data_dir,
-        session,
-        classifier_filename)
+    features = get_features(data_dir, session, classifier_filename)
     
     # Train classifier
     print('Training classifier')
     model = SVC(kernel='linear', probability=True)
-    model.fit(emb_array, labels)
+    model.fit(features.emb_array, features.labels)
 
     # Create a list of class names
-    class_names = [ cls.name.replace('_', ' ') for cls in dataset]
+    class_names = [ cls.name.replace('_', ' ') for cls in features.dataset]
 
     # Saving classifier model
-    with open(classifier_filename_exp, 'wb') as outfile:
+    with open(features.classifier_filename_exp, 'wb') as outfile:
         pickle.dump((model, class_names), outfile)
-    print('Saved classifier model to file "%s"' % classifier_filename_exp)
+    print('Saved classifier model to file "%s"' % features.classifier_filename_exp)
 
 def prediction(data_dir, session, classifier_filename, model_path, verbose):
-    emb_array, labels, dataset, classifier_filename_exp, paths = get_features(
-        data_dir,
-        session,
-        classifier_filename)
+    features = get_features(data_dir, session, classifier_filename)
     
     print('Testing classifier')
-    with open(classifier_filename_exp, 'rb') as infile:
+    with open(features.classifier_filename_exp, 'rb') as infile:
         (model, class_names) = pickle.load(infile)
         
-    print('Loaded classifier model from file "%s"' % classifier_filename_exp)
+    print('Loaded classifier model from file "%s"' % features.classifier_filename_exp)
 
-    predictions = model.predict_proba(emb_array)
+    predictions = model.predict_proba(features.emb_array)
 
     best_class_indices = np.argmax(predictions, axis=1)
 #        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
@@ -103,12 +104,20 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 pred_info.name = class_names[top_index]
                 pred_info.probability = all_pred[top_index]
                 pred_info.photo_path = os.path.join(model_path, pred_info.name.replace(' ', '_'))
-#                pred_info.distance = 
+                
+                # Get the feature embeddings for the person, and get the average value
+                
+                
+                # Calculate the distance between the predicted and actual embeddings
+                
+                # Set the distance in the PredictionInfo object
+                # pred_info.distance = 
+                
                 pred_info_list.append(pred_info.serialize())
                 
             pred_info_all.append(pred_info_list)
         
-        with open(paths[i], "rb") as image_file:
+        with open(features.paths[i], "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read())
             encoded_string = encoded_string.decode('utf-8')
         
