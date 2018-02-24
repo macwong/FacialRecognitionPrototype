@@ -17,7 +17,15 @@ function getModels() {
         type: "GET",
         dataType:"json"
     }).done((result) => {
-        console.log(result);
+        let $select = $("<select></select>");
+
+        for (var i = 0; i < result.models.length; i++) {
+            let $option = $("<option></option>");
+            $option.text(result.models[i]);
+            $select.append($option);
+        }
+
+        $models.html($select);
     });
 }
 
