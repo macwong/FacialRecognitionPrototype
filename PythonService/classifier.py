@@ -10,6 +10,7 @@ import math
 import pickle
 from sklearn.svm import SVC
 from predictor import PredictResponse, PredictionInfo
+from daveglobals import Globals
 
 def get_features(data_dir, session, classifier_filename, batch_size=90, image_size=160, seed=666):
     np.random.seed(seed=seed)
@@ -69,7 +70,7 @@ def train(data_dir, session, classifier_filename):
         pickle.dump((model, class_names), outfile)
     print('Saved classifier model to file "%s"' % classifier_filename_exp)
 
-def prediction(data_dir, session, classifier_filename, verbose):
+def prediction(data_dir, session, classifier_filename, model_path, verbose):
     emb_array, labels, dataset, classifier_filename_exp, paths = get_features(
         data_dir,
         session,
@@ -88,6 +89,7 @@ def prediction(data_dir, session, classifier_filename, verbose):
     
     pred_names = []
     pred_info_all = []
+    
     for i in range(len(best_class_indices)):
         pred_name = class_names[best_class_indices[i]]
         all_pred = predictions[i]
@@ -100,6 +102,8 @@ def prediction(data_dir, session, classifier_filename, verbose):
                 pred_info = PredictionInfo()
                 pred_info.name = class_names[top_index]
                 pred_info.probability = all_pred[top_index]
+                pred_info.photo_path = os.path.join(model_path, pred_info.name.replace(' ', '_'))
+#                pred_info.distance = 
                 pred_info_list.append(pred_info.serialize())
                 
             pred_info_all.append(pred_info_list)
