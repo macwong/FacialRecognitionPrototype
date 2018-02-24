@@ -49,7 +49,7 @@ def train():
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():
-    return predict_internal(predictor.predict, False)
+    return predict_internal(predictor.predict, True)
 
 @app.route('/daveface/predict_verbose', methods=['POST'])
 def predict_verbose():
@@ -85,7 +85,8 @@ def predict_internal(predict_func, verbose):
     return jsonify({
             'success': predict_response.success,
             'predictions': predict_response.predictions,
-            'error': predict_response.error
+            'error': predict_response.error,
+            'top_predictions': predict_response.top_predictions
             }), code
 
 @app.route('/daveface/getmodels', methods=['GET'])

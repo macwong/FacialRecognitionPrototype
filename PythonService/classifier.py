@@ -9,7 +9,7 @@ import os
 import math
 import pickle
 from sklearn.svm import SVC
-from predictor import PredictResponse
+from predictor import PredictResponse, PredictionInfo
 
 def get_features(data_dir, session, classifier_filename, batch_size=90, image_size=160, seed=666):
     np.random.seed(seed=seed)
@@ -87,13 +87,22 @@ def prediction(data_dir, session, classifier_filename, verbose):
 #        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
     
     pred_names = []
+    pred_info_all = []
     for i in range(len(best_class_indices)):
         pred_name = class_names[best_class_indices[i]]
         all_pred = predictions[i]
         top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:3]
         
-        for top_index in top_indices:
-            print(class_names[top_index])
+        if verbose:
+            pred_info_list = []
+            
+            for top_index in top_indices:
+                pred_info = PredictionInfo()
+                pred_info.name = class_names[top_index]
+                pred_info.probability = all_pred[top_index]
+                pred_info_list.append(pred_info.serialize())
+                
+            pred_info_all.append(pred_info_list)
         
         with open(paths[i], "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read())
@@ -105,7 +114,7 @@ def prediction(data_dir, session, classifier_filename, verbose):
             "image": encoded_string
         })
         
-    predict_response = PredictResponse("", True, pred_names)
+    predict_response = PredictResponse("", True, pred_names, pred_info_all)
     
     return predict_response
 

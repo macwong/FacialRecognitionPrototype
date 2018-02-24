@@ -10,19 +10,27 @@ from mygraph import MyGraph
 from daveglobals import Globals
 
 class PredictionInfo():
-    def __init__(super):
-        super.name = ""
-        super.photo_path = ""
-        super.probability = 0
-        super.distance = 0
+    def __init__(self):
+        self.name = ""
+        self.photo_path = ""
+        self.probability = 0
+        self.distance = 0
         pass
+    
+    def serialize(self):
+        return {
+            "name": self.name,
+            "photo_path": self.photo_path,
+            "probability": self.probability,
+            "distance": self.distance
+        }
 
 class PredictResponse():
-    def __init__(super, error = "", success = False, predictions = None, top_predictions = None):
-        super.success = success
-        super.predictions = predictions
-        super.error = ""
-        super.top_predictions = top_predictions
+    def __init__(self, error = "", success = False, predictions = None, top_predictions = None):
+        self.success = success
+        self.predictions = predictions
+        self.error = ""
+        self.top_predictions = top_predictions
         
 def predict(image, model_folder, verbose):
     temp_path = os.path.join(Globals.data_path, "temp")
