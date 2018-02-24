@@ -11,7 +11,7 @@ import pickle
 from sklearn.svm import SVC
 from predictor import PredictResponse, PredictionInfo
 from distutils.dir_util import copy_tree
-import shutil
+import uuid
 
 class FeatureEmbeddings():
     def __init__(self, success, error, dataset = None, emb_array = None, labels = None, paths = None, classifier_filename_exp = None):
@@ -101,7 +101,6 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     temp_predicted_path = os.path.join(data_dir, "predicted")
     
     if not os.path.exists(temp_predicted_path):
-        print(temp_predicted_path)
         os.makedirs(temp_predicted_path)
         
     for i in range(len(best_class_indices)):
@@ -111,7 +110,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         
         if verbose:
             pred_info_list = []
-            
+            print("Awesome indices:", len(top_indices))
             for top_index in top_indices:
                 pred_info = PredictionInfo()
                 pred_info.name = class_names[top_index]
@@ -120,12 +119,29 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 pred_info.photo_path = os.path.join(model_path, "data", folder_name)
                 
                 # Create temp photo path for predicted values
-                copyto_path = os.path.join(temp_predicted_path, folder_name)
-                copy_tree(pred_info.photo_path, copyto_path)
+                unique_path = os.path.join(temp_predicted_path, str(uuid.uuid4()))
+                
+                print("start", unique_path)
+                if not os.path.exists(unique_path):
+                    os.makedirs(unique_path)
+                
+                print("end", unique_path)
+                copyto_path = os.path.join(unique_path, folder_name)
+                
+                print(pred_info.photo_path)
+                print(copyto_path)
+
+#                print("start", copyto_path)
+#                if not os.path.exists(copyto_path):
+#                    os.makedirs(copyto_path)
+#                
+#                print("end", copyto_path)
+
+
+                copy_tree(pred_info.photo_path, copyto_path, update = 1)
                 
                 # Get the feature embeddings for the prediction's training data, and get the average value
-                predicted_features = get_features(temp_predicted_path, session, "")
-                shutil.rmtree(copyto_path)
+                predicted_features = get_features(unique_path, session, "")
                 
                 # Calculate the distance between the predicted and actual embeddings
                 # The following URL has a basic example of the formula
@@ -137,6 +153,9 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                     dist = dist + np.sqrt(np.sum(np.square(np.subtract(features.emb_array, emb))))
                 
                 dist = dist / len(predicted_features.emb_array)
+                print(len(predicted_features.emb_array))
+                print(dist)
+                
                 
                 # Set the distance in the PredictionInfo object
                 pred_info.distance = dist
