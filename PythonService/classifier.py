@@ -12,7 +12,9 @@ from sklearn.svm import SVC
 from predictor import PredictResponse, PredictionInfo
 
 class FeatureEmbeddings():
-    def __init__(self, dataset, emb_array, labels, paths, classifier_filename_exp):
+    def __init__(self, success, error, dataset = None, emb_array = None, labels = None, paths = None, classifier_filename_exp = None):
+        self.success = success
+        self.error = error
         self.dataset = dataset
         self.emb_array = emb_array
         self.labels = labels
@@ -40,7 +42,7 @@ def get_features(data_dir, session, classifier_filename, batch_size=90, image_si
     nrof_images = len(paths)
     
     if nrof_images == 0:
-        return False, None, "Nobody's home"
+        return FeatureEmbeddings(False, "Nobody's home")
 
     nrof_batches_per_epoch = int(math.ceil(1.0*nrof_images / batch_size))
     emb_array = np.zeros((nrof_images, embedding_size))
@@ -54,7 +56,7 @@ def get_features(data_dir, session, classifier_filename, batch_size=90, image_si
     
     classifier_filename_exp = os.path.expanduser(classifier_filename)
     
-    return FeatureEmbeddings(dataset, emb_array, labels, paths, classifier_filename_exp)
+    return FeatureEmbeddings(True, "", dataset, emb_array, labels, paths, classifier_filename_exp)
 
 
 def train(data_dir, session, classifier_filename):
@@ -76,6 +78,10 @@ def train(data_dir, session, classifier_filename):
 
 def prediction(data_dir, session, classifier_filename, model_path, verbose):
     features = get_features(data_dir, session, classifier_filename)
+
+    if features.success == False:
+        print(features.error)
+        return PredictResponse(features.error)
     
     print('Testing classifier')
     with open(features.classifier_filename_exp, 'rb') as infile:
@@ -103,11 +109,11 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 pred_info = PredictionInfo()
                 pred_info.name = class_names[top_index]
                 pred_info.probability = all_pred[top_index]
-                pred_info.photo_path = os.path.join(model_path, pred_info.name.replace(' ', '_'))
+                pred_info.photo_path = os.path.join(model_path, "data", pred_info.name.replace(' ', '_'))
                 
-                # Get the feature embeddings for the person, and get the average value
-                
-                
+                # Get the feature embeddings for the prediction, and get the average value
+                predicted_features = get_features(pred_info.photo_path, session, "")
+                print(predicted_features)
                 # Calculate the distance between the predicted and actual embeddings
                 
                 # Set the distance in the PredictionInfo object

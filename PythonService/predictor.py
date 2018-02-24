@@ -29,7 +29,7 @@ class PredictResponse():
     def __init__(self, error = "", success = False, predictions = None, top_predictions = None):
         self.success = success
         self.predictions = predictions
-        self.error = ""
+        self.error = error
         self.top_predictions = top_predictions
         
 def predict(image, model_folder, verbose):
@@ -82,7 +82,6 @@ def predict(image, model_folder, verbose):
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
     predict_response = classifier.prediction(temp_predict, MyGraph(), classifier_file, model_path, verbose)
-
     print("Cleanup...")
     shutil.rmtree(temp_predict)
     
