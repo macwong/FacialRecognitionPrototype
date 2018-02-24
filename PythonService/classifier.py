@@ -101,6 +101,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     temp_predicted_path = os.path.join(data_dir, "predicted")
     
     if not os.path.exists(temp_predicted_path):
+        print(temp_predicted_path)
         os.makedirs(temp_predicted_path)
         
     for i in range(len(best_class_indices)):
@@ -126,10 +127,15 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 predicted_features = get_features(temp_predicted_path, session, "")
                 shutil.rmtree(copyto_path)
                 
-                predicted_mean = np.mean(predicted_features.emb_array, axis=0)
+#                predicted_mean = np.mean(predicted_features.emb_array, axis=0)
                 
                 # Calculate the distance between the predicted and actual embeddings
-                dist = np.sqrt(np.sum(np.square(np.subtract(features.emb_array, predicted_mean))))
+                dist = 0
+                
+                for emb in predicted_features.emb_array:
+                    dist = dist + np.sqrt(np.sum(np.square(np.subtract(features.emb_array, emb))))
+                
+                dist = dist / len(predicted_features.emb_array)
                 print(dist)
                 
                 # Set the distance in the PredictionInfo object
