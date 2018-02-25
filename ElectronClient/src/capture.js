@@ -172,10 +172,11 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             }
             else {
                 var dataURI = "data:image/png;base64,"
-
+                
                 $resultsContents.empty();
-
+                
                 for (var i = 0; i < arrayLength; i++) {
+                    pred_name = result.predictions[i].pred_name;
                     let $figure = $("<figure></figure>");
                     $figure.addClass("person");
 
@@ -184,11 +185,31 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
 
                     let $figCaption = $("<figcaption></figcaption>");
                     $figCaption.addClass("caption");
-                    $figCaption.text(result.predictions[i].pred_name);
+                    $figCaption.text(pred_name);
 
                     let $icon = $("<img />")
                     $icon.addClass("icon");
-                    $icon.prop("src", "../images/verified.png")
+                    
+                    for (var pred in result.top_predictions[i]) {
+                        let train_name = result.top_predictions[i][pred].name;
+                        
+                        if (train_name === pred_name) {
+                            distance = result.top_predictions[i][pred].distance;
+                            
+                            if (distance < 0.8) {
+                                $icon.prop("src", "../images/verified.png");
+                            }
+                            else if (distance < 1.0) {
+                                $icon.prop("src", "../images/like.png");
+                            }
+                            else if (distance < 1.2) {
+                                $icon.prop("src", "../images/maybe.png");
+                            }
+                            else {
+                                $icon.prop("src", "../images/rotten.png");
+                            }
+                        }
+                    }
                     
                     $figure.append($image);
                     $figure.append($figCaption);
