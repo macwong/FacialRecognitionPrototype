@@ -186,8 +186,14 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                     $figCaption.addClass("caption");
                     $figCaption.text(result.predictions[i].pred_name);
 
+                    let $icon = $("<img />")
+                    $icon.addClass("icon");
+                    $icon.prop("src", "../images/verified.png")
+                    
                     $figure.append($image);
                     $figure.append($figCaption);
+                    $figure.append($icon);
+
                     $resultsContents.append($figure);
                 }
 
