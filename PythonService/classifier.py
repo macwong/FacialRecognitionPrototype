@@ -121,22 +121,10 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 # Create temp photo path for predicted values
                 unique_path = os.path.join(temp_predicted_path, str(uuid.uuid4()))
                 
-                print("start", unique_path)
                 if not os.path.exists(unique_path):
                     os.makedirs(unique_path)
                 
-                print("end", unique_path)
                 copyto_path = os.path.join(unique_path, folder_name)
-                
-                print(pred_info.photo_path)
-                print(copyto_path)
-
-#                print("start", copyto_path)
-#                if not os.path.exists(copyto_path):
-#                    os.makedirs(copyto_path)
-#                
-#                print("end", copyto_path)
-
 
                 copy_tree(pred_info.photo_path, copyto_path, update = 1)
                 
@@ -150,7 +138,10 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 dist = 0
                 
                 for emb in predicted_features.emb_array:
-                    dist = dist + np.sqrt(np.sum(np.square(np.subtract(features.emb_array, emb))))
+                    single_dist = np.sqrt(np.sum(np.square(np.subtract(features.emb_array[i], emb))))
+                    print(single_dist)
+                    
+                    dist = dist + single_dist
                 
                 dist = dist / len(predicted_features.emb_array)
                 print(len(predicted_features.emb_array))

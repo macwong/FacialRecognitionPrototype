@@ -131,6 +131,7 @@ $(document).ready(() => {
                 }
 
                 img.src = filePaths[0];
+                $(canvasEl).data("file_source", filePaths[0]);
             }
         );
     });
@@ -141,14 +142,15 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     defaultWidth = videoEl.videoWidth;
     defaultHeight = videoEl.videoHeight;
+    var dataURL = $(canvasEl).data("file_source");
 
     if (isVideo) {
         canvasEl.width = defaultWidth;
         canvasEl.height = defaultHeight;
         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+        var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
     }
 
-    var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
     $.ajax({
         url: "http://localhost:5000/daveface/predict",
         type: "POST",
