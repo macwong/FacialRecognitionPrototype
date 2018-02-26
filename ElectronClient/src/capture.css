@@ -63,6 +63,10 @@ body {
   border-bottom: dotted 1px grey;
 }
 
+.row:first-child {
+  border-top: dotted 1px grey;
+}
+
 .row .predicted-image {
   height: 50px;
   width: 50px;
