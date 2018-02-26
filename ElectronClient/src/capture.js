@@ -143,6 +143,7 @@ $(document).ready(() => {
 function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
+    var $history = $(document).find(".history");
     defaultWidth = videoEl.videoWidth;
     defaultHeight = videoEl.videoHeight;
     var dataURL = $(canvasEl).data("file_source");
@@ -195,10 +196,52 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 for (var i = 0; i < arrayLength; i++) {
                     createPhoto(result, $resultsContents, i);
 
-                    // Create a history row
-                    // history.append();
-                    // let $row = $("<div></div>");
-                    // $row.addClass("row");
+                    let pred_result = result.predictions[i];
+                    history.push(pred_result);
+
+                    let $row = $("<div></div>");
+                    $row.data("prediction_id", pred_result.prediction_id);
+                    $row.addClass("row");
+
+                    let $face = $("<img />");
+                    $face.addClass("predicted-image");
+                    $face.prop("src", m_dataURI + pred_result.image);
+
+                    let $rowText = $("<div></div>");
+                    $rowText.addClass("row-text");
+                    $rowText.text(pred_result.pred_name);
+
+                    let $name = $("<div></div>");
+                    $name.addClass("name");
+
+                    let $time = $("<div></div>");
+                    $time.addClass("time");
+                    $time.text("26/02/2018 02:40:55 PM");
+
+                    let $rating = $("<div></div>");
+                    $rating.addClass("rating");
+
+                    let $icon = $("<img />");
+                    pred_info = setPredictionIcon(pred_result.info, pred_result.pred_name, $icon);
+
+                    let ratingCount = 5;
+
+                    if (pred_info !== null) {
+                        ratingCount = getRating(pred_info.distance);
+                    }
+
+                    $row.append($face);
+                    $rowText.append($name);
+                    $rowText.append($time);
+
+                    for (var rate = 0; rate < ratingCount; rate++) {
+                        $rating.append($icon.clone());
+                    }
+
+                    $rowText.append($rating);
+                    $row.append($rowText);
+
+                    $history.append($row);
                 }
 
                 if (isVideo) {
@@ -260,34 +303,63 @@ function createPhoto(result, $resultsContents, rowNumber) {
 
     let $icon = $("<img />")
     $icon.addClass("icon");
-    
-    for (var pred in result.predictions[rowNumber].info) {
-        let train_name = result.predictions[rowNumber].info[pred].name;
-        
-        if (train_name === pred_name) {
-            distance = result.predictions[rowNumber].info[pred].distance;
-            
-            if (distance < 0.75) {
-                $icon.prop("src", "../images/verified.png");
-            }
-            else if (distance < 0.9) {
-                $icon.prop("src", "../images/like.png");
-            }
-            else if (distance < 1.05) {
-                $icon.prop("src", "../images/maybe.png");
-            }
-            else if (distance < 1.2) {
-                $icon.prop("src", "../images/noidea.png");
-            }
-            else {
-                $icon.prop("src", "../images/rotten.png");
-            }
-        }
-    }
+    setPredictionIcon(result.predictions[rowNumber].info, pred_name, $icon);
     
     $figure.append($image);
     $figure.append($figCaption);
     $figure.append($icon);
 
     $resultsContents.append($figure);
+}
+
+function setPredictionIcon(info, pred_name, $icon) {
+    for (var pred in info) {
+        let train_name = info[pred].name;
+        
+        if (train_name === pred_name) {
+            distance = info[pred].distance;
+            setPredictionImage($icon, distance);
+            return info[pred];
+        }
+    }
+
+    return null;
+}
+
+function getRating(distance) {
+    console.log(distance);
+
+    if (distance < 0.75) {
+        return 5;
+    }
+    else if (distance < 0.9) {
+        return 4;
+    }
+    else if (distance < 1.05) {
+        return 3;
+    }
+    else if (distance < 1.2) {
+        return 2;
+    }
+    else {
+        return 1;
+    }
+}
+
+function setPredictionImage($icon, distance) {
+    if (distance < 0.75) {
+        $icon.prop("src", "../images/verified.png");
+    }
+    else if (distance < 0.9) {
+        $icon.prop("src", "../images/like.png");
+    }
+    else if (distance < 1.05) {
+        $icon.prop("src", "../images/maybe.png");
+    }
+    else if (distance < 1.2) {
+        $icon.prop("src", "../images/noidea.png");
+    }
+    else {
+        $icon.prop("src", "../images/rotten.png");
+    }
 }

@@ -12,6 +12,7 @@ from sklearn.svm import SVC
 from predictor import PredictResponse, PredictionInfo
 from distutils.dir_util import copy_tree
 import uuid
+from daveglobals import Globals
 
 class FeatureEmbeddings():
     def __init__(self, success, error, dataset = None, emb_array = None, labels = None, paths = None, classifier_filename_exp = None):
@@ -157,7 +158,12 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             encoded_string = encoded_string.decode('utf-8')
         
         print(pred_name)
+        
+        prediction_id = Globals.current_prediction_id
+        Globals.current_prediction_id += 1
+        
         pred_names.append({
+            "prediction_id": prediction_id,
             "pred_name": pred_name,
             "image": encoded_string,
             "info": pred_info_list
