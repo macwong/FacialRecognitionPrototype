@@ -5,6 +5,8 @@ const $ = require("jquery");
 const fs = require("fs");
 const { dialog } = electron.remote;
 
+const m_dataURI = "data:image/png;base64,"
+
 let isVideo = true;
 let defaultWidth;
 let defaultHeight;
@@ -171,10 +173,9 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 $resultsContents.text("Dude! You're invisible!");
             }
             else {
-                var dataURI = "data:image/png;base64,"
-                
                 $resultsContents.empty();
                 
+                // Person in results on bottom
                 // <figure class="person">
                 //     <img />
                 //     <figcaption class="caption">
@@ -183,50 +184,24 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 //     <img src="../images/verified.png" />
                 // </figure>
 
+                // A row of data in the history column
+                // <div class="row">
+                //     <img class="predicted-image" src="../images/like.png" />
+                //     <div class="row-text">
+                //         <div class="name">David McCormick</div>
+                //         <div class="time">26/02/2018 02:40:55 PM</div>
+                //         <div class="rating">
+                //             <img src="../images/verified.png" />
+                //             <img src="../images/verified.png" />
+                //             <img src="../images/verified.png" />
+                //             <img src="../images/verified.png" />
+                //             <img src="../images/verified.png" />
+                //         </div>
+                //     </div>
+                // </div>
+
                 for (var i = 0; i < arrayLength; i++) {
-                    pred_name = result.predictions[i].pred_name;
-                    let $figure = $("<figure></figure>");
-                    $figure.addClass("person");
-
-                    let $image = $("<img />");
-                    $image.prop("src", dataURI + result.predictions[i].image);
-
-                    let $figCaption = $("<figcaption></figcaption>");
-                    $figCaption.addClass("caption");
-                    $figCaption.text(pred_name);
-
-                    let $icon = $("<img />")
-                    $icon.addClass("icon");
-                    
-                    for (var pred in result.top_predictions[i]) {
-                        let train_name = result.top_predictions[i][pred].name;
-                        
-                        if (train_name === pred_name) {
-                            distance = result.top_predictions[i][pred].distance;
-                            
-                            if (distance < 0.75) {
-                                $icon.prop("src", "../images/verified.png");
-                            }
-                            else if (distance < 0.9) {
-                                $icon.prop("src", "../images/like.png");
-                            }
-                            else if (distance < 1.05) {
-                                $icon.prop("src", "../images/maybe.png");
-                            }
-                            else if (distance < 1.2) {
-                                $icon.prop("src", "../images/noidea.png");
-                            }
-                            else {
-                                $icon.prop("src", "../images/rotten.png");
-                            }
-                        }
-                    }
-                    
-                    $figure.append($image);
-                    $figure.append($figCaption);
-                    $figure.append($icon);
-
-                    $resultsContents.append($figure);
+                    createPhoto(result, $resultsContents, i);
                 }
 
                 if (isVideo) {
@@ -259,4 +234,50 @@ function fadeStuff($resultsOverlay) {
 
 function clearOverlay($resultsOverlay) {
     $resultsOverlay.stop(true).css('opacity', '0.0');
+}
+
+function createPhoto(result, $resultsContents, rowNumber) {
+    pred_name = result.predictions[rowNumber].pred_name;
+    let $figure = $("<figure></figure>");
+    $figure.addClass("person");
+
+    let $image = $("<img />");
+    $image.prop("src", m_dataURI + result.predictions[rowNumber].image);
+
+    let $figCaption = $("<figcaption></figcaption>");
+    $figCaption.addClass("caption");
+    $figCaption.text(pred_name);
+
+    let $icon = $("<img />")
+    $icon.addClass("icon");
+    
+    for (var pred in result.top_predictions[rowNumber]) {
+        let train_name = result.top_predictions[rowNumber][pred].name;
+        
+        if (train_name === pred_name) {
+            distance = result.top_predictions[rowNumber][pred].distance;
+            
+            if (distance < 0.75) {
+                $icon.prop("src", "../images/verified.png");
+            }
+            else if (distance < 0.9) {
+                $icon.prop("src", "../images/like.png");
+            }
+            else if (distance < 1.05) {
+                $icon.prop("src", "../images/maybe.png");
+            }
+            else if (distance < 1.2) {
+                $icon.prop("src", "../images/noidea.png");
+            }
+            else {
+                $icon.prop("src", "../images/rotten.png");
+            }
+        }
+    }
+    
+    $figure.append($image);
+    $figure.append($figCaption);
+    $figure.append($icon);
+
+    $resultsContents.append($figure);
 }
