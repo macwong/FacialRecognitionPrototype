@@ -46,6 +46,7 @@ $(document).ready(() => {
     const videoEl = document.getElementById("video");
     const canvasEl = document.getElementById("canvas");
     const $resultsContainer = $(document).find(".resultsContainer");
+    const $history = $(document).find(".history");
 
     getModels(() => {
         navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
@@ -61,6 +62,19 @@ $(document).ready(() => {
         }).catch(() =>  {
             alert('could not connect stream');
         });
+    });
+
+    $(document).find(".input-checkbox").change((e) => {
+        let $inputCheckbox = $(e.currentTarget);
+
+        if ($inputCheckbox.is(":checked")) {
+            console.log("Show busy mode");
+            $history.show();
+        }
+        else {
+            console.log("Hide busy mode");
+            $history.hide();
+        }
     });
 
     $(".segmented label input[type=radio]").each(function(){
