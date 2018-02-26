@@ -73,6 +73,7 @@ body {
 }
 
 .row .row-text {
+  font-size: 14px;
   margin-left: 15px;
   display: flex;
   align-items: flex-start;

@@ -31,7 +31,6 @@ class PredictResponse():
         self.success = success
         self.predictions = predictions
         self.error = error
-        self.top_predictions = top_predictions
         
 def predict(image, model_folder, verbose):
     temp_path = os.path.join(Globals.data_path, "temp")

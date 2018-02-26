@@ -11,6 +11,7 @@ let isVideo = true;
 let defaultWidth;
 let defaultHeight;
 let currentModel;
+let history = [];
 
 function getModels(callback) {
     let $models = $(document).find(".models");
@@ -175,15 +176,6 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             else {
                 $resultsContents.empty();
                 
-                // Person in results on bottom
-                // <figure class="person">
-                //     <img />
-                //     <figcaption class="caption">
-                //         David McCormick
-                //     </figcaption>
-                //     <img src="../images/verified.png" />
-                // </figure>
-
                 // A row of data in the history column
                 // <div class="row">
                 //     <img class="predicted-image" src="../images/like.png" />
@@ -202,6 +194,11 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
 
                 for (var i = 0; i < arrayLength; i++) {
                     createPhoto(result, $resultsContents, i);
+
+                    // Create a history row
+                    // history.append();
+                    // let $row = $("<div></div>");
+                    // $row.addClass("row");
                 }
 
                 if (isVideo) {
@@ -236,7 +233,20 @@ function clearOverlay($resultsOverlay) {
     $resultsOverlay.stop(true).css('opacity', '0.0');
 }
 
+function createHistory() {
+
+}
+
 function createPhoto(result, $resultsContents, rowNumber) {
+    // Person in results on bottom
+    // <figure class="person">
+    //     <img />
+    //     <figcaption class="caption">
+    //         David McCormick
+    //     </figcaption>
+    //     <img src="../images/verified.png" />
+    // </figure>
+
     pred_name = result.predictions[rowNumber].pred_name;
     let $figure = $("<figure></figure>");
     $figure.addClass("person");
@@ -251,11 +261,11 @@ function createPhoto(result, $resultsContents, rowNumber) {
     let $icon = $("<img />")
     $icon.addClass("icon");
     
-    for (var pred in result.top_predictions[rowNumber]) {
-        let train_name = result.top_predictions[rowNumber][pred].name;
+    for (var pred in result.predictions[rowNumber].info) {
+        let train_name = result.predictions[rowNumber].info[pred].name;
         
         if (train_name === pred_name) {
-            distance = result.top_predictions[rowNumber][pred].distance;
+            distance = result.predictions[rowNumber].info[pred].distance;
             
             if (distance < 0.75) {
                 $icon.prop("src", "../images/verified.png");

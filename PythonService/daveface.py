@@ -85,8 +85,7 @@ def predict_internal(predict_func, verbose):
     return jsonify({
             'success': predict_response.success,
             'predictions': predict_response.predictions,
-            'error': predict_response.error,
-            'top_predictions': predict_response.top_predictions
+            'error': predict_response.error
             }), code
 
 @app.route('/daveface/getmodels', methods=['GET'])

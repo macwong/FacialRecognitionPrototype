@@ -96,7 +96,6 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
 #        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
     
     pred_names = []
-    pred_info_all = []
     
     temp_predicted_path = os.path.join(data_dir, "predicted")
     
@@ -152,8 +151,6 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 pred_info.distance = dist
                 
                 pred_info_list.append(pred_info.serialize())
-                
-            pred_info_all.append(pred_info_list)
         
         with open(features.paths[i], "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read())
@@ -162,10 +159,11 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         print(pred_name)
         pred_names.append({
             "pred_name": pred_name,
-            "image": encoded_string
+            "image": encoded_string,
+            "info": pred_info_list
         })
         
-    predict_response = PredictResponse("", True, pred_names, pred_info_all)
+    predict_response = PredictResponse("", True, pred_names)
     
     return predict_response
 
