@@ -22,7 +22,7 @@ body {
   display: flex;
   position: relative;
   justify-content: center;
-  align-items: center;
+  align-items: initial;
 }
 
 .canvas {
@@ -35,16 +35,21 @@ body {
 
 .column {
   flex: 1;
+  padding: 10px;
 }
 
 .column-one {
   order: 1;
+  padding: 10px 5px 10px 10px;
 }
 .column-two {
   order: 2;
+  display: flex;
+  align-items: center;
 }
 .column-three {
   order: 3;
+  padding: 10px 10px 10px 5px;
 }
 
 .resultsContainer {
