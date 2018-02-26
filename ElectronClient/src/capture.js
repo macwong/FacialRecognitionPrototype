@@ -175,6 +175,14 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 
                 $resultsContents.empty();
                 
+                // <figure class="person">
+                //     <img />
+                //     <figcaption class="caption">
+                //         David McCormick
+                //     </figcaption>
+                //     <img src="../images/verified.png" />
+                // </figure>
+
                 for (var i = 0; i < arrayLength; i++) {
                     pred_name = result.predictions[i].pred_name;
                     let $figure = $("<figure></figure>");
@@ -196,14 +204,17 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                         if (train_name === pred_name) {
                             distance = result.top_predictions[i][pred].distance;
                             
-                            if (distance < 0.8) {
+                            if (distance < 0.75) {
                                 $icon.prop("src", "../images/verified.png");
                             }
-                            else if (distance < 1.0) {
+                            else if (distance < 0.9) {
                                 $icon.prop("src", "../images/like.png");
                             }
-                            else if (distance < 1.2) {
+                            else if (distance < 1.05) {
                                 $icon.prop("src", "../images/maybe.png");
+                            }
+                            else if (distance < 1.2) {
+                                $icon.prop("src", "../images/noidea.png");
                             }
                             else {
                                 $icon.prop("src", "../images/rotten.png");

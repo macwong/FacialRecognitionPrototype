@@ -8,12 +8,20 @@
   <body>
     <div class="container">
       <div class="videoContainer">
-          <div class="column column-one">LHS container</div>
+          <div class="column column-one">
+              <div class="row">
+                  <img class="predicted-image" src="../images/like.png" />
+                  <span class="name">David McCormick</span>
+                  <img class="icon" src="../images/like.png" />
+              </div>
+          </div>
           <div class="column column-two">
               <video class="video" id="video" width="640" height="480" autoplay></video>
               <canvas class="canvas" id="canvas" width="640" height="480" style="display: none;"></canvas>
           </div>
-          <div class="column column-three">RHS container</div>
+          <div class="column column-three">
+            <!-- RHS container -->
+          </div>
         </div>
         <div class="controlsContainer">
             <div class="models">
@@ -37,7 +45,6 @@
             <div class="resultsContents"></div>
             <div class="resultsOverlay"></div>
         </div>
-
     </div>
     <script>
       // You can also require other files to run in this process
