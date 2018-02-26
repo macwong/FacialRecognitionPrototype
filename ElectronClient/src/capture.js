@@ -177,71 +177,9 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             else {
                 $resultsContents.empty();
                 
-                // A row of data in the history column
-                // <div class="row">
-                //     <img class="predicted-image" src="../images/like.png" />
-                //     <div class="row-text">
-                //         <div class="name">David McCormick</div>
-                //         <div class="time">26/02/2018 02:40:55 PM</div>
-                //         <div class="rating">
-                //             <img src="../images/verified.png" />
-                //             <img src="../images/verified.png" />
-                //             <img src="../images/verified.png" />
-                //             <img src="../images/verified.png" />
-                //             <img src="../images/verified.png" />
-                //         </div>
-                //     </div>
-                // </div>
-
                 for (var i = 0; i < arrayLength; i++) {
                     createPhoto(result, $resultsContents, i);
-
-                    let pred_result = result.predictions[i];
-                    history.push(pred_result);
-
-                    let $row = $("<div></div>");
-                    $row.data("prediction_id", pred_result.prediction_id);
-                    $row.addClass("row");
-
-                    let $face = $("<img />");
-                    $face.addClass("predicted-image");
-                    $face.prop("src", m_dataURI + pred_result.image);
-
-                    let $rowText = $("<div></div>");
-                    $rowText.addClass("row-text");
-                    $rowText.text(pred_result.pred_name);
-
-                    let $name = $("<div></div>");
-                    $name.addClass("name");
-
-                    let $time = $("<div></div>");
-                    $time.addClass("time");
-                    $time.text("26/02/2018 02:40:55 PM");
-
-                    let $rating = $("<div></div>");
-                    $rating.addClass("rating");
-
-                    let $icon = $("<img />");
-                    pred_info = setPredictionIcon(pred_result.info, pred_result.pred_name, $icon);
-
-                    let ratingCount = 5;
-
-                    if (pred_info !== null) {
-                        ratingCount = getRating(pred_info.distance);
-                    }
-
-                    $row.append($face);
-                    $rowText.append($name);
-                    $rowText.append($time);
-
-                    for (var rate = 0; rate < ratingCount; rate++) {
-                        $rating.append($icon.clone());
-                    }
-
-                    $rowText.append($rating);
-                    $row.append($rowText);
-
-                    $history.append($row);
+                    createHistory(result.predictions[i], $history);
                 }
 
                 if (isVideo) {
@@ -276,7 +214,68 @@ function clearOverlay($resultsOverlay) {
     $resultsOverlay.stop(true).css('opacity', '0.0');
 }
 
-function createHistory() {
+function createHistory(pred_result, $history) {
+    // A row of data in the history column
+    // <div class="row">
+    //     <img class="predicted-image" src="../images/like.png" />
+    //     <div class="row-text">
+    //         <div class="name">David McCormick</div>
+    //         <div class="time">26/02/2018 02:40:55 PM</div>
+    //         <div class="rating">
+    //             <img src="../images/verified.png" />
+    //             <img src="../images/verified.png" />
+    //             <img src="../images/verified.png" />
+    //             <img src="../images/verified.png" />
+    //             <img src="../images/verified.png" />
+    //         </div>
+    //     </div>
+    // </div>
+
+    history.push(pred_result);
+
+    let $row = $("<div></div>");
+    $row.data("prediction_id", pred_result.prediction_id);
+    $row.addClass("row");
+
+    let $face = $("<img />");
+    $face.addClass("predicted-image");
+    $face.prop("src", m_dataURI + pred_result.image);
+
+    let $rowText = $("<div></div>");
+    $rowText.addClass("row-text");
+    $rowText.text(pred_result.pred_name);
+
+    let $name = $("<div></div>");
+    $name.addClass("name");
+
+    let $time = $("<div></div>");
+    $time.addClass("time");
+    $time.text("26/02/2018 02:40:55 PM");
+
+    let $rating = $("<div></div>");
+    $rating.addClass("rating");
+
+    let $icon = $("<img />");
+    pred_info = setPredictionIcon(pred_result.info, pred_result.pred_name, $icon);
+
+    let ratingCount = 5;
+
+    if (pred_info !== null) {
+        ratingCount = getRating(pred_info.distance);
+    }
+
+    $row.append($face);
+    $rowText.append($name);
+    $rowText.append($time);
+
+    for (var rate = 0; rate < ratingCount; rate++) {
+        $rating.append($icon.clone());
+    }
+
+    $rowText.append($rating);
+    $row.append($rowText);
+
+    $history.append($row);
 
 }
 
