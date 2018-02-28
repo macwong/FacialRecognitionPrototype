@@ -61,6 +61,11 @@ body {
   align-items: flex-start;
   padding: 10px 5px;
   border-bottom: dotted 1px grey;
+  cursor: pointer;
+  background-color: white;
+}
+.row:hover {
+  background-color: rgb(176, 225, 255);
 }
 
 .row:first-child {

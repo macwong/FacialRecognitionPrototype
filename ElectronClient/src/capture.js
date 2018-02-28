@@ -292,6 +292,10 @@ function createHistory(pred_result, $history) {
     $rowText.append($rating);
     $row.append($rowText);
 
+    $row.click((e) => {
+        console.log("Test");
+    });
+
     return $row;
 }
 
