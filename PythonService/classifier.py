@@ -13,6 +13,7 @@ from predictor import PredictResponse, PredictionInfo
 from distutils.dir_util import copy_tree
 import uuid
 from daveglobals import Globals
+import datetime
 
 class FeatureEmbeddings():
     def __init__(self, success, error, dataset = None, emb_array = None, labels = None, paths = None, classifier_filename_exp = None):
@@ -92,6 +93,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     print('Loaded classifier model from file "%s"' % features.classifier_filename_exp)
 
     predictions = model.predict_proba(features.emb_array)
+    pred_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     best_class_indices = np.argmax(predictions, axis=1)
 #        best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
@@ -165,6 +167,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         pred_names.append({
             "prediction_id": prediction_id,
             "pred_name": pred_name,
+            "pred_time": pred_time,
             "image": encoded_string,
             "info": pred_info_list
         })

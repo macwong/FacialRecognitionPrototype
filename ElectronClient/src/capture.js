@@ -264,7 +264,7 @@ function createHistory(pred_result, $history) {
 
     let $time = $("<div></div>");
     $time.addClass("time");
-    $time.text("26/02/2018 02:40:55 PM");
+    $time.text(pred_result.pred_time);
 
     let $rating = $("<div></div>");
     $rating.addClass("rating");
