@@ -108,6 +108,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     for i in range(len(best_class_indices)):
         pred_name = class_names[best_class_indices[i]]
         all_pred = predictions[i]
+        best_pred = all_pred[best_class_indices[i]]
         top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:3]
         
         if verbose:
@@ -168,11 +169,12 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             "prediction_id": prediction_id,
             "pred_name": pred_name,
             "pred_time": pred_time,
+            "probability": best_pred,
             "image": encoded_string,
             "info": pred_info_list
         })
     
-    pred_names = sorted(pred_names, key = lambda x: x["pred_name"])
+    pred_names = sorted(pred_names, key = lambda x: x["probability"], reverse = True)
         
     predict_response = PredictResponse("", True, pred_names)
     
