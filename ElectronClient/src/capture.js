@@ -11,7 +11,7 @@ let isVideo = true;
 let defaultWidth;
 let defaultHeight;
 let currentModel;
-let history = [];
+let predictionHistory = [];
 
 function getModels(callback) {
     let $models = $(document).find(".models");
@@ -249,7 +249,7 @@ function createHistory(pred_result, $history, $info) {
     //     </div>
     // </div>
 
-    history.push(pred_result);
+    predictionHistory.push(pred_result);
 
     let $row = $("<div></div>");
     $row.data("prediction_id", pred_result.prediction_id);
@@ -294,10 +294,22 @@ function createHistory(pred_result, $history, $info) {
     $row.append($rowText);
 
     $row.click((e) => {
-        $info.text(pred_result.pred_name);
+        createInfo($(e.currentTarget), $info);
     });
 
     return $row;
+}
+
+function createInfo($row, $info) {
+    let predictionID = $row.data("prediction_id");
+    let pred_result = $.grep(predictionHistory, (prediction) => { return prediction.prediction_id });
+
+    if (pred_result.length !== 1) {
+        return;
+    }
+
+    pred_result = pred_result[0];
+    $info.text(pred_result.pred_name);
 }
 
 function createPhoto(result, $resultsContents, rowNumber) {
