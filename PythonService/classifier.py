@@ -171,6 +171,8 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             "image": encoded_string,
             "info": pred_info_list
         })
+    
+    pred_names = sorted(pred_names, key = lambda x: x["pred_name"])
         
     predict_response = PredictResponse("", True, pred_names)
     
