@@ -190,11 +190,14 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             }
             else {
                 $resultsContents.empty();
-                
+                let $recentHistory = $("<div></div>");
+
                 for (var i = 0; i < arrayLength; i++) {
                     createPhoto(result, $resultsContents, i);
-                    createHistory(result.predictions[i], $history);
+                    $recentHistory.append(createHistory(result.predictions[i], $history));
                 }
+
+                $history.prepend($recentHistory.children());
 
                 if (isVideo) {
                     fadeStuff($resultsOverlay);
@@ -289,8 +292,7 @@ function createHistory(pred_result, $history) {
     $rowText.append($rating);
     $row.append($rowText);
 
-    $history.prepend($row);
-
+    return $row;
 }
 
 function createPhoto(result, $resultsContents, rowNumber) {
