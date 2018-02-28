@@ -158,6 +158,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     var $history = $(document).find(".history");
+    var $info = $(document).find(".info");
     defaultWidth = videoEl.videoWidth;
     defaultHeight = videoEl.videoHeight;
     var dataURL = $(canvasEl).data("file_source");
@@ -194,7 +195,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
 
                 for (var i = 0; i < arrayLength; i++) {
                     createPhoto(result, $resultsContents, i);
-                    $recentHistory.append(createHistory(result.predictions[i], $history));
+                    $recentHistory.append(createHistory(result.predictions[i], $history, $info));
                 }
 
                 $history.prepend($recentHistory.children());
@@ -231,7 +232,7 @@ function clearOverlay($resultsOverlay) {
     $resultsOverlay.stop(true).css('opacity', '0.0');
 }
 
-function createHistory(pred_result, $history) {
+function createHistory(pred_result, $history, $info) {
     // A row of data in the history column
     // <div class="row">
     //     <img class="predicted-image" src="../images/like.png" />
@@ -293,7 +294,7 @@ function createHistory(pred_result, $history) {
     $row.append($rowText);
 
     $row.click((e) => {
-        console.log("Test");
+        $info.text(pred_result.pred_name);
     });
 
     return $row;
