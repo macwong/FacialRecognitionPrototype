@@ -253,7 +253,7 @@ function createHistory(pred_result, $history, $info) {
 
     let $row = $("<div></div>");
     $row.data("prediction_id", pred_result.prediction_id);
-    $row.addClass("row");
+    $row.addClass("row interactive");
 
     let $face = $("<img />");
     $face.addClass("predicted-image");

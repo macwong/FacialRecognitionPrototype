@@ -61,10 +61,14 @@ body {
   align-items: flex-start;
   padding: 10px 5px;
   border-bottom: dotted 1px grey;
-  cursor: pointer;
   background-color: white;
 }
-.row:hover {
+
+.row.interactive {
+  cursor: pointer;
+}
+
+.row.interactive:hover {
   background-color: rgb(176, 225, 255);
 }
 
@@ -100,7 +104,8 @@ body {
 .row .row-text .rating {
   margin-top: 3px;
 }
-.row .row-text .rating img {
+
+.rating img {
   height: 16px;
   width: 16px;
   margin: 0 2px;
@@ -206,6 +211,10 @@ body {
 
 .top-predictions .prediction-list {
   width: 100%;
+}
+
+.top-predictions .rating {
+  margin-top: 5px;
 }
 
 .controlsContainer {
