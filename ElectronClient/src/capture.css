@@ -188,6 +188,26 @@ body {
   margin: 5px;
 }
 
+.top-predictions {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.top-predictions h3 {
+  -webkit-margin-after: 10px;
+}
+
+.top-predictions .row {
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-predictions .prediction-list {
+  width: 100%;
+}
+
 .controlsContainer {
   flex: 1;
   display: flex;
@@ -413,7 +433,7 @@ select {
       -ms-flex-positive: 1;
           flex-grow: 1;
   width: 100%;
-  padding: 0.4em;
+  padding: 5px;
   overflow: hidden;
   list-style: none;
   border: solid 3px white;
