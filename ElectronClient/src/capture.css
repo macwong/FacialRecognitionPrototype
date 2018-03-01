@@ -146,13 +146,7 @@ body {
     height: 210px;
 }
 
-.caption {
-  max-width: 160px;
-  color: black;
-  text-align: center;
-}
-
-.person {
+.person, .profile {
   position: relative;
   background-color: white;
   padding: 5px;
@@ -162,7 +156,13 @@ body {
   -webkit-margin-end: 5px;
 }
 
-.person .icon {
+.person .caption, .profile .caption {
+  max-width: 160px;
+  color: black;
+  text-align: center;
+}
+
+.person .icon, .profile .icon {
     position: absolute;
     width: 30px;
     height: 30px;
@@ -177,6 +177,12 @@ body {
   justify-content: center;
   align-items: center;
   max-height: 73px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 select {
