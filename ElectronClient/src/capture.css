@@ -162,10 +162,6 @@ body {
   text-align: center;
 }
 
-.profile .caption {
-  font-weight: 900;
-}
-
 .person .icon, .profile .icon {
     position: absolute;
     width: 30px;
@@ -177,6 +173,19 @@ body {
 .profile .profile-pic {
     height: 160px;
     width: 160px;
+}
+
+.profile {
+  -webkit-margin-after: 0;
+}
+
+.profile .caption {
+  display: flex;
+  justify-content: center;
+}
+
+.profile .caption h2 {
+  margin: 5px;
 }
 
 .controlsContainer {
@@ -394,7 +403,7 @@ select {
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  margin: 0 0 3em 0;
+  margin: 0 0 10px 0;
   padding: 0;
 }
 .Rtable-cell {
