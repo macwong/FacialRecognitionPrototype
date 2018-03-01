@@ -47,6 +47,7 @@ $(document).ready(() => {
     const canvasEl = document.getElementById("canvas");
     const $resultsContainer = $(document).find(".resultsContainer");
     const $history = $(document).find(".history");
+    const $info = $(document).find(".info");
 
     getModels(() => {
         navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
@@ -68,12 +69,12 @@ $(document).ready(() => {
         let $inputCheckbox = $(e.currentTarget);
 
         if ($inputCheckbox.is(":checked")) {
-            console.log("Show busy mode");
             $history.show();
+            $info.show();
         }
         else {
-            console.log("Hide busy mode");
             $history.hide();
+            $info.hide();
         }
     });
 
