@@ -204,6 +204,14 @@ body {
   -webkit-margin-after: 10px;
 }
 
+.top-predictions h4, .top-predictions h5 {
+  -webkit-margin-after: 0;
+}
+
+.top-predictions h5 {
+  margin: 5px !important;
+}
+
 .top-predictions .row {
   flex-direction: column;
   align-items: center;
@@ -214,7 +222,24 @@ body {
 }
 
 .top-predictions .rating {
-  margin-top: 5px;
+  margin: 5px;
+}
+
+.top-predictions .training-images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.top-predictions .training-images img {
+  width: 60px;
+  height: 60px;
+}
+
+.top-predictions .table-cell {
+  padding: 0;
+  font-size: 18px;
 }
 
 .controlsContainer {
