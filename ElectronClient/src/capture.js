@@ -320,14 +320,20 @@ function createInfo($row, $info) {
         let pred_name = result.pred_name;
         let $contents = $("<div></div>").html(data);
         let $figure = $contents.find("figure");
-
+        
         $figure.find(".profile-pic").prop("src", m_dataURI + result.image);
         $figure.find(".caption h2").text(pred_name);
         setPredictionIcon(result.info, pred_name, $figure.find(".icon"));
-
+        
         let $scores = $contents.find(".scores");
         $scores.find(".probability").text(getProbability(result.probability));
         $scores.find(".distance").text(result.distance.toFixed(2));
+        
+        let $topPredictions = $contents.find(".top-predictions");
+        $.get(path.join(__dirname, 'toppredictionsrow.html'), (rowData) => {
+            let $rowTemplate = $(rowData);
+            $topPredictions.find(".prediction-list").html($rowTemplate);
+        });
 
         $info.html($contents.children());
     });
