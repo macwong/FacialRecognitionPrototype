@@ -193,6 +193,10 @@ body {
   margin: 5px;
 }
 
+.profile .profile-image {
+  border-radius: 10px;
+}
+
 .top-predictions {
   display: flex;
   align-items: center;

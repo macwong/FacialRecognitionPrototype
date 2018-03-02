@@ -312,10 +312,31 @@ function createInfo($row, $info) {
         return;
     }
     
-    pred_result = pred_result[0];
-    createPhoto(pred_result, $info, "profile");
-    
+    result = pred_result[0];
 
+    pred_name = result.pred_name;
+    let $figure = $("<figure></figure>");
+    $figure.addClass("profile");
+
+    let $image = $("<img />");
+    $image.prop("src", m_dataURI + result.image);
+    $image.addClass("profile-image");
+
+    let $figCaption = $("<figcaption></figcaption>");
+    $figCaption.addClass("caption");
+    let $heading = $("<h4></h4>");
+    $heading.text(pred_name);
+    $figCaption.append($heading);
+
+    let $icon = $("<img />")
+    $icon.addClass("icon");
+    setPredictionIcon(result.info, pred_name, $icon);
+    
+    $figure.append($image);
+    $figure.append($figCaption);
+    $figure.append($icon);
+
+    $info.append($figure);
 
     //<figure class="profile">
     //     <img class="profile-pic" src="../images/verified.png" />
