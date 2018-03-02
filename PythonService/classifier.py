@@ -109,6 +109,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         pred_name = class_names[best_class_indices[i]]
         all_pred = predictions[i]
         best_dist = 0
+        best_prob = 0
         top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:3]
         
         if verbose:
@@ -155,6 +156,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 
                 if pred_info.name == pred_name:
                     best_dist = dist
+                    best_prob = pred_info.probability
                 
                 pred_info_list.append(pred_info.serialize())
         
@@ -172,6 +174,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             "pred_name": pred_name,
             "pred_time": pred_time,
             "distance": best_dist,
+            "probability": best_prob,
             "image": encoded_string,
             "info": pred_info_list
         })

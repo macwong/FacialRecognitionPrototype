@@ -325,9 +325,18 @@ function createInfo($row, $info) {
         $figure.find(".caption h2").text(pred_name);
         setPredictionIcon(result.info, pred_name, $figure.find(".icon"));
 
+        let $scores = $contents.find(".scores");
+        $scores.find(".probability").text(getProbability(result.probability));
+        $scores.find(".distance").text(result.distance.toFixed(2));
 
         $info.html($contents.children());
     });
+}
+
+function getProbability(probability) {
+    prob = probability * 100;
+    prob = prob.toFixed(2);
+    return prob + "%";
 }
 
 function createPhoto(result, $resultsContents, figureClass) {
