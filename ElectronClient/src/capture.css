@@ -175,11 +175,6 @@ body {
     top: 0;
 }
 
-.profile .profile-pic {
-    height: 160px;
-    width: 160px;
-}
-
 .profile {
   -webkit-margin-after: 0;
 }
@@ -193,7 +188,7 @@ body {
   margin: 5px;
 }
 
-.profile .profile-image {
+.profile .profile-pic {
   border-radius: 10px;
 }
 

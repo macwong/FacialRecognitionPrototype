@@ -4,6 +4,7 @@ const video = require("./video");
 const $ = require("jquery");
 const fs = require("fs");
 const { dialog } = electron.remote;
+const path = require('path')
 
 const m_dataURI = "data:image/png;base64,"
 
@@ -303,40 +304,83 @@ function createHistory(pred_result, $history, $info) {
 
 function createInfo($row, $info) {
     $info.empty();
-    let predictionID = $row.data("prediction_id");
+
+    let $container = $("<div></div>").load(path.join(__dirname, 'info.html'));
+
+    $.get(path.join(__dirname, 'info.html'), (data) => {
+        let predictionID = $row.data("prediction_id");
+        let pred_result = $.grep(predictionHistory, (prediction) => { return prediction.prediction_id == predictionID });
+
+        if (pred_result.length !== 1) {
+            return;
+        }
+        
+        result = pred_result[0];
+        
+        let pred_name = result.pred_name;
+        let $contents = $("<div></div>").html(data);
+        let $figure = $contents.find("figure");
+
+        $figure.find(".profile-pic").prop("src", m_dataURI + result.image);
+
+        $info.html($contents.children());
+    })
+    // console.log($container.length)
+    // $info.html($container.contents());
+
+    // let predictionID = $row.data("prediction_id");
     
-    let pred_result = $.grep(predictionHistory, (prediction) => { return prediction.prediction_id == predictionID });
-    console.log(pred_result);
+    // let pred_result = $.grep(predictionHistory, (prediction) => { return prediction.prediction_id == predictionID });
+    // console.log(pred_result);
 
-    if (pred_result.length !== 1) {
-        return;
-    }
+    // if (pred_result.length !== 1) {
+    //     return;
+    // }
     
-    result = pred_result[0];
+    // result = pred_result[0];
 
-    pred_name = result.pred_name;
-    let $figure = $("<figure></figure>");
-    $figure.addClass("profile");
+    // pred_name = result.pred_name;
+    // let $figure = $("<figure></figure>");
+    // $figure.addClass("profile");
 
-    let $image = $("<img />");
-    $image.prop("src", m_dataURI + result.image);
-    $image.addClass("profile-image");
+    // let $image = $("<img />");
+    // $image.prop("src", m_dataURI + result.image);
+    // $image.addClass("profile-pic");
 
-    let $figCaption = $("<figcaption></figcaption>");
-    $figCaption.addClass("caption");
-    let $heading = $("<h4></h4>");
-    $heading.text(pred_name);
-    $figCaption.append($heading);
+    // let $figCaption = $("<figcaption></figcaption>");
+    // $figCaption.addClass("caption");
+    // let $heading = $("<h2></h2>");
+    // $heading.text(pred_name);
+    // $figCaption.append($heading);
 
-    let $icon = $("<img />")
-    $icon.addClass("icon");
-    setPredictionIcon(result.info, pred_name, $icon);
+    // let $icon = $("<img />")
+    // $icon.addClass("icon");
+    // setPredictionIcon(result.info, pred_name, $icon);
     
-    $figure.append($image);
-    $figure.append($figCaption);
-    $figure.append($icon);
+    // $figure.append($image);
+    // $figure.append($figCaption);
+    // $figure.append($icon);
 
-    $info.append($figure);
+    // $info.append($figure);
+
+    // let $tableContainer = $("<div></div>");
+
+
+    // <div>
+    //     <div class="Rtable Rtable--2cols Rtable--collapse">
+    //         <div class="table-header Rtable-cell Rtable-cell--alignCenter"><h3>Probability</h3></div>
+    //         <div class="table-cell Rtable-cell Rtable-cell--alignCenter">
+    //           5%
+    //         </div>
+    
+    //         <div class="table-header Rtable-cell Rtable-cell--alignCenter"><h3>Distance</h3></div>
+    //         <div class="table-cell Rtable-cell Rtable-cell--alignCenter">
+    //           0.75
+    //         </div>
+    //     </div>
+    // </div>
+
+
 
     //<figure class="profile">
     //     <img class="profile-pic" src="../images/verified.png" />
