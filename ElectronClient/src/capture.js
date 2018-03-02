@@ -195,7 +195,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 let $recentHistory = $("<div></div>");
 
                 for (var i = 0; i < arrayLength; i++) {
-                    createPhoto(result, $resultsContents, i);
+                    createPhoto(result.predictions[i], $resultsContents, "person");
                     $recentHistory.append(createHistory(result.predictions[i], $history, $info));
                 }
 
@@ -302,18 +302,87 @@ function createHistory(pred_result, $history, $info) {
 }
 
 function createInfo($row, $info) {
+    $info.empty();
     let predictionID = $row.data("prediction_id");
-    let pred_result = $.grep(predictionHistory, (prediction) => { return prediction.prediction_id });
+    
+    let pred_result = $.grep(predictionHistory, (prediction) => { return prediction.prediction_id == predictionID });
+    console.log(pred_result);
 
     if (pred_result.length !== 1) {
         return;
     }
-
+    
     pred_result = pred_result[0];
-    $info.text(pred_result.pred_name);
+    createPhoto(pred_result, $info, "profile");
+    
+
+
+    //<figure class="profile">
+    //     <img class="profile-pic" src="../images/verified.png" />
+    //     <figcaption class="caption">
+    //     <h2>David McCormick</h2>
+    //     </figcaption>
+    //     <img class="icon" src="../images/verified.png" />
+    // </figure>
+    // <div>
+    //     <div class="Rtable Rtable--2cols Rtable--collapse">
+    //         <div class="table-header Rtable-cell Rtable-cell--alignCenter"><h3>Probability</h3></div>
+    //         <div class="table-cell Rtable-cell Rtable-cell--alignCenter">
+    //           5%
+    //         </div>
+    
+    //         <div class="table-header Rtable-cell Rtable-cell--alignCenter"><h3>Distance</h3></div>
+    //         <div class="table-cell Rtable-cell Rtable-cell--alignCenter">
+    //           0.75
+    //         </div>
+    //     </div>
+    // </div>
+    // <div class="top-predictions">
+    //     <h3>Top Predictions</h3>
+    //     <div class="prediction-list">
+    //         <div class="row">
+    //           <h4>1. David McCormick</h4>
+    //           <div class="rating">
+    //             <img src="../images/verified.png">
+    //             <img src="../images/verified.png">
+    //             <img src="../images/verified.png">
+    //             <img src="../images/verified.png">
+    //             <img src="../images/verified.png">
+    //           </div>
+    //           <h5>Training Images</h5>
+    //           <div class="training-images">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //               <img src="../images/verified.png">
+    //           </div>
+    //           <div>
+    //               <div class="Rtable Rtable--2cols Rtable--collapse">
+    //                   <div class="table-header Rtable-cell Rtable-cell--alignCenter"><h5>Probability</h5></div>
+    //                   <div class="table-cell Rtable-cell Rtable-cell--alignCenter">
+    //                     5%
+    //                   </div>
+    
+    //                   <div class="table-header Rtable-cell Rtable-cell--alignCenter"><h5>Distance</h5></div>
+    //                   <div class="table-cell Rtable-cell Rtable-cell--alignCenter">
+    //                     0.75
+    //                   </div>
+    //               </div>
+    //           </div>
+    //         </div>
+    //     </div>
+    // </div>
+    
 }
 
-function createPhoto(result, $resultsContents, rowNumber) {
+function createPhoto(result, $resultsContents, figureClass) {
     // Person in results on bottom
     // <figure class="person">
     //     <img />
@@ -323,12 +392,12 @@ function createPhoto(result, $resultsContents, rowNumber) {
     //     <img src="../images/verified.png" />
     // </figure>
 
-    pred_name = result.predictions[rowNumber].pred_name;
+    pred_name = result.pred_name;
     let $figure = $("<figure></figure>");
-    $figure.addClass("person");
+    $figure.addClass(figureClass);
 
     let $image = $("<img />");
-    $image.prop("src", m_dataURI + result.predictions[rowNumber].image);
+    $image.prop("src", m_dataURI + result.image);
 
     let $figCaption = $("<figcaption></figcaption>");
     $figCaption.addClass("caption");
@@ -336,7 +405,7 @@ function createPhoto(result, $resultsContents, rowNumber) {
 
     let $icon = $("<img />")
     $icon.addClass("icon");
-    setPredictionIcon(result.predictions[rowNumber].info, pred_name, $icon);
+    setPredictionIcon(result.info, pred_name, $icon);
     
     $figure.append($image);
     $figure.append($figCaption);
@@ -360,8 +429,6 @@ function setPredictionIcon(info, pred_name, $icon) {
 }
 
 function getRating(distance) {
-    console.log(distance);
-
     if (distance < 0.75) {
         return 5;
     }
