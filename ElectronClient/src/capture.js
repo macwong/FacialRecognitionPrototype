@@ -339,10 +339,12 @@ function createInfo($row, $info) {
             let $ratingImage = $rowRating.find("img:first");
             let $training = $rowTemplate.find(".training-images");
             let $trainingImage = $training.find("img:first");
+            let $rowScores = $rowTemplate.find(".top-scores");
 
             for (var infoIndex in result.info) {
                 let info = result.info[infoIndex];
-                $rowName.text(info.name);
+                let rank = Number(infoIndex) + 1;
+                $rowName.text(rank + ". " + info.name);
 
                 let rating = getRating(info.distance);
                 $rowRating.empty();
@@ -359,6 +361,9 @@ function createInfo($row, $info) {
                     $trainingImage.prop("src", photo_path);
                     $training.append($trainingImage.clone());
                 }
+
+                $rowScores.find(".probability").text(getProbability(info.probability));
+                $rowScores.find(".distance").text(info.distance.toFixed(2));
 
                 $predictionList.append($rowTemplate.clone());
             }
