@@ -194,6 +194,22 @@ body {
   border-radius: 10px;
 }
 
+.expand-icon {
+  width: 20px;
+  height: 20px;
+  float: right;
+}
+
+
+
+.top-predictions.collapsed .prediction-list {
+  display: none;
+}
+
+.expandable {
+  cursor: pointer;
+}
+
 .top-predictions {
   width: 100%;
 }

@@ -338,6 +338,16 @@ function createInfo($row, $info) {
         
         let $topPredictions = $contents.find(".top-predictions");
         let $predictionList = $topPredictions.find(".prediction-list");
+        let $expandable = $topPredictions.find(".expandable");
+
+        $expandable.click((e) => {
+            if ($topPredictions.hasClass("collapsed")) {
+                $topPredictions.removeClass("collapsed");
+            }
+            else {
+                $topPredictions.addClass("collapsed");
+            }
+        });
 
         $.get(path.join(__dirname, 'toppredictionsrow.html'), (rowData) => {
             let $rowTemplate = $(rowData);
