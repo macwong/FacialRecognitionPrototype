@@ -109,10 +109,6 @@ $(document).ready(() => {
                     $video.addClass("file");
                     $video.prop("src", "");
                     $video.removeAttr("src");
-
-                    $video.click((e) => {
-                        openVideo(videoEl, canvasEl, $resultsContainer);
-                    });
                 }
             }
             else if ($parent.hasClass("option-image")) {
@@ -123,13 +119,34 @@ $(document).ready(() => {
         }
     });
 
+    $(videoEl).click((e) => {
+        if ($(e.currentTarget).hasClass("file")) {
+            openVideo(videoEl, canvasEl, $resultsContainer);
+        }
+    });
+
     $(canvasEl).click((e) => {
         openImage(videoEl, canvasEl, $resultsContainer);
     });
 });
 
 function openVideo(videoEl, canvasEl, $resultsContainer) {
-    console.log("click");
+    dialog.showOpenDialog(
+        remote.getCurrentWindow(),
+        {
+            defaultPath: 'c:/',
+            filters: [
+                { name: 'Images', extensions: ['avi', 'mov', 'mkv', 'mp4'] }
+              ],
+            properties: ['openFile']
+        },
+        function (filePaths) {
+            fadeStuff($resultsContainer.find(".resultsOverlay"));
+            captureImage(videoEl, canvasEl, $resultsContainer);
+
+            videoEl.src = filePaths[0];
+        }
+    );    
 }
 
 function openImage(videoEl, canvasEl, $resultsContainer) {
