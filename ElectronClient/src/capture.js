@@ -108,6 +108,7 @@ $(document).ready(() => {
                 else {
                     $video.addClass("file");
                     $video.prop("src", "");
+                    $video.removeAttr("src");
 
                     $video.click((e) => {
                         openVideo(videoEl, canvasEl, $resultsContainer);
@@ -194,6 +195,11 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     var dataURL = $(canvasEl).data("file_source");
 
     if (isVideo) {
+        if (videoEl.src === "") {
+            console.log(videoEl.src);
+            return;
+        }
+
         canvasEl.width = defaultWidth;
         canvasEl.height = defaultHeight;
         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
@@ -237,7 +243,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
 
                 $history.prepend($recentHistory.children());
 
-                if (isVideo) {
+                if (isVideo && videoEl.src !== "") {
                     fadeStuff($resultsOverlay);
                 }
             }
