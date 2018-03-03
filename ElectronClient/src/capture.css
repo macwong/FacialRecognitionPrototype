@@ -234,6 +234,7 @@ body {
 .top-predictions .training-images img {
   width: 60px;
   height: 60px;
+  padding: 2px;
 }
 
 .top-predictions .table-cell {

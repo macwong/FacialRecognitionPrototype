@@ -120,7 +120,9 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 pred_info.name = class_names[top_index]
                 pred_info.probability = all_pred[top_index]
                 folder_name = pred_info.name.replace(' ', '_')
-                pred_info.photo_path = os.path.join(model_path, "data", folder_name)
+                
+                photo_path_folder = os.path.join(model_path, "data", folder_name)
+                pred_info.photo_path = [os.path.join(photo_path_folder, f) for f in os.listdir(photo_path_folder) if os.path.isfile(os.path.join(photo_path_folder, f))]
                 
                 # Create temp photo path for predicted values
                 unique_path = os.path.join(temp_predicted_path, str(uuid.uuid4()))
@@ -130,7 +132,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 
                 copyto_path = os.path.join(unique_path, folder_name)
 
-                copy_tree(pred_info.photo_path, copyto_path, update = 1)
+                copy_tree(photo_path_folder, copyto_path, update = 1)
                 
                 # Get the feature embeddings for the prediction's training data, and get the average value
                 predicted_features = get_features(unique_path, session, "")
