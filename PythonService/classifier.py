@@ -110,7 +110,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         all_pred = predictions[i]
         best_dist = 0
         best_prob = 0
-        top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:3]
+        top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:5]
         
         if verbose:
             pred_info_list = []
