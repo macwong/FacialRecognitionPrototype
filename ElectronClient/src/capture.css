@@ -200,7 +200,14 @@ body {
   float: right;
 }
 
+.expand-icon {
+  transform: rotate(-90deg);
+  transition: 150ms linear all;
+}
 
+.collapsed .expand-icon {
+  transform: rotate(0deg);
+}
 
 .top-predictions.collapsed .prediction-list {
   display: none;
@@ -208,6 +215,9 @@ body {
 
 .expandable {
   cursor: pointer;
+  padding: 7px 5px 0 5px;
+  border-top: solid 1px grey;
+  border-bottom: solid 1px grey;
 }
 
 .top-predictions {
@@ -242,11 +252,6 @@ body {
 
 .top-predictions .row {
   flex-direction: column;
-  border-top: dotted 1px grey;
-}
-
-.top-predictions .row ~ .row {
-  border-top: none;
 }
 
 .top-predictions .prediction-list {
