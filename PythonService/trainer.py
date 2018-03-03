@@ -6,7 +6,7 @@ from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
         
-def train(input_folder_path, model_folder_name):
+def train(input_folder_path, model_folder_name, model_type):
     print("Input Folder Path:", input_folder_path)
     print("Model Folder Name:", model_folder_name)
     
@@ -42,6 +42,7 @@ def train(input_folder_path, model_folder_name):
     classifier.train(
            data_dir = processed_dir,
            session = MyGraph(),
-           classifier_filename = os.path.join(model_dir, "classifier.pkl"))
+           classifier_filename = os.path.join(model_dir, "classifier.pkl"),
+           model_type = model_type)
     
     return True, ""

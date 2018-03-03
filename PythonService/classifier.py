@@ -9,6 +9,7 @@ import os
 import math
 import pickle
 from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
 from predictor import PredictResponse, PredictionInfo
 from distutils.dir_util import copy_tree
 import uuid
@@ -63,13 +64,19 @@ def get_features(data_dir, session, classifier_filename, batch_size=90, image_si
     return FeatureEmbeddings(True, "", dataset, emb_array, labels, paths, classifier_filename_exp)
 
 
-def train(data_dir, session, classifier_filename):
+def train(data_dir, session, classifier_filename, model_type):
     
     features = get_features(data_dir, session, classifier_filename)
     
     # Train classifier
     print('Training classifier')
-    model = SVC(kernel='linear', probability=True)
+    if model_type == "svc":
+        print("SVC")
+        model = SVC(kernel='linear', probability=True)
+    else:
+        print("KNN")
+        model = KNeighborsClassifier(weights='distance', n_jobs=-1)
+
     model.fit(features.emb_array, features.labels)
 
     # Create a list of class names

@@ -27,11 +27,16 @@ def train():
     ):
         print("Invalid JSON request data...", returnValue)
         abort(400)
+        
+    model_type = "knn"
+    
+    if 'model_type' in requestData:
+        model_type = requestData['model_type']
 
     input_folder_path = requestData['input_folder_path']
     model_folder_name = requestData['model_folder_name']
     
-    success, error = trainer.train(input_folder_path, model_folder_name)
+    success, error = trainer.train(input_folder_path, model_folder_name, model_type)
     code = 400
     
     if success:
