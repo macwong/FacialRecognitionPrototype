@@ -330,9 +330,18 @@ function createInfo($row, $info) {
         $scores.find(".distance").text(result.distance.toFixed(2));
         
         let $topPredictions = $contents.find(".top-predictions");
+        let $predictionList = $topPredictions.find(".prediction-list");
+
         $.get(path.join(__dirname, 'toppredictionsrow.html'), (rowData) => {
             let $rowTemplate = $(rowData);
-            $topPredictions.find(".prediction-list").html($rowTemplate);
+            let $rowName = $rowTemplate.find(".top-name");
+            for (var infoIndex in result.info) {
+                console.log(infoIndex);
+                let info = result.info[infoIndex];
+                $rowName.text(info.name);
+
+                $predictionList.append($rowTemplate.clone());
+            }
         });
 
         $info.html($contents.children());
