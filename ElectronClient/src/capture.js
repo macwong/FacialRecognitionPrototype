@@ -7,10 +7,12 @@ const { dialog } = electron.remote;
 const path = require('path')
 
 const m_dataURI = "data:image/png;base64,"
+const defaultWidth = 640;
+const defaultHeight = 480;
 
 let isVideo = true;
-let defaultWidth;
-let defaultHeight;
+let currentWidth = defaultWidth;
+let currentHeight = defaultHeight;
 let currentModel;
 let predictionHistory = [];
 
@@ -95,7 +97,6 @@ $(document).ready(() => {
             $parent.addClass("checked");
 
             let $video = $(videoEl);
-            $video.removeClass("file");
 
             if ($parent.hasClass("option-live") || $parent.hasClass("option-video")) {
                 $video.show();
@@ -112,8 +113,19 @@ $(document).ready(() => {
                 }
             }
             else if ($parent.hasClass("option-image")) {
-                $(canvasEl).show();
+                if ($video.hasClass("file")) {
+                    $video.removeClass("file");
+
+                    canvasEl.width = defaultWidth;
+                    canvasEl.height = defaultHeight;
+                    currentWidth = defaultWidth;
+                    currentHeight = defaultHeight;
+                }
+                
                 $video.hide();
+                $video.prop("src", "");
+                $video.removeAttr("src");
+                $(canvasEl).show();
                 isVideo = false;
             }
         }
@@ -196,8 +208,10 @@ function openImage(videoEl, canvasEl, $resultsContainer) {
                 captureImage(videoEl, canvasEl, $resultsContainer);
             }
 
-            img.src = filePaths[0];
-            $(canvasEl).data("file_source", filePaths[0]);
+            if (filePaths !== null && filePaths !== undefined) {
+                img.src = filePaths[0];
+                $(canvasEl).data("file_source", filePaths[0]);
+            }
         }
     );
 }
@@ -207,8 +221,19 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     var $history = $(document).find(".history");
     var $info = $(document).find(".info");
-    defaultWidth = videoEl.videoWidth;
-    defaultHeight = videoEl.videoHeight;
+
+    currentWidth = videoEl.videoWidth;
+
+    if (currentWidth === 0) {
+        currentWidth = defaultWidth;
+    }
+
+    currentHeight = videoEl.videoHeight;
+
+    if (currentHeight === 0) {
+        currentHeight = defaultHeight;
+    }
+
     var dataURL = $(canvasEl).data("file_source");
 
     if (isVideo) {
@@ -217,8 +242,8 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             return;
         }
 
-        canvasEl.width = defaultWidth;
-        canvasEl.height = defaultHeight;
+        canvasEl.width = currentWidth;
+        canvasEl.height = currentHeight;
         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
         var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
     }
