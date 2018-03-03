@@ -11,6 +11,10 @@ body {
   overflow: hidden;
 }
 
+video.file {
+  background-color: black;
+}
+
 .container {
   display: flex;
   flex-direction: column;

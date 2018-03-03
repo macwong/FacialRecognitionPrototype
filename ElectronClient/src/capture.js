@@ -43,6 +43,19 @@ function getModels(callback) {
     });
 }
 
+function getVideoStream(videoEl, canvasEl, $resultsContainer) {
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        videoEl.src = URL.createObjectURL(stream);
+
+        videoEl.onloadedmetadata = (e) => {
+            captureImage(videoEl, canvasEl, $resultsContainer);
+
+        };
+    }).catch(() =>  {
+        alert('could not connect stream');
+    });
+}
+
 $(document).ready(() => {
     const videoEl = document.getElementById("video");
     const canvasEl = document.getElementById("canvas");
@@ -51,19 +64,8 @@ $(document).ready(() => {
     const $info = $(document).find(".info");
 
     getModels(() => {
-        navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {
-            $resultsContainer.find(".resultsContents").text("Loading...")
-    
-            var cam = document.getElementById('video')
-            cam.src = URL.createObjectURL(stream);
-    
-            cam.onloadedmetadata = function(e) {
-                captureImage(videoEl, canvasEl, $resultsContainer);
-    
-            };
-        }).catch(() =>  {
-            alert('could not connect stream');
-        });
+        $resultsContainer.find(".resultsContents").text("Loading...");
+        getVideoStream(videoEl, canvasEl, $resultsContainer);
     });
 
     $(document).find(".input-checkbox").change((e) => {
@@ -83,22 +85,36 @@ $(document).ready(() => {
 
     $segment.on("change", (e) => {
         let $option = $(e.currentTarget);
+        let $parent = $option.parent();
 
         if($option.is(":checked")) {
-            $option.parent().siblings().each((sigIndex, sibValue) => {
+            $parent.siblings().each((sigIndex, sibValue) => {
                 $(sibValue).removeClass("checked");
             });
-            $option.parent().addClass("checked");
 
-            if ($option.parent().hasClass("option-live")) {
-                $(videoEl).show();
-                $(canvasEl).hide();
+            $parent.addClass("checked");
+
+            let $video = $(videoEl);
+            let $canvas = $(canvasEl);
+            $video.removeClass("file");
+
+            if ($parent.hasClass("option-live") || $parent.hasClass("option-video")) {
+                $video.show();
+                $canvas.hide();
                 isVideo = true;
-                captureImage(videoEl, canvasEl, $resultsContainer);
+
+                if ($parent.hasClass("option-live")) {
+                    getVideoStream(videoEl, canvasEl, $resultsContainer);
+                }
+                else {
+                    $video.addClass("file");
+                    $video.prop("src", "");
+
+                }
             }
-            else if ($option.parent().hasClass("option-image")) {
+            else if ($parent.hasClass("option-image")) {
                 $(canvasEl).show();
-                $(videoEl).hide();
+                $video.hide();
                 isVideo = false;
             }
         }
