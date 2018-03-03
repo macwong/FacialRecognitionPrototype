@@ -387,10 +387,15 @@ select {
   position: absolute;
 }
 
+select, option {
+  cursor: pointer;
+}
+
 .input-toggle {
   position: relative;
   display: inline-block;
   vertical-align: middle;
+  cursor: pointer;
 }
 .input-toggle:before {
   content: "more";
