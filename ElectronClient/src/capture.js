@@ -79,21 +79,24 @@ $(document).ready(() => {
         }
     });
 
-    $(".segmented label input[type=radio]").each(function(){
-        $(this).on("change", function(){
-            if($(this).is(":checked")){
-               $(this).parent().siblings().each(function(){
-                    $(this).removeClass("checked");
-                });
-                $(this).parent().addClass("checked");
+    $(".segmented label input[type=radio]").each((index, value) => {
+        let $segment = $(value);
+        $segment.on("change", (e) => {
+            let $option = $(e.currentTarget);
 
-                if ($(this).parent().hasClass("option-live")) {
+            if($option.is(":checked")){
+                $option.parent().siblings().each((sigIndex, sibValue) => {
+                    $(sibValue).removeClass("checked");
+                });
+                $option.parent().addClass("checked");
+
+                if ($option.parent().hasClass("option-live")) {
                     $(videoEl).show();
                     $(canvasEl).hide();
                     isVideo = true;
                     captureImage(videoEl, canvasEl, $resultsContainer);
                 }
-                else if ($(this).parent().hasClass("option-image")) {
+                else if ($option.parent().hasClass("option-image")) {
                     $(canvasEl).show();
                     $(videoEl).hide();
                     isVideo = false;
