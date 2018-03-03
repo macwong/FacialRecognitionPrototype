@@ -335,10 +335,21 @@ function createInfo($row, $info) {
         $.get(path.join(__dirname, 'toppredictionsrow.html'), (rowData) => {
             let $rowTemplate = $(rowData);
             let $rowName = $rowTemplate.find(".top-name");
+            let $rowRating = $rowTemplate.find(".rating");
+            let $ratingImage = $rowRating.find("img:first");
+
             for (var infoIndex in result.info) {
                 console.log(infoIndex);
                 let info = result.info[infoIndex];
                 $rowName.text(info.name);
+
+                let rating = getRating(info.distance);
+                $rowRating.empty();
+                setPredictionImage($ratingImage, info.distance);
+
+                for (var i = 0; i < rating; i++) {
+                    $rowRating.append($ratingImage.clone());
+                }
 
                 $predictionList.append($rowTemplate.clone());
             }
