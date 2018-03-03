@@ -79,30 +79,29 @@ $(document).ready(() => {
         }
     });
 
-    $(".segmented label input[type=radio]").each((index, value) => {
-        let $segment = $(value);
-        $segment.on("change", (e) => {
-            let $option = $(e.currentTarget);
+    let $segment = $(".segmented label input[type=radio]");
 
-            if($option.is(":checked")){
-                $option.parent().siblings().each((sigIndex, sibValue) => {
-                    $(sibValue).removeClass("checked");
-                });
-                $option.parent().addClass("checked");
+    $segment.on("change", (e) => {
+        let $option = $(e.currentTarget);
 
-                if ($option.parent().hasClass("option-live")) {
-                    $(videoEl).show();
-                    $(canvasEl).hide();
-                    isVideo = true;
-                    captureImage(videoEl, canvasEl, $resultsContainer);
-                }
-                else if ($option.parent().hasClass("option-image")) {
-                    $(canvasEl).show();
-                    $(videoEl).hide();
-                    isVideo = false;
-                }
+        if($option.is(":checked")) {
+            $option.parent().siblings().each((sigIndex, sibValue) => {
+                $(sibValue).removeClass("checked");
+            });
+            $option.parent().addClass("checked");
+
+            if ($option.parent().hasClass("option-live")) {
+                $(videoEl).show();
+                $(canvasEl).hide();
+                isVideo = true;
+                captureImage(videoEl, canvasEl, $resultsContainer);
             }
-        });
+            else if ($option.parent().hasClass("option-image")) {
+                $(canvasEl).show();
+                $(videoEl).hide();
+                isVideo = false;
+            }
+        }
     });
 
     $(canvasEl).click((e) => {
