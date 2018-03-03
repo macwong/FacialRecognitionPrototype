@@ -97,6 +97,7 @@ $(document).ready(() => {
             $parent.addClass("checked");
 
             let $video = $(videoEl);
+            $video.prop("controls", false);
 
             if ($parent.hasClass("option-live") || $parent.hasClass("option-video")) {
                 $video.show();
@@ -153,6 +154,8 @@ function openVideo(videoEl, canvasEl, $resultsContainer) {
             properties: ['openFile']
         },
         function (filePaths) {
+            $(videoEl).prop("controls", true);
+            
             fadeStuff($resultsContainer.find(".resultsOverlay"));
             captureImage(videoEl, canvasEl, $resultsContainer);
 
