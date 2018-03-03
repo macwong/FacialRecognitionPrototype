@@ -210,8 +210,27 @@ body {
   margin: 5px !important;
 }
 
+.top-predictions .top-name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.top-predictions .top-name .top-name-heading {
+  font-weight: bold;
+}
+
+.top-predictions .more {
+  margin: 0 5px;
+}
+
 .top-predictions .row {
   flex-direction: column;
+  border-top: dotted 1px grey;
+}
+
+.top-predictions .row ~ .row {
+  border-top: none;
 }
 
 .top-predictions .prediction-list {
@@ -220,6 +239,7 @@ body {
 
 .top-predictions .rating {
   margin: 5px;
+  white-space: nowrap;
 }
 
 .top-predictions .training-images {

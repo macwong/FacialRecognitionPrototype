@@ -351,7 +351,7 @@ function createInfo($row, $info) {
             for (var infoIndex in result.info) {
                 let info = result.info[infoIndex];
                 let rank = Number(infoIndex) + 1;
-                $rowName.text(rank + ". " + info.name);
+                $rowName.find(".top-name-heading").text(rank + ". " + info.name);
 
                 let rating = getRating(info.distance);
                 $rowRating.empty();
