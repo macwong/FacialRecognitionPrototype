@@ -56,6 +56,12 @@ body {
   overflow-y: auto;
 }
 
+.prediction-time {
+  padding: 4px;
+  border-top: solid 1px grey;
+  border-bottom: dotted 1px grey;
+}
+
 .row {
   display: flex;
   align-items: flex-start;
@@ -70,10 +76,6 @@ body {
 
 .row.interactive:hover {
   background-color: rgb(176, 225, 255);
-}
-
-.row:first-child {
-  border-top: dotted 1px grey;
 }
 
 .row .predicted-image {

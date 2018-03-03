@@ -196,6 +196,13 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 let $recentHistory = $("<div></div>");
 
                 for (var i = 0; i < arrayLength; i++) {
+                    if (i == 0) {
+                        let $time = $("<div></div>");
+                        $time.addClass("prediction-time");
+                        $time.text(result.predictions[i].pred_time);
+                        $recentHistory.append($time);
+                    } 
+
                     createPhoto(result.predictions[i], $resultsContents, "person");
                     $recentHistory.append(createHistory(result.predictions[i], $history, $info));
                 }
