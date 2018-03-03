@@ -339,13 +339,16 @@ function createInfo($row, $info) {
         let $topPredictions = $contents.find(".top-predictions");
         let $predictionList = $topPredictions.find(".prediction-list");
         let $expandable = $topPredictions.find(".expandable");
-
+        $predictionList.hide();
+        
         $expandable.click((e) => {
             if ($topPredictions.hasClass("collapsed")) {
                 $topPredictions.removeClass("collapsed");
+                $predictionList.slideDown();
             }
             else {
                 $topPredictions.addClass("collapsed");
+                $predictionList.slideUp();
             }
         });
 

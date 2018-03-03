@@ -209,10 +209,6 @@ body {
   transform: rotate(0deg);
 }
 
-.top-predictions.collapsed .prediction-list {
-  display: none;
-}
-
 .expandable {
   cursor: pointer;
   padding: 7px 5px 0 5px;
