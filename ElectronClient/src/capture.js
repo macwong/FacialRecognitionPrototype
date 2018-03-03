@@ -87,7 +87,7 @@ $(document).ready(() => {
                 });
                 $(this).parent().addClass("checked");
 
-                if ($(this).parent().hasClass("option-video")) {
+                if ($(this).parent().hasClass("option-live")) {
                     $(videoEl).show();
                     $(canvasEl).hide();
                     isVideo = true;
