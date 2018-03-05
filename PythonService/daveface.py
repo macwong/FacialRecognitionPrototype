@@ -51,6 +51,34 @@ def train():
             'error': error
             }), code
 
+    
+@app.route('/daveface/retrain', methods=['POST'])
+def retrain():
+    print("Retraining started...")
+    returnValue = "Fail..."
+    requestData = request.get_json()
+    
+    if (not requestData or not 'model_folder_name' in requestData):
+        print("Invalid JSON request data...", returnValue)
+        abort(400)
+        
+    model_folder_name = requestData['model_folder_name']
+    
+    success, error = trainer.retrain(model_folder_name)
+    code = 400
+    
+    if success:
+        returnValue = "Success!"
+        code = 201
+    
+        
+    print("Training ended...", returnValue)
+        
+    return jsonify({
+            'success': success,
+            'error': error
+            }), code        
+    
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():

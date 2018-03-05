@@ -5,7 +5,21 @@ import classifier
 from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
-        
+   
+def retrain(model_folder_name):
+    model_dir = os.path.join(Globals.model_path, model_folder_name)
+    processed_dir = os.path.join(model_dir, "data")
+     
+    classifier.train(
+           data_dir = processed_dir,
+           session = MyGraph(),
+           classifier_filename = os.path.join(model_dir, "classifier.pkl"),
+           model_type = "knn")
+    
+    return True, ""
+
+
+
 def train(input_folder_path, model_folder_name, model_type):
     print("Input Folder Path:", input_folder_path)
     print("Model Folder Name:", model_folder_name)
