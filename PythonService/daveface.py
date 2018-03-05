@@ -64,7 +64,12 @@ def retrain():
         
     model_folder_name = requestData['model_folder_name']
     
-    success, error = trainer.retrain(model_folder_name)
+    model_type = "knn"
+    
+    if 'model_type' in requestData:
+        model_type = requestData['model_type']
+        
+    success, error = trainer.retrain(model_folder_name, model_type)
     code = 400
     
     if success:

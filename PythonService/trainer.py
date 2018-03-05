@@ -6,7 +6,7 @@ from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
    
-def retrain(model_folder_name):
+def retrain(model_folder_name, model_type):
     model_dir = os.path.join(Globals.model_path, model_folder_name)
     processed_dir = os.path.join(model_dir, "data")
      
@@ -14,7 +14,7 @@ def retrain(model_folder_name):
            data_dir = processed_dir,
            session = MyGraph(),
            classifier_filename = os.path.join(model_dir, "classifier.pkl"),
-           model_type = "knn")
+           model_type = model_type)
     
     return True, ""
 
