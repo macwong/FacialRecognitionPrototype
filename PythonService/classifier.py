@@ -84,7 +84,7 @@ def train(data_dir, session, classifier_filename, model_type):
 
     # Saving classifier model
     with open(features.classifier_filename_exp, 'wb') as outfile:
-        pickle.dump((model, class_names), outfile)
+        pickle.dump((model, class_names, features.emb_array, features.labels), outfile)
     print('Saved classifier model to file "%s"' % features.classifier_filename_exp)
 
 def prediction(data_dir, session, classifier_filename, model_path, verbose):
@@ -95,10 +95,12 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     
     print('Testing classifier')
     with open(features.classifier_filename_exp, 'rb') as infile:
-        (model, class_names) = pickle.load(infile)
+        (model, class_names, emb_array, labels) = pickle.load(infile)
         
     print('Loaded classifier model from file "%s"' % features.classifier_filename_exp)
-
+    
+    model.fit(emb_array, labels)
+    
     predictions = model.predict_proba(features.emb_array)
     pred_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
