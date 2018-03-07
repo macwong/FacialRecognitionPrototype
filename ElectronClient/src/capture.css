@@ -216,11 +216,11 @@ video.file {
 
 .expandable {
   padding: 7px 5px 0 5px;
+  cursor: pointer;
 }
 
 
 .block {
-  cursor: pointer;
   width: 100%;
   border-top: solid 1px grey;
   border-bottom: solid 1px grey;
@@ -262,6 +262,7 @@ video.file {
 
 .block .block-details {
   width: 100%;
+  padding: 5px;
 }
 
 .top-predictions .rating {
@@ -319,7 +320,7 @@ video.file {
   align-items: center;
 }
 
-select {
+select, input.name-list {
   -webkit-appearance: button;
   -webkit-border-radius: 2px;
   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
@@ -333,17 +334,32 @@ select {
   font-size: inherit;
   margin: 20px;
   overflow: hidden;
-  padding: 5px 40px;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 300px;
-  color: #fff;
-  background-image: url(../images/15xvbd5.png), -webkit-linear-gradient(#167efb, #167efb 40%, #167efb);
-  background-color: #167efb;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+}
+
+select {
+  background-image: url(../images/15xvbd5.png), -webkit-linear-gradient(#167efb, #167efb 40%, #167efb);
+  background-color: #167efb;
+  color: #fff;
+  padding: 5px 40px;
   padding-left: 15px;
+}
+
+input.name-list {
+  background-image: url(../images/15xvbd5.png);
+  color: #000;
+  padding: 5px 0;
+  padding-left: 15px;
+}
+
+input.name-list::-webkit-calendar-picker-indicator {
+  display: none;
+  cursor: pointer;
 }
 
 /* Radio group */
