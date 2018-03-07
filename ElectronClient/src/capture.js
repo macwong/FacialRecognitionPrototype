@@ -415,61 +415,71 @@ function createInfo($row, $info) {
         $scores.find(".probability").text(getProbability(result.probability));
         $scores.find(".distance").text(result.distance.toFixed(2));
         
-        let $topPredictions = $contents.find(".top-predictions");
-        let $predictionList = $topPredictions.find(".prediction-list");
-        let $expandable = $topPredictions.find(".expandable");
-        $predictionList.hide();
-        
-        $expandable.click((e) => {
-            if ($topPredictions.hasClass("collapsed")) {
-                $topPredictions.removeClass("collapsed");
-                $predictionList.slideDown();
-            }
-            else {
-                $topPredictions.addClass("collapsed");
-                $predictionList.slideUp();
-            }
+        getExpandableBlock($contents, ".add-face", ($block, $details) => {
+            
         });
 
-        $.get(path.join(__dirname, 'toppredictionsrow.html'), (rowData) => {
-            let $rowTemplate = $(rowData);
-            let $rowName = $rowTemplate.find(".top-name");
-            let $rowRating = $rowTemplate.find(".rating");
-            let $ratingImage = $rowRating.find("img:first");
-            let $training = $rowTemplate.find(".training-images");
-            let $trainingImage = $training.find("img:first");
-            let $rowScores = $rowTemplate.find(".top-scores");
-
-            for (var infoIndex in result.info) {
-                let info = result.info[infoIndex];
-                let rank = Number(infoIndex) + 1;
-                $rowName.find(".top-name-heading").text(rank + ". " + info.name);
-
-                let rating = getRating(info.distance);
-                $rowRating.empty();
-                setPredictionImage($ratingImage, info.distance);
-
-                for (var i = 0; i < rating; i++) {
-                    $rowRating.append($ratingImage.clone());
+        getExpandableBlock($contents, ".top-predictions", ($block, $details) => {
+            $.get(path.join(__dirname, 'toppredictionsrow.html'), (rowData) => {
+                let $rowTemplate = $(rowData);
+                let $rowName = $rowTemplate.find(".top-name");
+                let $rowRating = $rowTemplate.find(".rating");
+                let $ratingImage = $rowRating.find("img:first");
+                let $training = $rowTemplate.find(".training-images");
+                let $trainingImage = $training.find("img:first");
+                let $rowScores = $rowTemplate.find(".top-scores");
+    
+                for (var infoIndex in result.info) {
+                    let info = result.info[infoIndex];
+                    let rank = Number(infoIndex) + 1;
+                    $rowName.find(".top-name-heading").text(rank + ". " + info.name);
+    
+                    let rating = getRating(info.distance);
+                    $rowRating.empty();
+                    setPredictionImage($ratingImage, info.distance);
+    
+                    for (var i = 0; i < rating; i++) {
+                        $rowRating.append($ratingImage.clone());
+                    }
+    
+                    $training.empty();
+    
+                    for (var i = 0; i < info.photo_path.length; i++) {
+                        let photo_path = info.photo_path[i];
+                        $trainingImage.prop("src", photo_path);
+                        $training.append($trainingImage.clone());
+                    }
+    
+                    $rowScores.find(".probability").text(getProbability(info.probability));
+                    $rowScores.find(".distance").text(info.distance.toFixed(2));
+    
+                    $details.append($rowTemplate.clone());
                 }
-
-                $training.empty();
-
-                for (var i = 0; i < info.photo_path.length; i++) {
-                    let photo_path = info.photo_path[i];
-                    $trainingImage.prop("src", photo_path);
-                    $training.append($trainingImage.clone());
-                }
-
-                $rowScores.find(".probability").text(getProbability(info.probability));
-                $rowScores.find(".distance").text(info.distance.toFixed(2));
-
-                $predictionList.append($rowTemplate.clone());
-            }
+            });
         });
 
         $info.html($contents.children());
     });
+}
+
+function getExpandableBlock($contents, blockClass, callback) {
+    let $block = $contents.find(".block" + blockClass);
+    let $details = $block.find(".block-details");
+    let $expandable = $block.find(".expandable");
+    $details.hide();
+    
+    $expandable.click((e) => {
+        if ($block.hasClass("collapsed")) {
+            $block.removeClass("collapsed");
+            $details.slideDown();
+        }
+        else {
+            $block.addClass("collapsed");
+            $details.slideUp();
+        }
+    });
+
+    callback($block, $details);
 }
 
 function getProbability(probability) {
