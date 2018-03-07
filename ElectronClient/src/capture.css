@@ -215,14 +215,19 @@ video.file {
 }
 
 .expandable {
-  cursor: pointer;
   padding: 7px 5px 0 5px;
+}
+
+
+.block {
+  cursor: pointer;
+  width: 100%;
   border-top: solid 1px grey;
   border-bottom: solid 1px grey;
 }
-
-.block {
-  width: 100%;
+          
+.block ~ .block {
+  border-top: none;
 }
 
 .block h3 {
