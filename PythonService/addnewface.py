@@ -5,6 +5,7 @@ import shutil
 import classifier
 import os
 import numpy as np
+from shutil import copyfile
 
 def add(image, model_folder, name):
     # Create temp image
@@ -42,6 +43,10 @@ def add(image, model_folder, name):
     name_index = class_names.index(name)
     labels.append(name_index)
 
+    folder_name, folder_path = helpers.get_person_folder_path(model_path, name)
+    
+    file_name = os.path.basename(file_path)
+    copyfile(file_path, os.path.join(folder_path, file_name))
     
 #    print(len(labels))
 #    print(len(class_names))
