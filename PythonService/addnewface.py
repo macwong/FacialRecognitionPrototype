@@ -26,17 +26,17 @@ def add(image, model_folder, name):
     # Load model
     (model, class_names, emb_array, labels) = helpers.load_model(features.classifier_filename_exp)
     
-#    print(emb_array.shape)
-#    print(features.emb_array.shape)
+    print(emb_array.shape)
+    print(features.emb_array.shape)
     emb_array = np.append(emb_array, features.emb_array, axis = 0)
     
     # Add new embedding to array
-#    print("Emb array")
-#    print(emb_array.shape)
+    print("Emb array")
+    print(emb_array.shape)
 
-    matches = (n for n in class_names if n.lower() == name.lower())
+    matches = next((n for n in class_names if n.lower() == name.lower()), None)
     
-    if not matches:
+    if matches == None:
         print("Name not found... adding new name")
         class_names.append(name)
         
@@ -45,16 +45,21 @@ def add(image, model_folder, name):
 
     folder_name, folder_path = helpers.get_person_folder_path(model_path, name)
     
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    
     file_name = os.path.basename(file_path)
     copyfile(file_path, os.path.join(folder_path, file_name))
     
-#    print(len(labels))
-#    print(len(class_names))
+    print(len(labels))
+    print(len(class_names))
     
-    # Retrain?
+    # Retrain
+    model.fit(emb_array, labels)
     
     # Save the new model / embeddings etc
-    
+    helpers.save_model(features.classifier_filename_exp, model, class_names, emb_array, labels)
+
     # Cleanup
     shutil.rmtree(Globals.temp_path)
     

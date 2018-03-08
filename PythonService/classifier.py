@@ -84,10 +84,7 @@ def train(data_dir, session, classifier_filename, model_type):
     class_names = [ cls.name.replace('_', ' ') for cls in features.dataset]
 
     # Saving classifier model
-    with open(features.classifier_filename_exp, 'wb') as outfile:
-        pickle.dump((model, class_names, features.emb_array, features.labels), outfile)
-        
-    print('Saved classifier model to file "%s"' % features.classifier_filename_exp)
+    helpers.save_model(features.classifier_filename_exp, model, class_names, features.emb_array, features.labels)
 
 def prediction(data_dir, session, classifier_filename, model_path, verbose):
     features = get_features(data_dir, session, classifier_filename)

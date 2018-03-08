@@ -20,6 +20,12 @@ def load_model(model_path):
     
     return model, class_names, emb_array, labels
 
+def save_model(model_file, model, class_names, emb_array, labels):
+    with open(model_file, 'wb') as outfile:
+        pickle.dump((model, class_names, emb_array, labels), outfile)
+        
+    print('Saved classifier model to file "%s"' % model_file)
+
 def save_temp_face(image):
     temp_data_path = os.path.join(Globals.temp_path, "data")
     file_path = None
