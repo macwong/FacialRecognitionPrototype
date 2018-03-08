@@ -1,14 +1,10 @@
 import os
 import shutil
-import base64
-from mimetypes import guess_extension
-import uuid
 import classifier
 import Helpers.align_dataset as align
 from align_options import AlignOptions
 from mygraph import MyGraph
 from daveglobals import Globals
-from shutil import copyfile
 from Helpers import helpers
 
 class PredictionInfo():
@@ -34,7 +30,6 @@ class PredictResponse():
         self.error = error
         
 def predict(image, model_folder, verbose):
-    temp_path = os.path.join(Globals.data_path, "temp")
     error = helpers.save_temp_face(image)
        
     if error != "":
@@ -42,8 +37,8 @@ def predict(image, model_folder, verbose):
     
     print("Align image to work with classifier")
     temp_predict = os.path.join(Globals.data_path, "temp_predict")
-    align.align_faces(AlignOptions(temp_path, temp_predict, True))
-    shutil.rmtree(temp_path)
+    align.align_faces(AlignOptions(Globals.temp_path, temp_predict, True))
+    shutil.rmtree(Globals.temp_path)
     
     print("Classify image")
     temp_predict_data = os.path.join(temp_predict, "data")

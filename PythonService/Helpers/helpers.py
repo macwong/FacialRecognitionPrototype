@@ -6,14 +6,13 @@ import uuid
 import base64
 
 def save_temp_face(image):
-    temp_path = os.path.join(Globals.data_path, "temp")
-    temp_data_path = os.path.join(temp_path, "data")
+    temp_data_path = os.path.join(Globals.temp_path, "data")
     
     if not os.path.exists(Globals.data_path):
         return "Training Data Path not found"
     
-    if not os.path.exists(temp_path):
-        os.makedirs(temp_path)
+    if not os.path.exists(Globals.temp_path):
+        os.makedirs(Globals.temp_path)
 
     if not os.path.exists(temp_data_path):
         os.makedirs(temp_data_path)
