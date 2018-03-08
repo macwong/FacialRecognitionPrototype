@@ -6,6 +6,12 @@ import uuid
 import base64
 import pickle
 
+def get_person_folder_path(model_path, name):
+    folder_name = name.replace(' ', '_')
+    folder_path = os.path.join(model_path, "data", folder_name)
+    
+    return folder_name, folder_path
+
 def load_model(model_path):
     with open(model_path, 'rb') as infile:
         (model, class_names, emb_array, labels) = pickle.load(infile)

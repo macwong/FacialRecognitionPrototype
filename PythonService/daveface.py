@@ -98,14 +98,16 @@ def addface():
         not requestData 
         or not 'image' in requestData
         or not 'model' in requestData
+        or not 'name' in requestData
     ):
         print("Invalid JSON request data...", returnValue)
         abort(400)
         
     image = requestData["image"]
     model = requestData["model"]
+    name = requestData["name"]
     
-    success, error = addnewface.add(image, model)
+    success, error = addnewface.add(image, model, name)
     code = 400
     
     if success:

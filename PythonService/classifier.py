@@ -127,9 +127,9 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 pred_info = PredictionInfo()
                 pred_info.name = class_names[top_index]
                 pred_info.probability = all_pred[top_index]
-                folder_name = pred_info.name.replace(' ', '_')
                 
-                photo_path_folder = os.path.join(model_path, "data", folder_name)
+                folder_name, photo_path_folder = helpers.get_person_folder_path(model_path, pred_info.name)
+                
                 pred_info.photo_path = [os.path.join(photo_path_folder, f) for f in os.listdir(photo_path_folder) if os.path.isfile(os.path.join(photo_path_folder, f))]
                 
                 # Create temp photo path for predicted values

@@ -447,7 +447,8 @@ function createInfo($row, $info) {
                         type: "POST",
                         data: JSON.stringify({
                             image: result.image,
-                            model: m_currentModel
+                            model: m_currentModel,
+                            name: $input.val()
                         }),
                         contentType: "application/json; charset=utf-8",
                         dataType:"json"
