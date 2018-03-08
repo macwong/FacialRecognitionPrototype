@@ -343,6 +343,12 @@ function createHistory(pred_result, $history, $info) {
     $row.data("prediction_id", pred_result.prediction_id);
     $row.addClass("row interactive");
 
+
+    $row.click((e) => {
+        $(e.currentTarget).parent().find(".row").removeClass("selected");
+        $(e.currentTarget).addClass("selected");
+    });
+
     let $face = $("<img />");
     $face.addClass("predicted-image");
     $face.prop("src", m_dataURI + pred_result.image);

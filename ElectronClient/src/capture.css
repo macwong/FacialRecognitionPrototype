@@ -83,6 +83,10 @@ video.file {
   background-color: rgb(176, 225, 255);
 }
 
+.row.interactive.selected {
+  background-color: rgb(176, 225, 255);
+}
+
 .row .predicted-image {
   height: 60px;
   width: 60px;
