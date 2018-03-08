@@ -359,6 +359,7 @@ select {
   height: 23px;
   width: 170px;
   margin: 5px;
+  font-size: 14px;
 }
 
 .editable-dropdown .data-list {
@@ -367,6 +368,41 @@ select {
 
 .editable-dropdown .input::-webkit-calendar-picker-indicator {
   display: none;
+}
+
+.add-container {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+}
+
+.add-container .add-info {
+  font-size: 14px;
+  margin: 5px;
+  padding: 5px;
+  max-width: 170px;
+}
+
+button {
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 0.4em;
+  min-width: 60px;
+  max-width: 60px;
+  height: 30px;
+  margin: 5px;
+  padding: 5px;
+  display:block;
+  flex:1;
+  box-sizing:border-box;
+  border:1px solid #167efb;
+  border-right:none;
+  margin:0;
+  padding:.4em;
+  cursor: pointer;
+  user-select:none;
+  -webkit-user-select:none;
+  background:#167efb;
+  color:#fff;
 }
 
 /* Radio group */
@@ -379,6 +415,8 @@ select {
   min-width: 200px;
   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
 }
+
+
 .segmented label {
   display:block;
   flex:1;
