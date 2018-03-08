@@ -15,6 +15,7 @@ from distutils.dir_util import copy_tree
 import uuid
 from daveglobals import Globals
 import datetime
+from Helpers import helpers
 
 class FeatureEmbeddings():
     def __init__(self, success, error, dataset = None, emb_array = None, labels = None, paths = None, classifier_filename_exp = None):
@@ -85,6 +86,7 @@ def train(data_dir, session, classifier_filename, model_type):
     # Saving classifier model
     with open(features.classifier_filename_exp, 'wb') as outfile:
         pickle.dump((model, class_names, features.emb_array, features.labels), outfile)
+        
     print('Saved classifier model to file "%s"' % features.classifier_filename_exp)
 
 def prediction(data_dir, session, classifier_filename, model_path, verbose):
@@ -94,10 +96,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         return PredictResponse(features.error)
     
     print('Testing classifier')
-    with open(features.classifier_filename_exp, 'rb') as infile:
-        (model, class_names, emb_array, labels) = pickle.load(infile)
-        
-    print('Loaded classifier model from file "%s"' % features.classifier_filename_exp)
+    (model, class_names, emb_array, labels) = helpers.load_model(features.classifier_filename_exp)
     
     model.fit(emb_array, labels)
     

@@ -4,6 +4,15 @@ from shutil import copyfile
 from mimetypes import guess_extension
 import uuid
 import base64
+import pickle
+
+def load_model(model_path):
+    with open(model_path, 'rb') as infile:
+        (model, class_names, emb_array, labels) = pickle.load(infile)
+        
+    print('Loaded classifier model from file "%s"' % model_path)
+    
+    return model, class_names, emb_array, labels
 
 def save_temp_face(image):
     temp_data_path = os.path.join(Globals.temp_path, "data")

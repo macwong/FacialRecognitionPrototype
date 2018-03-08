@@ -14,9 +14,12 @@ def add(image, model_folder):
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
     features = classifier.get_features(Globals.temp_path, MyGraph(), classifier_file)
-    print(features.emb_array)
+    
+    if features.success == False:
+        return False, features.error
     
     # Load model
+    
     
     # Add new embedding to array
     
