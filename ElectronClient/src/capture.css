@@ -405,6 +405,11 @@ button {
   color:#fff;
 }
 
+button.disabled {
+  background-color: #cccccc;
+  border:1px solid #cccccc;
+}
+
 /* Radio group */
 .segmented {
   display:flex;

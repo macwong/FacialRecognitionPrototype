@@ -83,7 +83,42 @@ def retrain():
             'success': success,
             'error': error
             }), code        
+
     
+
+@app.route('/daveface/addface', methods=['POST'])
+def addface():
+    print("Add face started...")
+    returnValue = "Fail..."
+    
+    requestData = request.get_json()
+    
+    if (
+        not requestData 
+        or not 'image' in requestData
+        or not 'model' in requestData
+    ):
+        print("Invalid JSON request data...", returnValue)
+        abort(400)
+        
+    image = requestData["image"]
+    model = requestData["model"]
+    
+    code = 400
+    
+    if True:
+        returnValue = "Success!"
+        code = 201
+
+    print("Add face ended...", returnValue)
+    
+    return jsonify({
+            'success': True
+#            'predictions': predict_response.predictions,
+#            'error': predict_response.error
+            }), code      
+
+
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():

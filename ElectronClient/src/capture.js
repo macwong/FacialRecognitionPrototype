@@ -10,11 +10,11 @@ const m_dataURI = "data:image/png;base64,"
 const defaultWidth = 640;
 const defaultHeight = 480;
 
-let isVideo = true;
-let currentWidth = defaultWidth;
-let currentHeight = defaultHeight;
-let currentModel;
-let predictionHistory = [];
+let m_isVideo = true;
+let m_currentWidth = defaultWidth;
+let m_currentHeight = defaultHeight;
+let m_currentModel;
+let m_predictionHistory = [];
 
 function getModels(callback) {
     let $models = $(document).find(".models");
@@ -35,10 +35,10 @@ function getModels(callback) {
 
         $models.html($select);
 
-        currentModel = $select.find("option:first").val();
+        m_currentModel = $select.find("option:first").val();
 
         $select.change((e) => {
-            currentModel = $select.val();
+            m_currentModel = $select.val();
         })
 
         callback();
@@ -102,7 +102,7 @@ $(document).ready(() => {
             if ($parent.hasClass("option-live") || $parent.hasClass("option-video")) {
                 $video.show();
                 $(canvasEl).hide();
-                isVideo = true;
+                m_isVideo = true;
 
                 if ($parent.hasClass("option-live")) {
                     getVideoStream(videoEl, canvasEl, $resultsContainer);
@@ -119,15 +119,15 @@ $(document).ready(() => {
 
                     canvasEl.width = defaultWidth;
                     canvasEl.height = defaultHeight;
-                    currentWidth = defaultWidth;
-                    currentHeight = defaultHeight;
+                    m_currentWidth = defaultWidth;
+                    m_currentHeight = defaultHeight;
                 }
                 
                 $video.hide();
                 $video.prop("src", "");
                 $video.removeAttr("src");
                 $(canvasEl).show();
-                isVideo = false;
+                m_isVideo = false;
             }
         }
     });
@@ -225,28 +225,28 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $history = $(document).find(".history");
     var $info = $(document).find(".info");
 
-    currentWidth = videoEl.videoWidth;
+    m_currentWidth = videoEl.videoWidth;
 
-    if (currentWidth === 0) {
-        currentWidth = defaultWidth;
+    if (m_currentWidth === 0) {
+        m_currentWidth = defaultWidth;
     }
 
-    currentHeight = videoEl.videoHeight;
+    m_currentHeight = videoEl.videoHeight;
 
-    if (currentHeight === 0) {
-        currentHeight = defaultHeight;
+    if (m_currentHeight === 0) {
+        m_currentHeight = defaultHeight;
     }
 
     var dataURL = $(canvasEl).data("file_source");
 
-    if (isVideo) {
+    if (m_isVideo) {
         if (videoEl.src === "") {
             console.log(videoEl.src);
             return;
         }
 
-        canvasEl.width = currentWidth;
-        canvasEl.height = currentHeight;
+        canvasEl.width = m_currentWidth;
+        canvasEl.height = m_currentHeight;
         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
         var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
     }
@@ -256,7 +256,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         type: "POST",
         data: JSON.stringify({
             image: dataURL,
-            model: currentModel
+            model: m_currentModel
         }),
         contentType: "application/json; charset=utf-8",
         dataType:"json",
@@ -288,7 +288,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
 
                 $history.prepend($recentHistory.children());
 
-                if (isVideo && videoEl.src !== "") {
+                if (m_isVideo && videoEl.src !== "") {
                     fadeStuff($resultsOverlay);
                 }
             }
@@ -297,7 +297,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             $resultsContents.text(result.error);
         }
 
-        if (isVideo) {
+        if (m_isVideo) {
             // When one request is done, do it all over again...
             captureImage(videoEl, canvasEl, $resultsContainer);
         }
@@ -306,7 +306,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         
         $resultsContents.text(jqXHR.responseJSON.error);
         
-        if (isVideo) {
+        if (m_isVideo) {
             captureImage(videoEl, canvasEl, $resultsContainer);
         }
     });
@@ -337,7 +337,7 @@ function createHistory(pred_result, $history, $info) {
     //     </div>
     // </div>
 
-    predictionHistory.push(pred_result);
+    m_predictionHistory.push(pred_result);
 
     let $row = $("<div></div>");
     $row.data("prediction_id", pred_result.prediction_id);
@@ -395,7 +395,7 @@ function createInfo($row, $info) {
 
     $.get(path.join(__dirname, 'info.html'), (data) => {
         let predictionID = $row.data("prediction_id");
-        let pred_result = $.grep(predictionHistory, (prediction) => { return prediction.prediction_id == predictionID });
+        let pred_result = $.grep(m_predictionHistory, (prediction) => { return prediction.prediction_id == predictionID });
 
         if (pred_result.length !== 1) {
             return;
@@ -416,10 +416,11 @@ function createInfo($row, $info) {
         $scores.find(".distance").text(result.distance.toFixed(2));
         
         getExpandableBlock($contents, ".add-face", ($block, $details) => {
-            var $editableDropdown = $details.find(".editable-dropdown");
-            var $input = $editableDropdown.find(".input");
-            var $dataList = $details.find(".data-list");
-            var $nameOption = $dataList.find("option").clone();
+            let $editableDropdown = $details.find(".editable-dropdown");
+            let $input = $editableDropdown.find(".input");
+            let $dataList = $details.find(".data-list");
+            let $addButton = $details.find(".add-new-face");
+            let $nameOption = $dataList.find("option").clone();
 
             $dataList.empty();
 
@@ -435,6 +436,27 @@ function createInfo($row, $info) {
 
                 $dataList.append($nameOption.clone());
             }
+
+            $addButton.click((e) => {
+                $button = $(e.currentTarget); 
+
+                if (!$button.hasClass("disabled")) {
+                    $.ajax({
+                        url: "http://localhost:5000/daveface/addface",
+                        type: "POST",
+                        data: JSON.stringify({
+                            image: result.image,
+                            model: m_currentModel
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType:"json"
+                    }).done((result) => {
+                        console.log("Done!")
+                    });
+
+                    $button.addClass("disabled");
+                }
+            });
         });
 
         getExpandableBlock($contents, ".top-predictions", ($block, $details) => {
