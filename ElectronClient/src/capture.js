@@ -416,7 +416,25 @@ function createInfo($row, $info) {
         $scores.find(".distance").text(result.distance.toFixed(2));
         
         getExpandableBlock($contents, ".add-face", ($block, $details) => {
-            
+            var $editableDropdown = $details.find(".editable-dropdown");
+            var $input = $editableDropdown.find(".input");
+            var $dataList = $details.find(".data-list");
+            var $nameOption = $dataList.find("option").clone();
+
+            $dataList.empty();
+
+            for (var nameIndex in result.class_names) {
+                let name = result.class_names[nameIndex];
+                
+                $nameOption.text(name);
+                $nameOption.val(name);
+
+                if (name === pred_name) {
+                    $input.val(name);
+                }
+
+                $dataList.append($nameOption.clone());
+            }
         });
 
         getExpandableBlock($contents, ".top-predictions", ($block, $details) => {
