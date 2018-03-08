@@ -2,6 +2,7 @@ from flask import Flask, jsonify, abort, make_response, request
 import trainer, predictor
 import os
 from daveglobals import Globals
+import addnewface
 
 app = Flask(__name__)
 
@@ -104,19 +105,19 @@ def addface():
     image = requestData["image"]
     model = requestData["model"]
     
+    success, error = addnewface.add(image, model)
     code = 400
     
-    if True:
+    if success:
         returnValue = "Success!"
         code = 201
 
     print("Add face ended...", returnValue)
     
     return jsonify({
-            'success': True
-#            'predictions': predict_response.predictions,
-#            'error': predict_response.error
-            }), code      
+        'success': success,
+        'error': error
+    }), code
 
 
 

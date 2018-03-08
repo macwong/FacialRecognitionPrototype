@@ -420,6 +420,7 @@ function createInfo($row, $info) {
             let $input = $editableDropdown.find(".input");
             let $dataList = $details.find(".data-list");
             let $addButton = $details.find(".add-new-face");
+            let $addInfo = $details.find(".add-info");
             let $nameOption = $dataList.find("option").clone();
 
             $dataList.empty();
@@ -451,7 +452,7 @@ function createInfo($row, $info) {
                         contentType: "application/json; charset=utf-8",
                         dataType:"json"
                     }).done((result) => {
-                        console.log("Done!")
+                        $addInfo.text("New face added!");
                     });
 
                     $button.addClass("disabled");
