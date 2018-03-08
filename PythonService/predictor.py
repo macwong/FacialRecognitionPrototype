@@ -30,7 +30,7 @@ class PredictResponse():
         self.error = error
         
 def predict(image, model_folder, verbose):
-    error = helpers.save_temp_face(image)
+    file_path, error = helpers.save_temp_face(image)
        
     if error != "":
         return PredictResponse(error)

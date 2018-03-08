@@ -16,9 +16,10 @@ def load_model(model_path):
 
 def save_temp_face(image):
     temp_data_path = os.path.join(Globals.temp_path, "data")
+    file_path = None
     
     if not os.path.exists(Globals.data_path):
-        return "Training Data Path not found"
+        return None, "Training Data Path not found"
     
     if not os.path.exists(Globals.temp_path):
         os.makedirs(Globals.temp_path)
@@ -30,7 +31,8 @@ def save_temp_face(image):
         if os.path.isfile(image):
             print("Copy file to temp path")
             f_name = os.path.basename(image)
-            copyfile(image, os.path.join(temp_data_path, f_name))
+            file_path = os.path.join(temp_data_path, f_name)
+            copyfile(image, file_path)
     
     except ValueError:
         print("Convert base64 image to temp file")
@@ -50,7 +52,7 @@ def save_temp_face(image):
             extension = ".png"
     
         if extension == None:
-            return "Not a valid file mime type"
+            return None, "Not a valid file mime type"
     
         file_guid = str(uuid.uuid4())
         file_name = file_guid + extension
@@ -61,6 +63,6 @@ def save_temp_face(image):
             fh.write(imgdata)
             
         if imgdata == None:
-            return "No image data available"
+            return None, "No image data available"
             
-    return ""
+    return file_path, ""

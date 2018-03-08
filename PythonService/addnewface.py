@@ -7,7 +7,10 @@ import os
 
 def add(image, model_folder):
     # Create temp image
-    helpers.save_temp_face(image)
+    file_path, error = helpers.save_temp_face(image)
+    
+    if error != "":
+        return False, error
     
     # Get facenet embeddings
     model_path = os.path.join(Globals.model_path, model_folder)
@@ -19,7 +22,7 @@ def add(image, model_folder):
         return False, features.error
     
     # Load model
-    
+    (model, class_names, emb_array, labels) = helpers.load_model(features.classifier_filename_exp)
     
     # Add new embedding to array
     
