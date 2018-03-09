@@ -98,7 +98,7 @@ The image could contain one person, however the prototype also supports predicti
 ##### Example
 The following screenshot shows that the prototype can select between "Live" (i.e. webcam), "Video" files and "Image" files. Also, the prototype supports multiple faces in the one image.
 
-![Input Example](images/family.png?raw=true "Title")
+![Input Example 2](images/family2.png?raw=true "Title")
 
 ##### Benefits
 The ability to choose different input types (such as from a camera or a file) allows for more potential uses. Being able to monitor video feeds and make accurate predictions in real-time would be great for scenarios such as surveillance and facial verification tasks.
