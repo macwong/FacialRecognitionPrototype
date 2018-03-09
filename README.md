@@ -8,7 +8,7 @@ This prototype contains two core components:
 * A Python Flask web service that provides access to the face recognition
 * An Electron client that provides a UI that accesses the web service
 
-### Purpose
+## Purpose
 
 The aim of this prototype is to investigate the current state of facial recognition, including:
 * The accuracy of predictions
@@ -22,7 +22,7 @@ To evaluate these items, there were two main choices:
 
 I decided to roll my own solution, as this will allow for a more "robust" test of what we can do with facial recognition, without the API restrictions and / or costs. Plus, writing my own facial recognition prototype is more fun :)
 
-### Prototype Demo
+## Prototype Demo
 
 Here is a run-through of what this prototype can do, including:
 1. Training models
@@ -36,7 +36,7 @@ The following will be covered for each of the above sections:
 * Benefits
 * Example
 
-#### 1. Training Models
+### 1. Training Models
 
 ##### Key concepts
 The starting point of this facial recognition prototype (and indeed any machine / deep learning project) is to produce a training model.
@@ -59,31 +59,31 @@ The below screenshot shows an example of how we can choose a model in the protot
 
 ![Choose Model](images/ChooseModel.png?raw=true "Title")
 
-#### 2. Face Input
+### 2. Face Input
 ##### Key concepts
 ##### Benefits
 ##### Example
 
-#### 3. Converting training data and input
+### 3. Converting training data and input
 ##### Key concepts
 ##### Benefits
 ##### Example
 
-#### 4. Predictions
+### 4. Predictions
 ##### Key concepts
 ##### Benefits
 ##### Example
 
-#### 5. Improving Model
+### 5. Improving Model
 ##### Key concepts
 ##### Benefits
 ##### Example
 
-### Summary
+## Summary
 
-### Next Steps
+## Next Steps
 
-### Other Info
+## Other Info
 #### Features
 * Predict faces from a webcam, video file and images
 * Choose from different facial recognition models (default is K-Nearest Neighbour, also supports SVC)
