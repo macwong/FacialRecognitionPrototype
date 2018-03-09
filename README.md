@@ -69,7 +69,7 @@ In order to train a face recognition model, there needs to be some image pre-pro
 ##### Example
 ![Original Photo](images/Chuck_Norris.jpg?raw=true "Title")
 
-![Aligned Photo](images/Chuck Norris face.png?raw=true "Title")
+![Aligned Photo](images/Chuck_Norris_face.png?raw=true "Title")
 
 ![FaceNet](images/embeddings.png?raw=true "Title")
 
