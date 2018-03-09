@@ -8,6 +8,20 @@ This prototype contains two core components:
 * A Python Flask web service that provides access to the face recognition
 * An Electron client that provides a UI that accesses the web service
 
+### Purpose
+
+The aim of this prototype is to investigate the current state of facial recognition, including:
+* The accuracy of predictions
+* How well it scales (e.g. predicting from a dataset of 5, 50, 500 or 5000+ people)
+* The amount of training data required for a prediction to be accurate
+* The ability to integrate with potential products
+
+To evaluate these items, there were two main choices:
+* Accessing a pre-existing API (such as Microsoft's Face API)
+* Rolling my own solution
+
+I decided to roll my own solution, as this will allow for a more "robust" test of what we can do with facial recognition, without the API restrictions and / or costs. Plus, writing my own facial recognition prototype is more fun :)
+
 ### Features
 * Predict faces from a webcam, video file and images
 * Choose from different facial recognition models (default is K-Nearest Neighbour, also supports SVC)
