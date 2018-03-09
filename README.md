@@ -31,7 +31,6 @@ The following will be covered for each of the above sections:
 * Key concepts
 * Benefits
 * Example
-* Potential use cases
 
 #### 1. Training Models
 
@@ -55,6 +54,26 @@ Creating multiple and various training models allows for the facial recognition 
 The below screenshot shows an example of how we can choose a model in the prototype. For instance, the "Justice League" model only has 6 people (the main superheroes in the movie), while the "lfw_all_knn" model has 5762 people (mainly from the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset, with a few additions).
 
 ![Choose Model](images/ChooseModel.png?raw=true "Title")
+
+#### 2. Face Input
+##### Key concepts
+##### Benefits
+##### Example
+
+#### 3. Converting Input
+##### Key concepts
+##### Benefits
+##### Example
+
+#### 4. Predictions
+##### Key concepts
+##### Benefits
+##### Example
+
+#### 5. Improving Model
+##### Key concepts
+##### Benefits
+##### Example
 
 ### Summary
 
