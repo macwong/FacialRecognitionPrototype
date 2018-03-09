@@ -422,7 +422,13 @@ function createInfo($row, $info) {
         $scores.find(".distance").text(result.distance.toFixed(2));
 
         getExpandableBlock($contents, ".model-info", ($block, $details) => {
+            let $modelName = $details.find(".model-name");
+            let $totalPeople = $details.find(".total-people");
+            let $trainingImages = $details.find(".training-images");
+            let $algorithm = $details.find(".algorithm");
+            let $peopleList = $details.find(".people-list");
 
+            
         });
 
         getExpandableBlock($contents, ".top-predictions", ($block, $details) => {
@@ -474,8 +480,8 @@ function createInfo($row, $info) {
 
             $dataList.empty();
 
-            for (var nameIndex in result.class_names) {
-                let name = result.class_names[nameIndex];
+            for (var nameIndex in result.model_info.class_names) {
+                let name = result.model_info.class_names[nameIndex];
                 
                 $nameOption.text(name);
                 $nameOption.val(name);

@@ -183,7 +183,9 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             "probability": best_prob,
             "image": encoded_string,
             "pred_info": pred_info_list,
-            "class_names": class_names
+            "model_info": {
+                "class_names": class_names
+            }
         })
     
     pred_names = sorted(pred_names, key = lambda x: x["distance"])
