@@ -50,19 +50,26 @@ Once this training model has been created, we can provide the model with a new i
 
 Now, if we decide to pass in a picture of someone who isn't in the training set (such as Steven Seagal), then the model will obviously not be able to predict "Steven Seagal". Instead, it will predict "Chuck Norris", as this is the only person in the training set. However, there are ways that we can measure the accuracy of the predictions, which will be covered later.
 
-##### Benefits
-Creating multiple and various training models allows for the facial recognition prototype to make different predictions depending on scope. For instance, we could have one model for "Actors" and another for "Sports Stars", and we can pick and choose different models depending on who we want to predict.
-
 ##### Example
 The below screenshot shows an example of how we can choose a model in the prototype. For instance, the "Justice League" model only has 6 people (the main superheroes in the movie), while the "lfw_all_knn" model has 5762 people (mainly from the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset, with a few additions).
 
 ![Choose Model](images/ChooseModel.png?raw=true "Title")
 
+##### Benefits
+Creating multiple and various training models allows for the facial recognition prototype to make different predictions depending on scope. For instance, we could have one model for "Actors" and another for "Sports Stars", and we can pick and choose different models depending on who we want to predict.
+
 ### 2. Converting images for training
 
 ##### Key concepts
-##### Benefits
+In order to train a face recognition model, there needs to be some image pre-processing. This includes:
+* Categorising the faces, so that the model can tell the difference between "Chuck Norris" and "Steven Seagal"
+* Aligning the faces, to ensure that all faces in the training set are roughly in the same position. This will provide a more consistent dataset, therefore (hopefully) improving predictions
+* Converting the aligned faces into a format that 
+
 ##### Example
+
+##### Benefits
+
 
 ### 3. Face input
 
@@ -71,20 +78,23 @@ Once a training model has been created, then the model can make predictions for 
 
 The image could contain one person, however 
 
+##### Example
 ##### Benefits
 
-##### Example
+
 
 
 ### 4. Predictions
 ##### Key concepts
-##### Benefits
 ##### Example
+##### Benefits
+
 
 ### 5. Improving Model
 ##### Key concepts
-##### Benefits
+
 ##### Example
+##### Benefits
 
 ## Summary
 
