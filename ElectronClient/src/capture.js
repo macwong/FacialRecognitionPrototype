@@ -41,9 +41,26 @@ function getModels(callback) {
             m_currentModel = $select.val();
         })
 
-        $('.modal-toggle').on('click', (e) => {
+        $('.add-model').on('click', (e) => {
             e.preventDefault();
-            $('.modal').toggleClass('is-visible');
+
+            $.get(path.join(__dirname, 'modal.html'), (data) => {
+                let $modal = $(data);
+
+                $(document.body).append($modal);
+
+                setTimeout(() => {
+                    $modal.addClass('is-visible');
+                }, 50);
+
+                $(".modal-toggle").click((e) => {
+                    $modal.removeClass('is-visible');
+                    
+                    setTimeout(() => {
+                        $modal.remove();
+                    }, 500);
+                });
+            });
         });
 
         callback();
