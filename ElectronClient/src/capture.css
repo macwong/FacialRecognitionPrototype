@@ -338,6 +338,7 @@ video.file {
   justify-content: center;
   align-items: center;
   max-height: 73px;
+  width: 100%;
 }
 
 .info {
@@ -366,6 +367,7 @@ select, .editable-dropdown .input {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+  margin: 5px;
 }
 
 select {
