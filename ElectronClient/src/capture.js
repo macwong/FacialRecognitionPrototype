@@ -41,6 +41,11 @@ function getModels(callback) {
             m_currentModel = $select.val();
         })
 
+        $('.modal-toggle').on('click', (e) => {
+            e.preventDefault();
+            $('.modal').toggleClass('is-visible');
+        });
+
         callback();
     });
 }
