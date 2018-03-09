@@ -24,10 +24,10 @@ I decided to roll my own solution, as this will allow for a more "robust" test o
 
 ## Prototype Demo
 
-Here is a run-through of what this prototype can do, including:
+Here is a run-through of what this prototype contains, including:
 1. Training models
-2. Face input
-3. Converting training data and input
+2. Converting images for training
+3. Face input
 4. Predictions
 5. Improving model
 
@@ -42,7 +42,7 @@ The following will be covered for each of the above sections:
 The starting point of this facial recognition prototype (and indeed any machine / deep learning project) is to produce a training model.
 
 Training models:
-* Receive data as input (in this case images of people). This is commonly referred to as the "training set"
+* Receive data as input (in this case images of people's faces). This is commonly referred to as the "training set"
 * Map "labels" to each person in the training set (for instance, a picture of Chuck Norris will be mapped to a label of "Chuck Norris")
 * Use a machine learning algorithm to "learn" about the images
 
@@ -54,20 +54,27 @@ Now, if we decide to pass in a picture of someone who isn't in the training set 
 Creating multiple and various training models allows for the facial recognition prototype to make different predictions depending on scope. For instance, we could have one model for "Actors" and another for "Sports Stars", and we can pick and choose different models depending on who we want to predict.
 
 ##### Example
-
 The below screenshot shows an example of how we can choose a model in the prototype. For instance, the "Justice League" model only has 6 people (the main superheroes in the movie), while the "lfw_all_knn" model has 5762 people (mainly from the [Labeled Faces in the Wild](http://vis-www.cs.umass.edu/lfw/) dataset, with a few additions).
 
 ![Choose Model](images/ChooseModel.png?raw=true "Title")
 
-### 2. Face Input
+### 2. Converting images for training
+
 ##### Key concepts
 ##### Benefits
 ##### Example
 
-### 3. Converting training data and input
+### 3. Face input
+
 ##### Key concepts
+Once a training model has been created, then the model can make predictions for new image input. Whilst the model requires image input, we can still use video or webcam footage, by creating snapshots of the video at a given interval, and converting it to an image.
+
+The image could contain one person, however 
+
 ##### Benefits
+
 ##### Example
+
 
 ### 4. Predictions
 ##### Key concepts
