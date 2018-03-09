@@ -1,6 +1,6 @@
 # Facial Recognition Prototype
 
-This is a facial recognition prototype, based on David Sandberg's awesome FaceNet implementation:
+This is a facial recognition prototype, based on David Sandberg's awesome Python FaceNet implementation:
 
 https://github.com/davidsandberg/facenet
 
