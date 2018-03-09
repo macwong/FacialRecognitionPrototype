@@ -264,6 +264,11 @@ video.file {
   flex-direction: column;
 }
 
+.models-container {
+  display: flex;
+  align-items: center;
+}
+
 .model-info div {
   margin-bottom: 5px;
 }
@@ -409,7 +414,7 @@ button {
   border-radius: 0.4em;
   min-width: 60px;
   max-width: 60px;
-  height: 30px;
+  height: 31px;
   margin: 5px;
   padding: 5px;
   display:block;
