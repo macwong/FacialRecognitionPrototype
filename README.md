@@ -68,12 +68,15 @@ In order to train a face recognition model, there needs to be some image pre-pro
 
 ##### Example
 If we have the following image in our training set:
+
 ![Original Photo](images/Chuck_Norris.jpg?raw=true "Title")
 
 We first need to align the face, so key "landmarks" (such as eyes, nose and mouth) are in the same position for all training images. To do this, we use the [MTCNN](https://kpzhang93.github.io/MTCNN_face_detection_alignment/) neural network:
+
 ![Aligned Photo](images/Chuck_Norris_face.png?raw=true "Title")
 
 Then, using the FaceNet algorithm, we convert this image data to a vector with 128-dimensions. So this is how Chuck Norris now looks like (at least according to our facial recognition system):
+
 ![FaceNet](images/embeddings.png?raw=true "Title")
 
 ##### Benefits
