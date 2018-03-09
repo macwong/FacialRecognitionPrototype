@@ -13,13 +13,13 @@ This prototype contains two core components:
 * Choose from different facial recognition models (default is K-Nearest Neighbour)
 * Predict multiple faces at once
 * Display relevant info regarding each prediction, such as:
-** The probability of the prediction
-** The (euclidean) distance between the predicted image and the image(s) in the training set
-** Information about the model
-** Displaying the embeddings (the 128-dimension vector that FaceNet produces)
-** Display the top 5 predictions
-** Adding a predicted face to the training model
-** Adding new people to the training model
+  - The probability of the prediction
+  - The (euclidean) distance between the predicted image and the image(s) in the training set
+  - Information about the model
+  - Displaying the embeddings (the 128-dimension vector that FaceNet produces)
+  - Display the top 5 predictions
+  - Adding a predicted face to the training model
+  - Adding new people to the training model
 
 ### How it works
 * User chooses between 
