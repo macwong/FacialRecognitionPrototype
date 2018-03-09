@@ -446,6 +446,25 @@ function createInfo($row, $info) {
             }
         });
 
+        getExpandableBlock($contents, ".embeddings", ($block, $details) => {
+            let $span = $details.find(".emb").clone();
+
+            $details.empty();
+
+            for (var emb_index in result.embeddings) {
+                let emb = result.embeddings[emb_index];
+                emb = emb.toFixed(5);
+                embDisplay = emb.toString();
+
+                if (emb > 0) {
+                    embDisplay = " " + embDisplay;
+                }
+
+                $span.text(embDisplay);
+                $details.append($span.clone());
+            }
+        });        
+
         getExpandableBlock($contents, ".top-predictions", ($block, $details) => {
             $.get(path.join(__dirname, 'toppredictionsrow.html'), (rowData) => {
                 let $rowTemplate = $(rowData);

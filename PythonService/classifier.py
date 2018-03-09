@@ -183,6 +183,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             "probability": best_prob,
             "image": encoded_string,
             "pred_info": pred_info_list,
+            "embeddings":  features.emb_array[i].tolist(),
             "model_info": {
                 "model_name": os.path.basename(model_path),
                 "class_names": class_names,
