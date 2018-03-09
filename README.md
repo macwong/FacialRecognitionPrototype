@@ -31,7 +31,7 @@ Here is a run-through of what this prototype contains, including:
 4. Predictions
 5. Improving model
 
-The following will be covered for each of the above sections:
+For each of the above sections, the following will be covered:
 * Key concepts
 * Benefits
 * Example
@@ -64,9 +64,14 @@ Creating multiple and various training models allows for the facial recognition 
 In order to train a face recognition model, there needs to be some image pre-processing. This includes:
 * Categorising the faces, so that the model can tell the difference between "Chuck Norris" and "Steven Seagal"
 * Aligning the faces, to ensure that all faces in the training set are roughly in the same position. This will provide a more consistent dataset, therefore (hopefully) improving predictions
-* Converting the aligned faces into a format that 
+* Converting the aligned faces into a format that can be more easily and accurately interpreted by a machine learning algorithm. In this case, we are using FaceNet, as this produces facial "features" that tell more about the face than most other methods (not including the human brain). FaceNet converts images into 128-dimension vectors... for the non-mathematician developers out there, that's an array with 128 numbers in it :)
 
 ##### Example
+![Original Photo](images/Chuck_Norris.jpg?raw=true "Title")
+
+![Aligned Photo](images/Chuck Norris face.png?raw=true "Title")
+
+![FaceNet](images/embeddings.png?raw=true "Title")
 
 ##### Benefits
 
