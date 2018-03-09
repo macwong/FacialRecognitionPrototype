@@ -75,7 +75,11 @@ We first need to align the face, so key "landmarks" (such as eyes, nose and mout
 
 ![Aligned Photo](images/Chuck_Norris_face.png?raw=true "Title")
 
-Then, using the FaceNet algorithm, we convert this image data to a vector with 128 dimensions. Following this conversion, this is how Chuck Norris looks like (at least according to our facial recognition system):
+Then we categorise the image into a folder that contains the name "Chuck_Norris". This folder name will act as our label, to help identify the face:
+
+![Folder](images/folder.png?raw=true "Title")
+
+Finally, using the FaceNet algorithm, we convert this image data to a vector with 128 dimensions. Following this conversion, this is how Chuck Norris looks like (at least according to our facial recognition system):
 
 ![FaceNet](images/embeddings.png?raw=true "Title")
 
