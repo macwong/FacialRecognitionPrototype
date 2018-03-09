@@ -67,23 +67,37 @@ In order to train a face recognition model, there needs to be some image pre-pro
 * Converting the aligned faces into a format that can be more easily and accurately interpreted by a machine learning algorithm. In this case, we are using FaceNet, as this produces facial "features" that tell more about the face than most other methods (not including the human brain). FaceNet converts images into 128-dimension vectors... for the non-mathematician developers out there, that's an array with 128 numbers in it :)
 
 ##### Example
+If we have the following image in our training set:
+
 ![Original Photo](images/Chuck_Norris.jpg?raw=true "Title")
 
-![Aligned Photo](images/Chuck Norris face.png?raw=true "Title")
+We first need to align the face, so key "landmarks" (such as eyes, nose and mouth) are in the same position for all training images. To do this, we use the [MTCNN](https://kpzhang93.github.io/MTCNN_face_detection_alignment/) neural network:
+
+![Aligned Photo](images/Chuck_Norris_face.png?raw=true "Title")
+
+Then we categorise the image into a folder that contains the name "Chuck_Norris". This folder name will act as our label, to help identify the face:
+
+![Folder](images/folder.png?raw=true "Title")
+
+Finally, using the FaceNet algorithm, we convert this image data to a vector with 128 dimensions. Following this conversion, this is how Chuck Norris looks like (at least according to our facial recognition system):
 
 ![FaceNet](images/embeddings.png?raw=true "Title")
 
 ##### Benefits
-
+The FaceNet neural network has been trained to provide a 128 dimension vector that represents key facial features that a machine learning algorithm can interpret, and greatly increases the likelihood of an algorithm correctly predicting a given image. 
 
 ### 3. Face input
 
 ##### Key concepts
-Once a training model has been created, then the model can make predictions for new image input. Whilst the model requires image input, we can still use video or webcam footage, by creating snapshots of the video at a given interval, and converting it to an image.
+Once a model has been trained with the appropriate data, then the model can make predictions for new images. Whilst the model requires image input, we can still use video or webcam footage, by creating snapshots of the video at a given interval, and converting it to an image.
 
-The image could contain one person, however 
+The input also needs to go through the same conversion process as the training data (i.e. from a full image, to an aligned face, and finally to a 128 dimension vector).
+
+The image could contain one person, however the prototype also supports predicting multiple faces in the one image.
 
 ##### Example
+
+
 ##### Benefits
 
 
