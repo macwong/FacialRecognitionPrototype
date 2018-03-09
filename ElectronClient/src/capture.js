@@ -360,9 +360,9 @@ function createHistory(pred_result, $history, $info) {
     let $name = $("<div></div>");
     $name.addClass("name");
 
-    let $time = $("<div></div>");
-    $time.addClass("time");
-    $time.text(pred_result.pred_time);
+    let $modelName = $("<div></div>");
+    $modelName.addClass("time");
+    $modelName.text(pred_result.model_info.model_name);
 
     let $rating = $("<div></div>");
     $rating.addClass("rating");
@@ -378,7 +378,7 @@ function createHistory(pred_result, $history, $info) {
 
     $row.append($face);
     $rowText.append($name);
-    $rowText.append($time);
+    $rowText.append($modelName);
 
     for (var rate = 0; rate < ratingCount; rate++) {
         $rating.append($icon.clone());
