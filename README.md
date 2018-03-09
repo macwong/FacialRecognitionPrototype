@@ -25,7 +25,11 @@ I decided to roll my own solution, as this will allow for a more "robust" test o
 ### Prototype Demo
 
 Here is a run-through of what this prototype can do, including:
-* Training models
+1. Training models
+2. Face input
+3. Converting training data and input
+4. Predictions
+5. Improving model
 
 The following will be covered for each of the above sections:
 * Key concepts
@@ -60,7 +64,7 @@ The below screenshot shows an example of how we can choose a model in the protot
 ##### Benefits
 ##### Example
 
-#### 3. Converting Input
+#### 3. Converting training data and input
 ##### Key concepts
 ##### Benefits
 ##### Example
