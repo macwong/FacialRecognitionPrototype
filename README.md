@@ -10,7 +10,7 @@ This prototype contains two core components:
 
 ### Features
 * Predict faces from a webcam, video file and images
-* Choose from different facial recognition models (default is K-Nearest Neighbour)
+* Choose from different facial recognition models (default is K-Nearest Neighbour, also supports SVC)
 * Predict multiple faces at once
 * Display relevant info regarding each prediction, such as:
   - The probability of the prediction
@@ -21,8 +21,14 @@ This prototype contains two core components:
   - Adding a predicted face to the training model
   - Adding new people to the training model
 
-### How it works
-* User chooses between 
+### Example
+* User trains a model (currently only supported via web service). This can be done by using your favourite API access tool (such as Fiddler or Postman)
+* Select a trained model
+* Choose between the "Live", "Video" and "Image" options
+* If choosing a "Video" or "Image", click on the image viewer to open a file
+* Then after a couple of seconds, a prediction will be made
+* To view more info, click the Less / More toggle
+* Click on a prediction to view more info
 
 ### Dependencies
 * Python environment (e.g. Anaconda)
@@ -34,6 +40,7 @@ This prototype contains two core components:
 Coming soon...
 
 ### To do
+* Remove all hard-coded references to my folder structure
 * Python web service currently assumes that only 1 request will be done at once... will need some refactoring to allow for multiple asynchronous calls to the service
 * Refactor code for public consumption
 * Allow users to create models from scratch using the Electron client
