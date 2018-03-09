@@ -93,18 +93,20 @@ Once a model has been trained with the appropriate data, then the model can make
 
 The input also needs to go through the same conversion process as the training data (i.e. from a full image, to an aligned face, and finally to a 128 dimension vector).
 
-The image could contain one person, however the prototype also supports predicting multiple faces in the one image. Also, the facial recognition is robust to scenarios such as turning the face, lighting conditions and partial covering of the face.
+The image could contain one person, however the prototype also supports predicting multiple faces in the one image.
 
 ##### Example
+The following screenshot shows that the prototype can select between "Live" (i.e. webcam), "Video" files and "Image" files. Also, the prototype supports multiple faces in the one image.
 
+![Input Example](images/family.png?raw=true "Title")
 
 ##### Benefits
-
-
-
+The ability to choose different input types (such as from a camera or a file) allows for more potential uses. Being able to monitor video feeds and make accurate predictions in real-time would be great for scenarios such as surveillance and facial verification tasks.
 
 ### 4. Predictions
+
 ##### Key concepts
+Also, the facial recognition is robust to scenarios such as turning the face, lighting conditions and partial covering of the face.
 ##### Example
 ##### Benefits
 
