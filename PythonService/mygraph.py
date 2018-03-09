@@ -25,17 +25,6 @@ class MyGraph():
                 with graph.as_default():
                     tf.import_graph_def(graph_def, name='')
                     
-            #    graph.finalize()
-                
-                # Create the session that we'll use to execute the model
-            #    sess_config = tf.ConfigProto(
-            #        log_device_placement=False,
-            #        allow_soft_placement = True,
-            #        gpu_options = tf.GPUOptions(
-            #            per_process_gpu_memory_fraction=1
-            #        )
-            #    )
-                    
                 self.sess = tf.Session(graph=graph)
                 
                 self.images_placeholder = graph.get_tensor_by_name("input:0")

@@ -7,7 +7,6 @@ import numpy as np
 import Helpers.facenet.facenet as facenet
 import os
 import math
-import pickle
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from predictor import PredictResponse, PredictionInfo
@@ -145,7 +144,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 # Calculate the distance between the predicted and actual embeddings
                 # The following URL has a basic example of the formula
                 # https://www.mathway.com/popular-problems/Basic%20Math/35308
-                # Our implementation just happens to have a few more coordinates (128 rather than 2)
+                # Our implementation just happens to have a few more dimensions (128 rather than 2)
                 dist = 0
                 
                 for emb in predicted_features.emb_array:
