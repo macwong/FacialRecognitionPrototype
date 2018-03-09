@@ -427,8 +427,15 @@ function createInfo($row, $info) {
             let $trainingImages = $details.find(".training-images");
             let $algorithm = $details.find(".algorithm");
             let $peopleList = $details.find(".people-list");
+            let $li = $peopleList.find("li").clone();
+            $peopleList.empty();
 
-            
+            for (var class_index in result.model_info.class_names) {
+                let class_name = result.model_info.class_names[class_index];
+
+                $li.text(class_name);
+                $peopleList.append($li.clone())
+            }
         });
 
         getExpandableBlock($contents, ".top-predictions", ($block, $details) => {
