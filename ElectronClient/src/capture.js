@@ -56,9 +56,10 @@ function getModels(callback) {
                 $(".modal-toggle").click((e) => {
                     $modal.removeClass('is-visible');
                     
-                    setTimeout(() => {
-                        $modal.remove();
-                    }, 500);
+                    $modal.on('transitionend', (e) => {
+                        //when transition is finished you remove the element.
+                        $modal.remove()
+                    });
                 });
             });
         });
