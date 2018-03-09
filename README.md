@@ -93,7 +93,7 @@ Once a model has been trained with the appropriate data, then the model can make
 
 The input also needs to go through the same conversion process as the training data (i.e. from a full image, to an aligned face, and finally to a 128 dimension vector).
 
-The image could contain one person, however the prototype also supports predicting multiple faces in the one image.
+The image could contain one person, however the prototype also supports predicting multiple faces in the one image. Also, the facial recognition is robust to scenarios such as turning the face, lighting conditions and partial covering of the face.
 
 ##### Example
 
