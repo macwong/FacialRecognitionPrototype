@@ -347,14 +347,18 @@ video.file {
   align-items: center;
 }
 
-input.folder-location {
+.modal input {
   width: 220px;
-  margin: 10px;
+  margin: 5px 10px;
   height: 23px;
 }
 
 button.choose-folder {
   display: inline-block;
+}
+
+.modal .model-add {
+  margin-top: 15px;
 }
 
 select, .editable-dropdown .input {
@@ -867,6 +871,7 @@ ul.nice-list li:nth-child(even) {
   margin-left: -16em;
   background-color: #fff;
   box-shadow: 0 0 1.5em hsla(0, 0%, 0%, 0.35);
+  border-radius: 15px;
 }
 
 .modal-transition {
