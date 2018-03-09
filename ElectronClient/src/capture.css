@@ -264,6 +264,14 @@ video.file {
   flex-direction: column;
 }
 
+.model-info div {
+  margin-bottom: 5px;
+}
+
+.block {
+  font-size: 14px;
+}
+
 .block .block-details {
   width: 100%;
 }
@@ -768,7 +776,7 @@ ul.nice-list {
 }
 
 ul.nice-list li {
-  padding: 10px 15px;
+  padding: 7px;
   border-bottom: 1px solid #ccc;
   font-size: 14px;
 }

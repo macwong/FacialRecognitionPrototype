@@ -428,13 +428,21 @@ function createInfo($row, $info) {
             let $algorithm = $details.find(".algorithm");
             let $peopleList = $details.find(".people-list");
             let $li = $peopleList.find("li").clone();
+
+            let model_info = result.model_info;
+
+            $modelName.text(model_info.model_name);
+            $totalPeople.text(model_info.total_people);
+            $trainingImages.text(model_info.training_images);
+            $algorithm.text(model_info.algorithm);
+            
             $peopleList.empty();
 
-            for (var class_index in result.model_info.class_names) {
-                let class_name = result.model_info.class_names[class_index];
+            for (var class_index in model_info.class_names) {
+                let class_name = model_info.class_names[class_index];
 
                 $li.text(class_name);
-                $peopleList.append($li.clone())
+                $peopleList.append($li.clone());
             }
         });
 

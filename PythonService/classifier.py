@@ -184,7 +184,11 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             "image": encoded_string,
             "pred_info": pred_info_list,
             "model_info": {
-                "class_names": class_names
+                "model_name": os.path.basename(model_path),
+                "class_names": class_names,
+                "total_people": len(class_names),
+                "training_images": len(emb_array),
+                "algorithm": str(model)
             }
         })
     
