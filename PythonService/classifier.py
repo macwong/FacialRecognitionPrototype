@@ -182,7 +182,7 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             "distance": best_dist,
             "probability": best_prob,
             "image": encoded_string,
-            "info": pred_info_list,
+            "pred_info": pred_info_list,
             "class_names": class_names
         })
     

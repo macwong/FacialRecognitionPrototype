@@ -368,7 +368,7 @@ function createHistory(pred_result, $history, $info) {
     $rating.addClass("rating");
 
     let $icon = $("<img />");
-    pred_info = setPredictionIcon(pred_result.info, pred_result.pred_name, $icon);
+    pred_info = setPredictionIcon(pred_result.pred_info, pred_result.pred_name, $icon);
 
     let ratingCount = 5;
 
@@ -415,7 +415,7 @@ function createInfo($row, $info) {
         
         $figure.find(".profile-pic").prop("src", m_dataURI + result.image);
         $figure.find(".caption h2").text(pred_name);
-        setPredictionIcon(result.info, pred_name, $figure.find(".icon"));
+        setPredictionIcon(result.pred_info, pred_name, $figure.find(".icon"));
         
         let $scores = $contents.find(".scores");
         $scores.find(".probability").text(getProbability(result.probability));
@@ -435,8 +435,8 @@ function createInfo($row, $info) {
                 let $trainingImage = $training.find("img:first");
                 let $rowScores = $rowTemplate.find(".top-scores");
     
-                for (var infoIndex in result.info) {
-                    let info = result.info[infoIndex];
+                for (var infoIndex in result.pred_info) {
+                    let info = result.pred_info[infoIndex];
                     let rank = Number(infoIndex) + 1;
                     $rowName.find(".top-name-heading").text(rank + ". " + info.name);
     
@@ -563,7 +563,7 @@ function createPhoto(result, $resultsContents, figureClass) {
 
     let $icon = $("<img />")
     $icon.addClass("icon");
-    setPredictionIcon(result.info, pred_name, $icon);
+    setPredictionIcon(result.pred_info, pred_name, $icon);
     
     $figure.append($image);
     $figure.append($figCaption);
