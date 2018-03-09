@@ -335,7 +335,7 @@ video.file {
   flex: 1;
   display: flex;
   position: relative;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   max-height: 73px;
   width: 100%;
@@ -582,7 +582,6 @@ select, option {
 }
 
 .field {
-  padding: 0 24px;
   margin: auto;
   -ms-flex-preferred-size: 100%;
       flex-basis: 100%;
