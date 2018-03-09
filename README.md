@@ -22,7 +22,34 @@ To evaluate these items, there were two main choices:
 
 I decided to roll my own solution, as this will allow for a more "robust" test of what we can do with facial recognition, without the API restrictions and / or costs. Plus, writing my own facial recognition prototype is more fun :)
 
-### Features
+### Demo
+
+Here is a run-through of what this prototype can do, including:
+* How it works
+* Benefits
+* Potential use cases
+
+#### 1. Training Models
+
+The starting point of this facial recognition prototype (and indeed any machine / deep learning project) is to produce a training model.
+
+Training models:
+* Receive data as input (in this case images of people). This is commonly referred to as the "training set"
+* Map "labels" to each person in the training set (for instance, a picture of Chuck Norris will be mapped to a label of "Chuck Norris")
+* Use a machine learning algorithm to "learn" about the images
+
+Once this training model has been created, we can provide the model with a new image (such as different picture of Chuck Norris). The model will then output its prediction (which should hopefully be "Chuck Norris").
+
+Now, if we decide to pass in a picture of someone who isn't in the training set (such as Steven Seagal), then the model will obviously not be able to predict "Steven Seagal". Instead, it will predict "Chuck Norris", as this is the only person in the training set. However, there are ways that we can measure the accuracy of the predictions, which will be covered later.
+
+![Choose Model](images/ChooseModel.png?raw=true "Title")
+
+### Summary
+
+### Next Steps
+
+### Other Info
+#### Features
 * Predict faces from a webcam, video file and images
 * Choose from different facial recognition models (default is K-Nearest Neighbour, also supports SVC)
 * Predict multiple faces at once
@@ -35,7 +62,7 @@ I decided to roll my own solution, as this will allow for a more "robust" test o
   - Adding a predicted face to the training model
   - Adding new people to the training model
 
-### Example
+#### Example
 * User trains a model (currently only supported via web service). This can be done by using your favourite API access tool (such as Fiddler or Postman)
 * Select a trained model
 * Choose between the "Live", "Video" and "Image" options
@@ -44,16 +71,16 @@ I decided to roll my own solution, as this will allow for a more "robust" test o
 * To view more info, click the Less / More toggle
 * Click on a prediction to view more info
 
-### Dependencies
+#### Dependencies
 * Python environment (e.g. Anaconda)
 * Tensorflow
 * Electron
 * Node package manager
 
-### Video Example
+#### Video Example
 Coming soon...
 
-### To do
+#### To do
 * Remove all hard-coded references to my folder structure
 * Python web service currently assumes that only 1 request will be done at once... will need some refactoring to allow for multiple asynchronous calls to the service
 * Refactor code for public consumption
