@@ -755,3 +755,28 @@ strong {
 .Rtable-cell--alignRight {
   text-align: right;
 }
+
+
+ul.nice-list {
+  max-height: 200px;
+  overflow: auto;
+  margin: 10px;
+  padding: 0;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  -webkit-overflow-scrolling: touch;
+}
+
+ul.nice-list li {
+  padding: 10px 15px;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+}
+
+ul.nice-list li:last-child {
+  border-bottom: none;
+}
+ul.nice-list li:nth-child(even) {
+  background: #f8f8f8;
+}
