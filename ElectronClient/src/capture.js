@@ -50,6 +50,7 @@ function getModels(callback) {
                 let $folderLocation = $modal.find(".folder-location");
                 let $algorithm = $modal.find(".algorithm");
                 let $loading = $modal.find(".loading");
+                let $loadingOverlay = $modal.find(".loading-overlay");
 
                 $(document.body).append($modal);
 
@@ -67,7 +68,8 @@ function getModels(callback) {
                 });
 
                 $modal.find(".model-add").click((e) => {
-                    $loading.show();
+                    $loading.addClass("is-visible");
+                    $loadingOverlay.show();
 
                     $.ajax({
                         url: "http://localhost:5000/daveface/train",
@@ -81,7 +83,8 @@ function getModels(callback) {
                         dataType:"json",
                         
                     }).done((result) => {
-                        $loading.hide();
+                        $loading.removeClass("is-visible");
+                        $loadingOverlay.hide();
                         $modal.removeClass('is-visible');
                     
                         $modal.on('transitionend', (e) => {
@@ -89,7 +92,8 @@ function getModels(callback) {
                             $modal.remove();
                         });
                     }).fail((jqXHR, textStatus, errorThrown) => {
-                        $loading.hide();
+                        $loading.removeClass("is-visible");
+                        $loadingOverlay.hide();
                         let $errorMsg = $modal.find(".error-message");
                         $errorMsg.text(jqXHR.responseJSON.error);
                     });
