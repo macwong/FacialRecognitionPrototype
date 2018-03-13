@@ -46,6 +46,9 @@ function getModels(callback) {
 
             $.get(path.join(__dirname, 'modal.html'), (data) => {
                 let $modal = $(data);
+                let $name = $modal.find(".model-name");
+                let $folderLocation = $modal.find(".folder-location");
+                let $algorithm = $modal.find(".algorithm");
 
                 $(document.body).append($modal);
 
@@ -53,12 +56,39 @@ function getModels(callback) {
                     $modal.addClass('is-visible');
                 }, 50);
 
-                $(".modal-toggle").click((e) => {
+                $modal.find(".modal-toggle").click((e) => {
                     $modal.removeClass('is-visible');
                     
                     $modal.on('transitionend', (e) => {
                         //when transition is finished you remove the element.
-                        $modal.remove()
+                        $modal.remove();
+                    });
+                });
+
+                $modal.find(".model-add").click((e) => {
+                    console.log("clicked");
+
+                    $.ajax({
+                        url: "http://localhost:5000/daveface/train",
+                        type: "POST",
+                        data: JSON.stringify({
+                            input_folder_path: $folderLocation.val(),
+                            model_folder_name: $name.val(),
+                            model_type: $algorithm.val()
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType:"json",
+                        
+                    }).done((result) => {
+                        $modal.removeClass('is-visible');
+                    
+                        $modal.on('transitionend', (e) => {
+                            //when transition is finished you remove the element.
+                            $modal.remove();
+                        });
+                    }).fail((jqXHR, textStatus, errorThrown) => {
+                        let $errorMsg = $modal.find(".error-message");
+                        $errorMsg.text(jqXHR.responseJSON.error);
                     });
                 });
             });

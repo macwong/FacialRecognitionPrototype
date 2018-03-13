@@ -874,6 +874,10 @@ ul.nice-list li:nth-child(even) {
   border-radius: 15px;
 }
 
+.modal .error-message {
+  color: red;
+}
+
 .modal-transition {
   transition: all 0.3s 0.12s;
   transform: translateY(-10%);
