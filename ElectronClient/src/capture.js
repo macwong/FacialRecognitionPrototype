@@ -66,6 +66,11 @@ function getModels(callback) {
                     });
                 });
 
+                $modal.find(".choose-folder").click((e) => {
+                    let $hiddenFile = $modal.find(".folder-input");
+                    $hiddenFile.click();
+                });
+
                 $modal.find(".model-add").click((e) => {
                     $loading.addClass("is-visible");
 
