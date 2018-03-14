@@ -960,11 +960,13 @@ ul.nice-list li:nth-child(even) {
 
 .loading {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   z-index: 10000;
-  background-color: black;
-  transform: translate(-50%, -50%);
   display: none;
 }
 
@@ -981,5 +983,5 @@ ul.nice-list li:nth-child(even) {
 }
 
 .loading .loading-message {
-  z-index: 11;
+  z-index: 11;  
 }
