@@ -325,7 +325,7 @@ video.file {
   list-style: none;
 }
 
-.block , ul.fields {
+.block ul, ul.fields {
   -webkit-padding-start: 0;
   -webkit-margin-before: 5px;
   -webkit-margin-after: 5px;
@@ -336,7 +336,7 @@ ul.fields {
 }
 
 ul.fields li {
-  height: 35px;
+  height: 40px;
 }
 
 .controlsContainer {
@@ -359,6 +359,8 @@ ul.fields li {
   width: 220px;
   margin: 0 10px;
   height: 23px;
+  padding: 4px;
+  border: solid 1px black;
 }
 
 button.choose-folder {
@@ -367,6 +369,7 @@ button.choose-folder {
 
 .modal .model-add {
   margin-top: 15px;
+  display: inline-block;
 }
 
 select, .editable-dropdown .input {
@@ -868,7 +871,7 @@ ul.nice-list li:nth-child(even) {
   z-index: 9999;
 }
 
-.loading.is-visible {
+.modal .loading.is-visible {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -877,9 +880,11 @@ ul.nice-list li:nth-child(even) {
 
 .loading-message {
   color: white;
+  height: 35px;
+  font-size: 20px;
 }
 
-.modal.is-visible .modal-overlay {
+.modal.is-visible .modal-overlay, .loading.is-visible .loading-overlay {
   opacity: 1;
   visibility: visible;
   transition-delay: 0s;
@@ -964,8 +969,17 @@ ul.nice-list li:nth-child(even) {
 }
 
 .loading svg.loading-icon {
+  z-index: 11;
   width: 100px;
   height: 100px;
   margin: 20px;
   display: inline-block;
+}
+
+.loading .loading-overlay {
+  z-index: 10;
+}
+
+.loading .loading-message {
+  z-index: 11;
 }
