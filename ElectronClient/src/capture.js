@@ -67,8 +67,14 @@ function getModels(callback) {
                 });
 
                 $modal.find(".choose-folder").click((e) => {
-                    let $hiddenFile = $modal.find(".folder-input");
-                    $hiddenFile.click();
+                    dialog.showOpenDialog(
+                        remote.getCurrentWindow(), {
+                            properties: ['openDirectory']
+                        },
+                        function (filePaths) {
+                            $folderLocation.val(filePaths[0]);
+                        }
+                    );
                 });
 
                 $modal.find(".model-add").click((e) => {
