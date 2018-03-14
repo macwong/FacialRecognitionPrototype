@@ -16,15 +16,15 @@ let m_currentHeight = defaultHeight;
 let m_currentModel;
 let m_predictionHistory = [];
 
-function getModels(callback) {
-    let $models = $(document).find(".models");
+function refreshModels($select) {
+    var deferred = $.Deferred();
 
     $.ajax({
         url: "http://localhost:5000/daveface/getmodels",
         type: "GET",
         dataType:"json"
     }).done((result) => {
-        let $select = $("<select></select>");
+        $select.empty();
 
         for (var i = 0; i < result.models.length; i++) {
             let $option = $("<option></option>");
@@ -33,6 +33,17 @@ function getModels(callback) {
             $select.append($option);
         }
 
+        deferred.resolve();
+    });
+
+    return deferred.promise();
+}
+
+function initApp(callback) {
+    let $models = $(document).find(".models");
+    let $select = $("<select></select>");
+
+    refreshModels($select).then(() => {
         $models.html($select);
 
         m_currentModel = $select.find("option:first").val();
@@ -99,6 +110,8 @@ function getModels(callback) {
                             //when transition is finished you remove the element.
                             $modal.remove();
                         });
+
+                        refreshModels($select);
                     }).fail((jqXHR, textStatus, errorThrown) => {
                         $loading.removeClass("is-visible");
                         let $errorMsg = $modal.find(".error-message");
@@ -132,7 +145,7 @@ $(document).ready(() => {
     const $history = $(document).find(".history");
     const $info = $(document).find(".info");
 
-    getModels(() => {
+    initApp(() => {
         $resultsContainer.find(".resultsContents").text("Loading...");
         getVideoStream(videoEl, canvasEl, $resultsContainer);
     });
