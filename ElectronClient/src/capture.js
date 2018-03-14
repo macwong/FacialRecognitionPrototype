@@ -16,7 +16,7 @@ let m_currentHeight = defaultHeight;
 let m_currentModel;
 let m_predictionHistory = [];
 
-function refreshModels($select) {
+function getModels($select) {
     var deferred = $.Deferred();
 
     $.ajax({
@@ -43,7 +43,7 @@ function initApp(callback) {
     let $models = $(document).find(".models");
     let $select = $("<select></select>");
 
-    refreshModels($select).then(() => {
+    getModels($select).then(() => {
         $models.html($select);
 
         m_currentModel = $select.find("option:first").val();
@@ -111,7 +111,9 @@ function initApp(callback) {
                             $modal.remove();
                         });
 
-                        refreshModels($select);
+                        getModels($select).then(() => {
+                            $select.val(m_currentModel);
+                        });
                     }).fail((jqXHR, textStatus, errorThrown) => {
                         $loading.removeClass("is-visible");
                         let $errorMsg = $modal.find(".error-message");
