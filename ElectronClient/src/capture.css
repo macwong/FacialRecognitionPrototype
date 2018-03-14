@@ -904,6 +904,7 @@ ul.nice-list li:nth-child(even) {
 
 .modal .error-message {
   color: red;
+  padding: 10px;
 }
 
 .modal-transition {

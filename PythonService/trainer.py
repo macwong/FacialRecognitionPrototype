@@ -29,9 +29,12 @@ def train(input_folder_path, model_folder_name, model_type):
     if os.path.exists(input_folder_path) == False:
         return False, "Invalid input folder!"
     
+    model_dir = os.path.join(Globals.model_path, model_folder_name)
+    
+    if os.path.exists(model_dir) == True:
+        return False, "Model already exists!"
     
     print("Aligning faces...")
-    model_dir = os.path.join(Globals.model_path, model_folder_name)
     processed_dir = os.path.join(model_dir, "data")
     
     align.align_faces(AlignOptions(input_folder_path, processed_dir))
