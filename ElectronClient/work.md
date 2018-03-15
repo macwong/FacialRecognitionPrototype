@@ -49,7 +49,7 @@ Training models contain the following:
 
 Video example:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/WOgDWFbLLRQ?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+[![Training a model](https://img.youtube.com/vi/WOgDWFbLLRQ/0.jpg)](https://www.youtube.com/watch?v=WOgDWFbLLRQ{:target="_blank"})
 
 ## Prototype features
 
