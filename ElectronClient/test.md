@@ -49,6 +49,18 @@ Training models contain the following:
 
 ## Prototype features
 
+#### Creating new training models
+
+#### Predictions from image, video and webcam input
+
+#### Calculates the accuracy of predictions
+
+#### Provides a "Top 5" for each prediction
+
+#### Ability to add new faces
+
+#### Provides model and image info
+
 ## Potential use cases
 
 ## Verdict
