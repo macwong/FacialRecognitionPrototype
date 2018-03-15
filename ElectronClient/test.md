@@ -49,7 +49,7 @@ Training models contain the following:
 
 ## Prototype features
 
-#### Creating new training models
+#### Creating and choosing training models
 
 #### Predictions from image, video and webcam input
 
