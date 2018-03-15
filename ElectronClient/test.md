@@ -53,6 +53,8 @@ Training models contain the following:
 
 #### Predictions from image, video and webcam input
 
+#### Displays history of predictions
+
 #### Calculates the accuracy of predictions
 
 #### Provides a "Top 5" for each prediction
