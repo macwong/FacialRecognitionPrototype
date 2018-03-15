@@ -2,6 +2,7 @@ const electron = require("electron");
 const { remote } = electron;
 const video = require("./video");
 const fs = require("fs");
+const $ = require("./jquery")
 const { dialog } = electron.remote;
 const path = require('path')
 
