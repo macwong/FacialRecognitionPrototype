@@ -16,7 +16,6 @@ This article covers:
 * Why are we investigating this tech?
 * Basic facial recognition concepts
 * Prototype features
-* How it works
 * Potential use cases
 * Verdict
 * Next steps
@@ -31,9 +30,24 @@ The aim of this investigation is to identify the feasibility of implementing fac
 
 ## Basic facial recognition concepts
 
-## Prototype features
+#### Prediction process
 
-## How it works
+Here is a high-level overview of what a typical facial recognition system performs:
+1. Receives an input (e.g. image, video or live cam of a person). If using video or camera, then takes snapshot images at given intervals
+2. Uses face detection to find all faces in the input image, and creates separate images for each
+3. Converts the face images into a more effective format (from raw pixels to numerical values that contain a more semantic understanding of the face)
+4. Using these numerical values, use a machine learning algorithm to predict who the face(s) are
+
+However, before predictions can be made, a "training model" is required. A training model uses a machine learning algorithm to "learn" about people's faces, including identifying who each face is.
+
+#### Training models
+
+Training models contain the following:
+* Dataset (i.e. images of people's faces). These faces are people that the facial recognition system is aware of, and all predictions will be based off these people. For example, if the system only has "Chuck Norris" in the dataset, then all predictions will be of "Chuck Norris" (although there are ways of measuring the veracity of predictions, which will be covered later)
+* Labels (i.e. identifying each person to predict from). These labels are typically numerical IDs, and are mapped to both images in the dataset, as well as people's names. For instance, A label with ID "1" could be "Chuck Norris", which map to 1 or more images of his face
+* Training process (using a machine learning algorithm). The aim of the training process is for the system to "learn" who people are, based on the provided dataset and labels. Firstly, there is some pre-processing conducted on the dataset (i.e. the same process as steps 2 and 3 in the above "Prediction Process"). Then, a machine learning algorithm is used to teach the system to identify the people in the dataset. The same algorithm needs to be used for both the training model and the prediction process
+
+## Prototype features
 
 ## Potential use cases
 
