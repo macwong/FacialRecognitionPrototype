@@ -49,7 +49,7 @@ Training models contain the following:
 
 Video example:
 
-[Training a model](https://www.youtube.com/watch?v=WOgDWFbLLRQ){:target="_blank"}
+<a href="https://www.youtube.com/watch?v=WOgDWFbLLRQ" target="_blank">Training a Model</a>
 
 ## Prototype features
 
