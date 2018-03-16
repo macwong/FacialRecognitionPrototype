@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "PythonService"
+		},
+		{
+			"path": "ElectronClient"
+		}
+	],
+	"settings": {}
+}

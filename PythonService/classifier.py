@@ -78,7 +78,7 @@ def train(data_dir, session, classifier_filename, model_type):
         model = KNeighborsClassifier(weights='distance', n_jobs=-1)
 
     model.fit(features.emb_array, features.labels)
-
+    
     # Create a list of class names
     class_names = [ cls.name.replace('_', ' ') for cls in features.dataset]
 
