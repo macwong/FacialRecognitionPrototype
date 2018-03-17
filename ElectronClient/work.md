@@ -58,25 +58,29 @@ The prototype provides the ability to create a new training model. The user need
 
 For the image folder, it needs to have the following format:
 
-[Parent Folder]
+* [Parent Folder]
    * Dave McCormick
-   >* dave01.png
-   >* testdave02.jpg
+   		* dave01.png
+   		* testdave02.jpg
    * Chuck Norris
-   >* [Image01.png]
-   >* [Image02.png]
+   		* [Image01.png]
+   		* [Image02.png]
    * Angelina Jolie
-   >* [Image01.png]
+   		* [Image01.png]
 
 Then when creating the model, the app will extract the names from the folder name (e.g. "Dave McCormick"), and map the folder name to both a label (e.g. Label ID "0") and the images (e.g. "dave01.png" and "testdave02.png").
 
 There is also a choice of algorithm, but from basic tests, K-nearest neighbours seems to be a more consistent algorithm in most cases.
+
+Once a model has been created, it can be chosen as the main model, and predictions can be made on it.
 
 Below is a video example of adding a model, then using the newly created model for making predictions (hopefully Confluence auto-embeds youtube vids... otherwise, press Cmd / Ctrl + Click on the image below to open in a new tab):
 
 [![Training a model](https://img.youtube.com/vi/WOgDWFbLLRQ/0.jpg)](https://www.youtube.com/watch?v=WOgDWFbLLRQ)
 
 #### Predictions from image, video and webcam input
+
+
 
 #### Can predict from a large dataset of faces
 
