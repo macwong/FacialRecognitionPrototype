@@ -35,7 +35,7 @@ The aim of this investigation is to identify the feasibility of implementing fac
 Here is a high-level overview of what a typical facial recognition system performs:
 1. Receives an input (e.g. image, video or live cam of a person). If using video or camera, then takes snapshot images at given intervals
 2. Uses face detection to find all faces in the input image, and creates separate images for each
-3. Converts the face images into a more effective format (from raw pixels to numerical values that contain a more semantic understanding of the face)
+3. Converts the face images into a more effective format (from raw pixels to 128 numerical values that contain a more semantic understanding of the face)
 4. Using these numerical values, use a machine learning algorithm to predict who the face(s) are
 
 However, before predictions can be made, a "training model" is required. A training model uses a machine learning algorithm to "learn" about people's faces, including identifying who each face is.
@@ -47,15 +47,19 @@ Training models contain the following:
 * Labels (i.e. identifying each person to predict from). These labels are typically numerical IDs, and are mapped to both images in the dataset, as well as people's names. For instance, A label with ID "1" could be "Chuck Norris", which map to 1 or more images of his face
 * Training process (using a machine learning algorithm). The aim of the training process is for the system to "learn" who people are, based on the provided dataset and labels. Firstly, there is some pre-processing conducted on the dataset (i.e. the same process as steps 2 and 3 in the above "Prediction Process"). Then, a machine learning algorithm is used to teach the system to identify the people in the dataset. The same algorithm needs to be used for both the training model and the prediction process
 
-Video example (press Cmd / Ctrl + Click on the image below to open in a new tab):
-
-[![Training a model](https://img.youtube.com/vi/WOgDWFbLLRQ/0.jpg)](https://www.youtube.com/watch?v=WOgDWFbLLRQ)
-
 ## Prototype features
 
 #### Creating and choosing training models
 
+Can also choose algorithm
+
+Video example (hopefully Confluence auto-embeds youtube vids... otherwise, press Cmd / Ctrl + Click on the image below to open in a new tab):
+
+[![Training a model](https://img.youtube.com/vi/WOgDWFbLLRQ/0.jpg)](https://www.youtube.com/watch?v=WOgDWFbLLRQ)
+
 #### Predictions from image, video and webcam input
+
+#### Robust to facial expressions, object occlusions and lighting conditions
 
 #### Displays history of predictions
 
@@ -66,6 +70,8 @@ Video example (press Cmd / Ctrl + Click on the image below to open in a new tab)
 #### Ability to add new faces
 
 #### Provides model and image info
+
+
 
 ## Potential use cases
 
