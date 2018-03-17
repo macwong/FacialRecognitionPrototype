@@ -211,8 +211,31 @@ Video here :)
 
 ## Potential use cases
 
+* Quicker Check-In / Out: when the student walks up to the front desk, we could have the user's details automatically displayed in StarRez Web. When the receptionist confirms that the prediction is correct, they can quickly check in
+* Automatic greetings: When the student walks into reception or even their room, an app could automatically greet them using a TV monitor or a text to speech system
+* Verifying students / visitors: Automatically detecting that all people walking through the halls are accounted for
+* Surveillance of incidents: Processing surveillance videos to find out if any students were part of an incident
+
 ## Verdict
+
+The facial recognition tech is much more powerful than anticipated, and we could potentially be integrating this tech into our products.
 
 ## Next steps
 
+There are two main directions that we can go from here:
+* Compare this prototype with API offerings (such as Microsoft's Face API). This will allow us to verify whether the API can do what this baseline prototype can do.
+* Build upon the code written in the prototype, to make it production-ready.
+
+If we were to build upon the prototype, then here are some actions that we can take:
+* Refactor code to be less hacky. For the prototype I have focused mainly on functionality rather than code cleanliness, which would have to change if we were to release to a production environment.
+* Investigate how to deploy to production. Since the facial recognition side of things is written in Python, we'll need to work out how to deploy this. The prototype uses a Python Flask web service, so we could potentially keep this service layer.
+* Authenticate service layer: If we were to use something like Python Flask, we would need to authenticate using similar mechanisms to our REST service APIs.
+* Remove dependency on GPU. Currently, we're using the GPU to do most of the maths computations. Whilst cloud GPUs are getting cheaper, it would be much cheaper if we didn't need them at all
+* Improve performance. If we remove the GPU dependency, then we'll need to work out how to make the predictions faster in order to continue doing real-time predictions.
+
+In the comments of the following YouTube clip, the developer mentions that they could potentially make 5-10 predictions per second on CPU, which would be pretty sweet:
+
+https://www.youtube.com/watch?v=T6czH6DLhC4
+
+* Run on mobile device. If we are able to run this in real-time on CPU, then we could potentially run this in real-time on mobile devices as well. Android has a Tensorflow framework, not sure about ios.
 
