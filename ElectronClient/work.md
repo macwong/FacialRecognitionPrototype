@@ -184,11 +184,30 @@ Video here :)
 
 #### Provides a "Top 5" for each prediction
 
+For each predicted face, the user can see the top 5 most likely predictions. Here is a video covering this:
+
+Video here :)
+
 #### Ability to add new faces
 
+The user of the prototype has the ability to add new faces to the training model for the following two situations:
+* Adding a face to an existing person
+* Adding a new person
+
+Video here :)
+
 #### Provides model and image info
+For each prediction, the prototype provides the following information:
+* Model name
+* Total people in model
+* Total images in model
+* Algorithm details
+* People in model dataset
+* FaceNet embeddings (the 128-dimension vector)
 
+Here is an example video:
 
+Video here :)
 
 ## Potential use cases
 
