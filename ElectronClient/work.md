@@ -159,7 +159,28 @@ Video here :)
 
 #### Displays history of predictions
 
+For each prediction, the prototype can display a historical list of all predictions made. This allows us to click on each prediction, in order to see more info.
+
+Here is a video example of this:
+
+Video here :)
+
 #### Calculates the accuracy of predictions
+
+The accuracy of each prediction is displayed in two ways:
+* Probabilility: The machine learning algorithm provides a percentage probability of the face input. This probability is sensitive to the data in the training model, therefore is an inconsistent metric for evaluating accuracy
+* Distance: A comparison between the 128-dimension vector of the face input vs the 128-dimension vector of the training images. This calculates the "euclidean distance" between the two vectors, and the shorter the distance, the more likely that the prediction is correct. The distance is a direct comparison, without considering other data in the training model, therefore is a good way of measuring the accuracy
+
+The prototype uses the Distance to evaluate the accuracy of predictions, using the following scores:
+* 5: Twitter verified: The likelihood of the prediction being accurate is very high. Distance is less than 0.75
+* 4: Facebook like: Reasonable prediction. Distance is between 0.75 and 0.9
+* 3: Not sure: Starting to guess. Distance is between 0.9 and 1.05
+* 2: Sad face: Unlikely to be accurate, and is more likely to be an unknown person. Distance is between 1.05 and 1.2
+* 1: Rotten tomato: Poor prediction. Is most likely unknown to the dataset, or a very poor image sample. Distance is larger than 1.2
+
+Here is a video that shows the difference between these 5 scores:
+
+Video here :)
 
 #### Provides a "Top 5" for each prediction
 
