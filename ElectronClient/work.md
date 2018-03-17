@@ -108,9 +108,36 @@ Below is a video example of creating a model, then using the newly created model
 #### Predictions from image, video and webcam input
 
 Predictions can be made from a variety of input sources:
-* Images: the user can select an image from their file system
+* Images and Video: the user can select an image or video from their file system
+* Live: input coming from the webcam
+
+Here is a video showing the different input options, and how they can be used to make face predictions:
+
+Video here :)
 
 #### Can predict from a large dataset of faces
+
+Typically, the more people that the system has to predict from, the more likely that the system will be incorrect. For instance, if there are only 10 people (including myself) in the dataset, then it should be easy to predict a new picture of me. However, if there are 5000+ people, then it should be much harder for the prediction to be accurate (as there is a higher likelihood of more people who look similar).
+
+The largest dataset that I used for testing was the "Labeled Faces in the Wild" (LFW) face dataset. This contains the following:
+* 5749 people
+* 13233 images of faces
+* 1680 people with two or more face images
+* 4069 people with only one face image
+
+Despite this being a (relatively) large dataset, the predictions are still surprisingly both accurate and reasonably fast.
+
+Using a data science approach, we can do a 1 vs 1 comparison of all 13233 faces in the dataset, to measure the accuracy:
+* True Positive (TP): two faces are validated as the same person, and they are indeed the same
+* True Negative (TN): two faces are judged as different people, and they are indeed different
+* False Positive (FP): two faces are validated as the same person, but the truth is that they are different
+* False Negative (FN): two faces are judged as different people, but the truth is that they are the same person
+
+Using the above 4 values, we can calculate the accuracy using the following formula:
+
+(TP+TN)/(TP+TN+FP+FN)
+
+![equation](http://www.sciweavers.org/tex2img.php?eq=%5Cfrac%7B%28TP%20%2B%20TN%29%7D%7B%28TP%20%2B%20TN%20%2B%20FP%20%2B%20FN%29%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
 
 #### Robust to facial expressions, object occlusions and lighting conditions
 
