@@ -125,7 +125,7 @@ The largest dataset that I used for testing was the "Labeled Faces in the Wild" 
 * 1680 people with two or more face images
 * 4069 people with only one face image
 
-Despite this being a (relatively) large dataset, the predictions are still surprisingly both accurate and reasonably fast.
+Despite this being a (relatively) large dataset, the predictions are still both (surprisingly) accurate and reasonably fast.
 
 Using a data science approach, we can do a 1 vs 1 comparison of all 13233 faces in the dataset, to measure the accuracy:
 * True Positive (TP): two faces are validated as the same person, and they are indeed the same
@@ -135,11 +135,27 @@ Using a data science approach, we can do a 1 vs 1 comparison of all 13233 faces 
 
 Using the above 4 values, we can calculate the accuracy using the following formula:
 
-(TP+TN)/(TP+TN+FP+FN)
+(TP + TN) / (TP + TN + FP + FN)
 
-![equation](http://www.sciweavers.org/tex2img.php?eq=%5Cfrac%7B%28TP%20%2B%20TN%29%7D%7B%28TP%20%2B%20TN%20%2B%20FP%20%2B%20FN%29%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+Using this formula, we can get an accuracy of 99.2% (+-0.003).
+
+Anecdotally, I find that the predictions aren't always this accurate (especially from a low quality webcam), but still provide decent results that could generally be relied upon for most non-critical uses.
+
+Performance-wise, predictions are generally taking between 2 and 3 seconds, even with the large dataset. This time could be cut down with more efficient algorithms and code.
 
 #### Robust to facial expressions, object occlusions and lighting conditions
+
+The prototype can make successful predictions even with various facial expressions (such as smiling, frowning, or "alternative" expressions). Here is a video outlining this:
+
+Video here :)
+
+Object occlusion (i.e. objects that get in the way of the face, such as sunglasses or a hand) can still result in accurate predictions, however the predictions get less confident with the higher rate of occlusion. With too much occlusion, predictions start to become incorrect. Here is an example video:
+
+Video here :)
+
+The algorithm seems extremely robust to lighting conditions, where correct predictions can be made even with different white balance (coloured lighting), brightness (almost to silhouette darkness) and inconsistent light. Here is an example of this:
+
+Video here :)
 
 #### Displays history of predictions
 
