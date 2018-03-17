@@ -51,13 +51,34 @@ Training models contain the following:
 
 #### Creating and choosing training models
 
-Can also choose algorithm
+The prototype provides the ability to create a new training model. The user needs to provide the following:
+* The model's name (e.g. "Test Model")
+* The image folder (i.e. a folder on the computer that contains the images)
+* The algorithm (currently a choice between K-Nearest Neighbours and Support Vector Classification... although one day would like to add LSH Forests to the list, as it's a much quicker version of K-Nearest Neighbours)
 
-Video example (hopefully Confluence auto-embeds youtube vids... otherwise, press Cmd / Ctrl + Click on the image below to open in a new tab):
+For the image folder, it needs to have the following format:
+
+[Parent Folder]
+   * Dave McCormick
+   >* dave01.png
+   >* testdave02.jpg
+   * Chuck Norris
+   >* [Image01.png]
+   >* [Image02.png]
+   * Angelina Jolie
+   >* [Image01.png]
+
+Then when creating the model, the app will extract the names from the folder name (e.g. "Dave McCormick"), and map the folder name to both a label (e.g. Label ID "0") and the images (e.g. "dave01.png" and "testdave02.png").
+
+There is also a choice of algorithm, but from basic tests, K-nearest neighbours seems to be a more consistent algorithm in most cases.
+
+Below is a video example of adding a model, then using the newly created model for making predictions (hopefully Confluence auto-embeds youtube vids... otherwise, press Cmd / Ctrl + Click on the image below to open in a new tab):
 
 [![Training a model](https://img.youtube.com/vi/WOgDWFbLLRQ/0.jpg)](https://www.youtube.com/watch?v=WOgDWFbLLRQ)
 
 #### Predictions from image, video and webcam input
+
+#### Can predict from a large dataset of faces
 
 #### Robust to facial expressions, object occlusions and lighting conditions
 
