@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import base64
 import numpy as np
-import Helpers.facenet.facenet as facenet
+import Helpers.facenet as facenet
 import os
 import math
 from sklearn.svm import SVC
