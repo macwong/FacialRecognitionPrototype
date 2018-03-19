@@ -36,8 +36,10 @@ def train(input_folder_path, model_folder_name, model_type):
     
     print("Aligning faces...")
     processed_dir = os.path.join(model_dir, "data")
+
+    my_graph = MyGraph()
     
-    align.align_faces(AlignOptions(input_folder_path, processed_dir))
+    align.align_faces(AlignOptions(input_folder_path, processed_dir, my_graph))
     
     directories = os.listdir(processed_dir)
     
@@ -58,7 +60,7 @@ def train(input_folder_path, model_folder_name, model_type):
     
     classifier.train(
            data_dir = processed_dir,
-           session = MyGraph(),
+           session = my_graph,
            classifier_filename = os.path.join(model_dir, "classifier.pkl"),
            model_type = model_type)
     

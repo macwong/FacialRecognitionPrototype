@@ -34,10 +34,12 @@ def predict(image, model_folder, verbose):
        
     if error != "":
         return PredictResponse(error)
+
+    my_graph = MyGraph()
     
     print("Align image to work with classifier")
     temp_predict = os.path.join(Globals.data_path, "temp_predict")
-    align.align_faces(AlignOptions(Globals.temp_path, temp_predict, True))
+    align.align_faces(AlignOptions(Globals.temp_path, temp_predict, my_graph, True))
     shutil.rmtree(Globals.temp_path)
     
     print("Classify image")
@@ -49,7 +51,7 @@ def predict(image, model_folder, verbose):
     model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
     
-    predict_response = classifier.prediction(temp_predict, MyGraph(), classifier_file, model_path, verbose)
+    predict_response = classifier.prediction(temp_predict, my_graph, classifier_file, model_path, verbose)
     print("Cleanup...")
     shutil.rmtree(temp_predict)
     
