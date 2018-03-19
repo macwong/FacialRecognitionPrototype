@@ -7,14 +7,15 @@ const { dialog } = electron.remote;
 const path = require('path')
 
 const m_dataURI = "data:image/png;base64,"
-const defaultWidth = 640;
-const defaultHeight = 480;
+const m_defaultWidth = 640;
+const m_defaultHeight = 480;
 
 let m_isVideo = true;
-let m_currentWidth = defaultWidth;
-let m_currentHeight = defaultHeight;
+let m_currentWidth = m_defaultWidth;
+let m_currentHeight = m_defaultHeight;
 let m_currentModel;
 let m_predictionHistory = [];
+let m_currentImages = [];
 
 function getModels($select) {
     var deferred = $.Deferred();
@@ -199,10 +200,10 @@ $(document).ready(() => {
                 if ($video.hasClass("file")) {
                     $video.removeClass("file");
 
-                    canvasEl.width = defaultWidth;
-                    canvasEl.height = defaultHeight;
-                    m_currentWidth = defaultWidth;
-                    m_currentHeight = defaultHeight;
+                    canvasEl.width = m_defaultWidth;
+                    canvasEl.height = m_defaultHeight;
+                    m_currentWidth = m_defaultWidth;
+                    m_currentHeight = m_defaultHeight;
                 }
                 
                 $video.hide();
@@ -254,51 +255,56 @@ function openImage(videoEl, canvasEl, $resultsContainer) {
             filters: [
                 { name: 'Images', extensions: ['jpg', 'png', 'gif'] }
               ],
-            properties: ['openFile']
+            properties: ['openFile', 'multiSelections']
         },
         function (filePaths) {
-            var ctx = canvasEl.getContext('2d');
-            var img = new Image();
-            img.onload = function() {
-                var canvasLeft = 0;
-                var canvasTop = 0;
-                var imageWidth = img.width;
-                var imageHeight = img.height;
-
-                var ratio = 0;
-
-                // Check if the current width is larger than the max
-                if(imageWidth > defaultWidth){
-                    ratio = defaultWidth / imageWidth;   // get ratio for scaling image
-                    $(this).css("width", defaultWidth); // Set new width
-                    $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
-                    imageHeight = imageHeight * ratio;    // Reset height to match scaled image
-                    imageWidth = imageWidth * ratio;    // Reset width to match scaled image
-                }
-                
-                // Check if current height is larger than max
-                if(imageHeight > defaultHeight){
-                    ratio = defaultHeight / imageHeight; // get ratio for scaling image
-                    $(this).css("height", defaultHeight);   // Set new height
-                    $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
-                    imageWidth = imageWidth * ratio;    // Reset width to match scaled image
-                    imageHeight = imageHeight * ratio;    // Reset height to match scaled image
-                }
-                
-                canvasLeft = (defaultWidth - imageWidth) / 2;
-                canvasTop = (defaultHeight - imageHeight) / 2;
-                ctx.clearRect(0, 0, defaultWidth, defaultHeight);
-                ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
-                fadeStuff($resultsContainer.find(".resultsOverlay"));
-                captureImage(videoEl, canvasEl, $resultsContainer);
-            }
-
-            if (filePaths !== null && filePaths !== undefined) {
-                img.src = filePaths[0];
-                $(canvasEl).data("file_source", filePaths[0]);
-            }
+            m_currentImages = filePaths;
+            updateImage(canvasEl, videoEl, $resultsContainer);
         }
     );
+}
+
+function updateImage(canvasEl, videoEl, $resultsContainer) {
+    var ctx = canvasEl.getContext('2d');
+    var img = new Image();
+    img.onload = function() {
+        var canvasLeft = 0;
+        var canvasTop = 0;
+        var imageWidth = img.width;
+        var imageHeight = img.height;
+
+        var ratio = 0;
+
+        // Check if the current width is larger than the max
+        if(imageWidth > m_defaultWidth){
+            ratio = m_defaultWidth / imageWidth;   // get ratio for scaling image
+            $(this).css("width", m_defaultWidth); // Set new width
+            $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
+            imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+            imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+        }
+        
+        // Check if current height is larger than max
+        if(imageHeight > m_defaultHeight){
+            ratio = m_defaultHeight / imageHeight; // get ratio for scaling image
+            $(this).css("height", m_defaultHeight);   // Set new height
+            $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
+            imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+            imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+        }
+        
+        canvasLeft = (m_defaultWidth - imageWidth) / 2;
+        canvasTop = (m_defaultHeight - imageHeight) / 2;
+        ctx.clearRect(0, 0, m_defaultWidth, m_defaultHeight);
+        ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
+        fadeStuff($resultsContainer.find(".resultsOverlay"));
+        captureImage(videoEl, canvasEl, $resultsContainer);
+    }
+
+    if (m_currentImages !== null && m_currentImages !== undefined) {
+        img.src = m_currentImages[0];
+        $(canvasEl).data("file_source", m_currentImages[0]);
+    }
 }
 
 function captureImage(videoEl, canvasEl, $resultsContainer) {
@@ -310,13 +316,13 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     m_currentWidth = videoEl.videoWidth;
 
     if (m_currentWidth === 0) {
-        m_currentWidth = defaultWidth;
+        m_currentWidth = m_defaultWidth;
     }
 
     m_currentHeight = videoEl.videoHeight;
 
     if (m_currentHeight === 0) {
-        m_currentHeight = defaultHeight;
+        m_currentHeight = m_defaultHeight;
     }
 
     var dataURL = $(canvasEl).data("file_source");
@@ -382,6 +388,15 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         if (m_isVideo) {
             // When one request is done, do it all over again...
             captureImage(videoEl, canvasEl, $resultsContainer);
+        }
+        else {
+            if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
+                m_currentImages.shift();
+            }
+
+            if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
+                updateImage(canvasEl, videoEl, $resultsContainer)
+            }
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
         clearOverlay($resultsOverlay);
