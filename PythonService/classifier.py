@@ -114,58 +114,63 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         all_pred = predictions[i]
         best_dist = 0
         best_prob = 0
-        top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:5]
-        
-        if verbose:
-            pred_info_list = []
-            print("Awesome indices:", len(top_indices))
-            for top_index in top_indices:
-                pred_info = PredictionInfo()
-                pred_info.name = class_names[top_index]
-                pred_info.probability = all_pred[top_index]
-                
-                folder_name, photo_path_folder = helpers.get_person_folder_path(model_path, pred_info.name)
-                
-                pred_info.photo_path = [os.path.join(photo_path_folder, f) for f in os.listdir(photo_path_folder) if os.path.isfile(os.path.join(photo_path_folder, f))]
-                
-                # Create temp photo path for predicted values
-                unique_path = os.path.join(temp_predicted_path, str(uuid.uuid4()))
-                
-                if not os.path.exists(unique_path):
-                    os.makedirs(unique_path)
-                
-                copyto_path = os.path.join(unique_path, folder_name)
 
-                copy_tree(photo_path_folder, copyto_path, update = 1)
+        top = 5
+
+        if not verbose:
+            top = 1
+
+        top_indices = sorted(range(len(all_pred)), key=lambda i: all_pred[i], reverse=True)[:top]
+
+        pred_info_list = []
+        print("Awesome indices:", len(top_indices))
+        for top_index in top_indices:
+            pred_info = PredictionInfo()
+            pred_info.name = class_names[top_index]
+            pred_info.probability = all_pred[top_index]
+            
+            folder_name, photo_path_folder = helpers.get_person_folder_path(model_path, pred_info.name)
+            
+            pred_info.photo_path = [os.path.join(photo_path_folder, f) for f in os.listdir(photo_path_folder) if os.path.isfile(os.path.join(photo_path_folder, f))]
+            
+            # Create temp photo path for predicted values
+            unique_path = os.path.join(temp_predicted_path, str(uuid.uuid4()))
+            
+            if not os.path.exists(unique_path):
+                os.makedirs(unique_path)
+            
+            copyto_path = os.path.join(unique_path, folder_name)
+
+            copy_tree(photo_path_folder, copyto_path, update = 1)
+            
+            # Get the feature embeddings for the prediction's training data, and get the average value
+            predicted_features = get_features(unique_path, session, "")
+            
+            # Calculate the distance between the predicted and actual embeddings
+            # The following URL has a basic example of the formula
+            # https://www.mathway.com/popular-problems/Basic%20Math/35308
+            # Our implementation just happens to have a few more dimensions (128 rather than 2)
+            dist = 0
+            
+            for emb in predicted_features.emb_array:
+                single_dist = np.sqrt(np.sum(np.square(np.subtract(features.emb_array[i], emb))))
+                print(single_dist)
                 
-                # Get the feature embeddings for the prediction's training data, and get the average value
-                predicted_features = get_features(unique_path, session, "")
-                
-                # Calculate the distance between the predicted and actual embeddings
-                # The following URL has a basic example of the formula
-                # https://www.mathway.com/popular-problems/Basic%20Math/35308
-                # Our implementation just happens to have a few more dimensions (128 rather than 2)
-                dist = 0
-                
-                for emb in predicted_features.emb_array:
-                    single_dist = np.sqrt(np.sum(np.square(np.subtract(features.emb_array[i], emb))))
-                    print(single_dist)
-                    
-                    dist = dist + single_dist
-                
-                dist = dist / len(predicted_features.emb_array)
-                print(len(predicted_features.emb_array))
-                print(dist)
-                
-                # Set the distance in the PredictionInfo object
-                pred_info.distance = dist
-                
-                if pred_info.name == pred_name:
-                    best_dist = dist
-                    best_prob = pred_info.probability
-                
-                pred_info_list.append(pred_info.serialize())
-        
+                dist = dist + single_dist
+            
+            dist = dist / len(predicted_features.emb_array)
+            print(len(predicted_features.emb_array))
+            print(dist)
+            
+            # Set the distance in the PredictionInfo object
+            pred_info.distance = dist
+            
+            if pred_info.name == pred_name:
+                best_dist = dist
+                best_prob = pred_info.probability
+            
+            pred_info_list.append(pred_info.serialize())
+    
         with open(features.paths[i], "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read())
             encoded_string = encoded_string.decode('utf-8')

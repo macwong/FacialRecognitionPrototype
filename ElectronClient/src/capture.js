@@ -16,6 +16,7 @@ let m_currentHeight = m_defaultHeight;
 let m_currentModel;
 let m_predictionHistory = [];
 let m_currentImages = [];
+let m_verbose = false;
 
 function getModels($select) {
     var deferred = $.Deferred();
@@ -159,10 +160,12 @@ $(document).ready(() => {
         if ($inputCheckbox.is(":checked")) {
             $history.show();
             $info.show();
+            m_verbose = true;
         }
         else {
             $history.hide();
             $info.hide();
+            m_verbose = false;
         }
     });
 
@@ -345,7 +348,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         data: JSON.stringify({
             image: dataURL,
             model: m_currentModel,
-            verbose: true
+            verbose: m_verbose
         }),
         contentType: "application/json; charset=utf-8",
         dataType:"json",
