@@ -125,14 +125,9 @@ def addface():
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():
-    return predict_internal(predictor.predict, True)
+    return predict_internal(predictor.predict)
 
-@app.route('/daveface/predict_verbose', methods=['POST'])
-def predict_verbose():
-    return predict_internal(predictor.predict, True)
-    
-
-def predict_internal(predict_func, verbose):
+def predict_internal(predict_func):
     print("Predicting started...")
     returnValue = "Fail..."
     
@@ -145,6 +140,11 @@ def predict_internal(predict_func, verbose):
     ):
         print("Invalid JSON request data...", returnValue)
         abort(400)
+
+    verbose = True
+
+    if 'verbose' in requestData:
+        verbose = requestData["verbose"]
         
     image = requestData["image"]
     model = requestData["model"]

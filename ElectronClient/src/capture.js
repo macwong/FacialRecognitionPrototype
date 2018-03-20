@@ -344,7 +344,8 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         type: "POST",
         data: JSON.stringify({
             image: dataURL,
-            model: m_currentModel
+            model: m_currentModel,
+            verbose: true
         }),
         contentType: "application/json; charset=utf-8",
         dataType:"json",
