@@ -125,9 +125,6 @@ def addface():
 
 @app.route('/daveface/predict', methods=['POST'])
 def predict():
-    return predict_internal(predictor.predict)
-
-def predict_internal(predict_func):
     print("Predicting started...")
     returnValue = "Fail..."
     
@@ -149,7 +146,7 @@ def predict_internal(predict_func):
     image = requestData["image"]
     model = requestData["model"]
     
-    predict_response = predict_func(image, model, verbose)
+    predict_response = predictor.predict(image, model, verbose)
     code = 400
     
     if predict_response.success:
@@ -179,4 +176,4 @@ def getmodels():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(threaded = True)

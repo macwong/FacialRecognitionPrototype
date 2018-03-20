@@ -22,7 +22,7 @@ function getModels($select) {
     var deferred = $.Deferred();
 
     $.ajax({
-        url: "http://localhost:5000/daveface/getmodels",
+        url: "http://127.0.0.1:5000/daveface/getmodels",
         type: "GET",
         dataType:"json"
     }).done((result) => {
@@ -94,7 +94,7 @@ function initApp(callback) {
                     $loading.addClass("is-visible");
 
                     $.ajax({
-                        url: "http://localhost:5000/daveface/train",
+                        url: "http://127.0.0.1:5000/daveface/train",
                         type: "POST",
                         data: JSON.stringify({
                             input_folder_path: $folderLocation.val(),
@@ -343,7 +343,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     }
 
     $.ajax({
-        url: "http://localhost:5000/daveface/predict",
+        url: "http://127.0.0.1:5000/daveface/predict",
         type: "POST",
         data: JSON.stringify({
             image: dataURL,
@@ -639,7 +639,7 @@ function createInfo($row, $info) {
 
                 if (!$button.hasClass("disabled")) {
                     $.ajax({
-                        url: "http://localhost:5000/daveface/addface",
+                        url: "http://127.0.0.1:5000/daveface/addface",
                         type: "POST",
                         data: JSON.stringify({
                             image: result.image,
