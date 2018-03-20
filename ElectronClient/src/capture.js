@@ -382,9 +382,10 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                         $recentHistory.append(createHistory(result.predictions[i], $history, $info));
                     }
 
-                    $history.prepend($recentHistory.children());
                 }
-
+                
+                $history.prepend($recentHistory.children());
+                
                 if (m_isVideo && videoEl.src !== "") {
                     fadeStuff($resultsOverlay);
                 }
