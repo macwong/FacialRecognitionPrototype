@@ -13,7 +13,7 @@ from predictor import PredictResponse, PredictionInfo
 from distutils.dir_util import copy_tree
 import uuid
 from daveglobals import Globals
-import datetime
+import datetime, time
 from Helpers import helpers
 
 class FeatureEmbeddings():
@@ -150,18 +150,16 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             # The following URL has a basic example of the formula
             # https://www.mathway.com/popular-problems/Basic%20Math/35308
             # Our implementation just happens to have a few more dimensions (128 rather than 2)
-            dist = 0
             
-            for emb in predicted_features.emb_array:
-                single_dist = np.sqrt(np.sum(np.square(np.subtract(features.emb_array[i], emb))))
-                print(single_dist)
-                
-                dist = dist + single_dist
-            
-            dist = dist / len(predicted_features.emb_array)
-            print(len(predicted_features.emb_array))
-            print(dist)
-            
+            # start = time.time()
+            dist = np.sum(np.sqrt(np.sum(np.square(np.subtract(features.emb_array[i], predicted_features.emb_array)), axis = 1))) / len(predicted_features.emb_array)
+            # end = time.time()
+
+            # print("Time taken (Vectorized):", end - start)
+
+            print("Training images to compare: ", len(predicted_features.emb_array))
+            print("Distance: ", dist)
+
             # Set the distance in the PredictionInfo object
             pred_info.distance = dist
             
