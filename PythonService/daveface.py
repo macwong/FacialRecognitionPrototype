@@ -3,6 +3,7 @@ import trainer, predictor
 import os
 from daveglobals import Globals
 import addnewface
+import time
 
 app = Flask(__name__)
 
@@ -126,6 +127,8 @@ def addface():
 @app.route('/daveface/predict', methods=['POST'])
 def predict():
     print("Predicting started...")
+    start = time.time()
+
     returnValue = "Fail..."
     
     requestData = request.get_json()
@@ -153,7 +156,10 @@ def predict():
         returnValue = "Success!"
         code = 201
 
-    print("Predicting ended...", returnValue)
+    end = time.time()
+    print("Time taken (Total):", end - start)
+
+    print("Predicting ended...", returnValue, "\n")
     
     return jsonify({
             'success': predict_response.success,

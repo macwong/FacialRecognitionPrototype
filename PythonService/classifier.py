@@ -109,6 +109,17 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     if not os.path.exists(temp_predicted_path):
         os.makedirs(temp_predicted_path)
         
+    # if not verbose:
+    #     for i in range(len(best_class_indices)):
+    #         with open(features.paths[i], "rb") as image_file:
+    #             encoded_string = base64.b64encode(image_file.read())
+    #             encoded_string = encoded_string.decode('utf-8')
+
+    #         pred_names.append({
+    #             "pred_name": class_names[best_class_indices[i]],
+    #             "image": encoded_string
+    #         })
+    # else:
     for i in range(len(best_class_indices)):
         pred_name = class_names[best_class_indices[i]]
         all_pred = predictions[i]
@@ -195,8 +206,9 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
                 "algorithm": str(model)
             }
         })
-    
-    pred_names = sorted(pred_names, key = lambda x: x["distance"])
+
+    if verbose:
+        pred_names = sorted(pred_names, key = lambda x: x["distance"])
         
     predict_response = PredictResponse("", True, pred_names)
     

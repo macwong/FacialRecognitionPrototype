@@ -1,6 +1,7 @@
 import os
 import shutil
 import classifier
+import time
 import Helpers.align_dataset as align
 from align_options import AlignOptions
 from mygraph import MyGraph
@@ -36,12 +37,17 @@ def predict(image, model_folder, verbose):
         return PredictResponse(error)
 
     my_graph = MyGraph()
-    
+
+    start = time.time()
+
     print("Align image to work with classifier")
     temp_predict = os.path.join(Globals.data_path, "temp_predict")
     align.align_faces(AlignOptions(Globals.temp_path, temp_predict, my_graph, True))
     shutil.rmtree(Globals.temp_path)
     
+    end = time.time()
+    print("Time taken (Align):", end - start)
+
     print("Classify image")
     temp_predict_data = os.path.join(temp_predict, "data")
     
@@ -50,9 +56,14 @@ def predict(image, model_folder, verbose):
     
     model_path = os.path.join(Globals.model_path, model_folder)
     classifier_file = os.path.join(model_path, "classifier.pkl")
-    
+
+    start = time.time()
+
     predict_response = classifier.prediction(temp_predict, my_graph, classifier_file, model_path, verbose)
     print("Cleanup...")
     shutil.rmtree(temp_predict)
     
+    end = time.time()
+    print("Time taken (Prediction):", end - start)
+
     return predict_response
