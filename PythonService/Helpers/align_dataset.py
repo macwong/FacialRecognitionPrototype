@@ -34,11 +34,15 @@ import numpy as np
 import Helpers.facenet as facenet
 import Helpers.detect_face as detect_face
 import random
+import time
 from time import sleep
 from mygraph import MyGraph
 
 def align_faces(args):
-    sleep(random.random())
+    # sleep(random.random())
+
+    start = time.time()
+
     output_dir = os.path.expanduser(args.output_dir)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -46,6 +50,9 @@ def align_faces(args):
     src_path,_ = os.path.split(os.path.realpath(__file__))
     facenet.store_revision_info(src_path, output_dir, ' '.join(sys.argv))
     dataset = facenet.get_dataset(args.input_dir)
+
+    end = time.time()
+    print("Time taken (Align > Get Dataset):", end - start)
     
     print('Creating networks and loading parameters')
     
@@ -60,9 +67,13 @@ def align_faces(args):
     with open(bounding_boxes_filename, "w") as text_file:
         nrof_images_total = 0
         nrof_successfully_aligned = 0
+        
         if args.random_order:
             random.shuffle(dataset)
+        
         for cls in dataset:
+            start = time.time()
+
             output_class_dir = os.path.join(output_dir, cls.name)
             if not os.path.exists(output_class_dir):
                 os.makedirs(output_class_dir)
@@ -128,7 +139,11 @@ def align_faces(args):
                         else:
                             print('Unable to align "%s"' % image_path)
                             text_file.write('%s\n' % (output_filename))
-                            
+
+             
+            end = time.time()
+            print("Time taken (Align > Get Face):", end - start)
+                        
     print('Total number of images: %d' % nrof_images_total)
     print('Number of successfully aligned images: %d' % nrof_successfully_aligned)
             
