@@ -298,8 +298,21 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
         
         canvasLeft = (m_defaultWidth - imageWidth) / 2;
         canvasTop = (m_defaultHeight - imageHeight) / 2;
-        ctx.clearRect(0, 0, m_defaultWidth, m_defaultHeight);
-        ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
+        
+        opacity = 0;
+        
+        (function fadeIn() {
+            ctx.clearRect(0, 0, m_defaultWidth, m_defaultHeight);
+            ctx.globalAlpha = opacity;
+            ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
+            opacity += 0.015;
+            if (opacity < 1)
+                requestAnimationFrame(fadeIn);
+            else
+                isBusy = false;
+        })();
+
+        // ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
         fadeStuff($resultsContainer.find(".resultsOverlay"));
         captureImage(videoEl, canvasEl, $resultsContainer);
     }
@@ -405,7 +418,9 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             }
 
             if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
-                updateImage(canvasEl, videoEl, $resultsContainer)
+                sleep(2000).then(() => {
+                    updateImage(canvasEl, videoEl, $resultsContainer)
+                });
             }
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
@@ -417,6 +432,10 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             captureImage(videoEl, canvasEl, $resultsContainer);
         }
     });
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function fadeStuff($resultsOverlay) {
