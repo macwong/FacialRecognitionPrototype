@@ -93,7 +93,12 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
     
     print('Testing classifier')
     (model, class_names, emb_array, labels) = helpers.load_model(features.classifier_filename_exp)
-    
+
+    top = np.min([5, len(class_names)])
+
+    if hasattr(model, 'n_neighbors'):
+        model.n_neighbors = top
+
     model.fit(emb_array, labels)
     
     predictions = model.predict_proba(features.emb_array)
@@ -125,8 +130,6 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
         all_pred = predictions[i]
         best_dist = 0
         best_prob = 0
-
-        top = 5
 
         if not verbose:
             top = 1
@@ -207,8 +210,8 @@ def prediction(data_dir, session, classifier_filename, model_path, verbose):
             }
         })
 
-    if verbose:
-        pred_names = sorted(pred_names, key = lambda x: x["distance"])
+    # if verbose:
+    pred_names = sorted(pred_names, key = lambda x: x["distance"])
         
     predict_response = PredictResponse("", True, pred_names)
     
