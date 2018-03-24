@@ -116,6 +116,10 @@ Here is a video showing the different input options, and how they can be used to
 
 Video here :)
 
+#### Predictions in real-time
+
+https://youtu.be/XXTHB1FZj_U
+
 #### Can predict from a large dataset of faces
 
 Typically, the more people that the system has to predict from, the more likely that the system will be incorrect. For instance, if there are only 10 people (including myself) in the dataset, then it should be easy to predict a new picture of me. However, if there are 5000+ people, then it should be much harder for the prediction to be accurate (as there is a higher likelihood of more people who look similar).
@@ -182,13 +186,13 @@ The prototype uses the Distance to evaluate the accuracy of predictions, using t
 
 Here is a video that shows the difference between these 5 scores:
 
-Video here :)
+https://youtu.be/PouD_K-1_fw
 
 #### Provides a "Top 5" for each prediction
 
 For each predicted face, the user can see the top 5 most likely predictions. Here is a video covering this:
 
-Video here :)
+https://youtu.be/BZgsosfM4z0
 
 #### Ability to add new faces
 
@@ -196,7 +200,7 @@ The user of the prototype has the ability to add new faces to the training model
 * Adding a face to an existing person
 * Adding a new person
 
-Video here :)
+https://youtu.be/2j9xxTAyl84
 
 #### Provides model and image info
 For each prediction, the prototype can display a historical list of all predictions made. This allows us to click on each prediction, in order to see more info, such as:
