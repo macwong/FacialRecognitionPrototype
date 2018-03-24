@@ -108,7 +108,8 @@ Below is a video example of creating a model, then using the newly created model
 #### Predictions from image, video and webcam input
 
 Predictions can be made from a variety of input sources:
-* Images and Video: the user can select an image or video from their file system
+* Images: the user can select one or more images from their file system
+* Video: the user can select a video from their file system
 * Live: input coming from the webcam
 
 Here is a video showing the different input options, and how they can be used to make face predictions:
@@ -143,27 +144,28 @@ Anecdotally, I find that the predictions aren't always this accurate (especially
 
 Performance-wise, predictions are generally taking between 2 and 3 seconds, even with the large dataset. This time could be cut down with more efficient algorithms and code.
 
-#### Robust to facial expressions, object occlusions and lighting conditions
+#### Robust predictions
+
+The facial recognition prototype is fairly robust to the following variables:
+- Facial expressions
+- Multiple faces
+- Age differences
+- Makeup differences
+- Lighting conditions
+- Occlusions
+- Doppelgangers
 
 The prototype can make successful predictions even with various facial expressions (such as smiling, frowning, or "alternative" expressions). Here is a video outlining this:
 
-Video here :)
+https://youtu.be/KIF6Xc6uujw
 
-Object occlusion (i.e. objects that get in the way of the face, such as sunglasses or a hand) can still result in accurate predictions, however the predictions get less confident with the higher rate of occlusion. With too much occlusion, predictions start to become incorrect. Here is an example video:
+Object occlusion (i.e. objects that get in the way of the face, such as sunglasses or a hand) can still result in accurate predictions, however the predictions get less confident with the higher rate of occlusion. With too much occlusion, predictions start to become incorrect.
 
-Video here :)
+The algorithm also seems extremely robust to lighting conditions, where correct predictions can be made even with different white balance (coloured lighting), brightness (almost to silhouette darkness) and inconsistent light. 
 
-The algorithm seems extremely robust to lighting conditions, where correct predictions can be made even with different white balance (coloured lighting), brightness (almost to silhouette darkness) and inconsistent light. Here is an example of this:
+Here is a video of the various conditions that the prototype can handle:
 
-Video here :)
-
-#### Displays history of predictions
-
-For each prediction, the prototype can display a historical list of all predictions made. This allows us to click on each prediction, in order to see more info.
-
-Here is a video example of this:
-
-Video here :)
+https://youtu.be/932r6Uq4SZI
 
 #### Calculates the accuracy of predictions
 
@@ -197,7 +199,7 @@ The user of the prototype has the ability to add new faces to the training model
 Video here :)
 
 #### Provides model and image info
-For each prediction, the prototype provides the following information:
+For each prediction, the prototype can display a historical list of all predictions made. This allows us to click on each prediction, in order to see more info, such as:
 * Model name
 * Total people in model
 * Total images in model
@@ -207,7 +209,7 @@ For each prediction, the prototype provides the following information:
 
 Here is an example video:
 
-Video here :)
+https://youtu.be/9HIzk_G8Eco
 
 ## Potential use cases
 
