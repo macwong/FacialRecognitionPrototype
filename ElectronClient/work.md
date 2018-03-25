@@ -114,7 +114,7 @@ Predictions can be made from a variety of input sources:
 
 Here is a video showing the different input options, and how they can be used to make face predictions:
 
-Video here :)
+https://youtu.be/R8ikzYLrFLc
 
 #### Predictions in real-time
 
