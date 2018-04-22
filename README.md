@@ -36,8 +36,8 @@ This prototype contains two core components:
 * Electron
 * Node package manager
 
-#### Video Example
-Coming soon...
+#### Video Examples (Playlist)
+https://www.youtube.com/playlist?list=PLG-CffjFV9JRnVdHX4LJD_DrCpptiU1mc
 
 #### To do
 * Remove all hard-coded references to my folder structure
