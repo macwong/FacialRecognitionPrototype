@@ -169,10 +169,16 @@ def predict():
 
 @app.route('/daveface/getmodels', methods=['GET'])
 def getmodels():
+    if os.path.isdir(Globals.model_path) == False:
+        return jsonify({
+            'success': True,
+            'models': []
+        })
+
     directories = [
         o
         for o in os.listdir(Globals.model_path)
-        if os.path.isdir(os.path.join(Globals.model_path,o))
+        if os.path.isdir(os.path.join(Globals.model_path, o))
     ]
     
     return jsonify({
