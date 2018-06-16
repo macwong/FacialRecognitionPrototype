@@ -6,6 +6,7 @@ const $ = require("./jquery")
 const { dialog } = electron.remote;
 const path = require('path')
 
+const m_endpoint = "http://127.0.0.1:5000/daveface/"
 const m_dataURI = "data:image/png;base64,"
 const m_defaultWidth = 640;
 const m_defaultHeight = 480;
@@ -22,7 +23,7 @@ function getModels($select) {
     var deferred = $.Deferred();
 
     $.ajax({
-        url: "http://127.0.0.1:5000/daveface/getmodels",
+        url: path.join(m_endpoint, "getmodels"),
         type: "GET",
         dataType:"json"
     }).done((result) => {
@@ -94,7 +95,7 @@ function initApp(callback) {
                     $loading.addClass("is-visible");
 
                     $.ajax({
-                        url: "http://127.0.0.1:5000/daveface/train",
+                        url: path.join(m_endpoint, "train"),
                         type: "POST",
                         data: JSON.stringify({
                             input_folder_path: $folderLocation.val(),
@@ -356,7 +357,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     }
 
     $.ajax({
-        url: "http://127.0.0.1:5000/daveface/predict",
+        url: path.join(m_endpoint, "predict"),
         type: "POST",
         data: JSON.stringify({
             image: dataURL,
@@ -658,7 +659,7 @@ function createInfo($row, $info) {
 
                 if (!$button.hasClass("disabled")) {
                     $.ajax({
-                        url: "http://127.0.0.1:5000/daveface/addface",
+                        url: path.join(m_endpoint, "addface"),
                         type: "POST",
                         data: JSON.stringify({
                             image: result.image,
