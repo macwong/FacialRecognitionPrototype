@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow.python.platform import gfile
+from daveglobals import Globals
 import Helpers.detect_face as detect_face
 import os
 
@@ -18,7 +19,7 @@ class MyGraph():
             print("New Graph")
             # Check if the model is a model directory (containing a metagraph and a checkpoint file)
             #  or if it is a protobuf file with a frozen graph
-            model_exp = os.path.expanduser("D:\\_GithubTest\\FacialRecognitionPrototype\\data\\facenet_models\\20170512-110547.pb")
+            model_exp = os.path.expanduser(Globals.facenet_path)
             if (os.path.isfile(model_exp)):
                 print('Model filename: %s' % model_exp)
                 with gfile.FastGFile(model_exp,'rb') as f:
