@@ -397,15 +397,14 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
 
                 let $recentHistory = $("<div></div>");
 
-                for (var i = 0; i < arrayLength; i++) {
-                    if (m_verbose) {
-                        if (i == 0) {
+                if (m_verbose) {
+                    for (var i = 0; i < arrayLength; i++) {
+                        if (i === 0) {
                             let $time = $("<div></div>");
                             $time.addClass("prediction-time");
                             $time.text(result.predictions[i].pred_time);
                             $recentHistory.append($time);
                         } 
-                        
 
                         $recentHistory.append(createHistory(result.predictions[i], $history, $info));
                     }
