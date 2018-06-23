@@ -1,3 +1,7 @@
+import HelloWorld from './react/helloworld';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 const electron = require("electron");
 const { remote } = electron;
 const video = require("./video");
@@ -150,6 +154,12 @@ $(document).ready(() => {
     const $history = $(document).find(".history");
     const $info = $(document).find(".info");
 
+    ReactDOM.render(
+        <HelloWorld />,
+        document.getElementById("helloworld")
+    );
+    
+
     initApp(() => {
         $resultsContainer.find(".resultsContents").text("Loading...");
         getVideoStream(videoEl, canvasEl, $resultsContainer);
@@ -300,17 +310,16 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
         canvasLeft = (m_defaultWidth - imageWidth) / 2;
         canvasTop = (m_defaultHeight - imageHeight) / 2;
         
-        opacity = 0;
+        let opacity = 0;
         
         (function fadeIn() {
             ctx.clearRect(0, 0, m_defaultWidth, m_defaultHeight);
             ctx.globalAlpha = opacity;
             ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
             opacity += 0.015;
-            if (opacity < 1)
+            if (opacity < 1) {
                 requestAnimationFrame(fadeIn);
-            else
-                isBusy = false;
+            }
         })();
 
         // ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
@@ -495,7 +504,7 @@ function createHistory(pred_result, $history, $info) {
     $rating.addClass("rating");
 
     let $icon = $("<img />");
-    pred_info = setPredictionIcon(pred_result.pred_info, pred_result.pred_name, $icon);
+    let pred_info = setPredictionIcon(pred_result.pred_info, pred_result.pred_name, $icon);
 
     let ratingCount = 5;
 
@@ -534,7 +543,7 @@ function createInfo($row, $info) {
             return;
         }
         
-        result = pred_result[0];
+        let result = pred_result[0];
         
         let pred_name = result.pred_name;
         let $contents = $("<div></div>").html(data);
@@ -581,7 +590,7 @@ function createInfo($row, $info) {
             for (var emb_index in result.embeddings) {
                 let emb = result.embeddings[emb_index];
                 emb = emb.toFixed(5);
-                embDisplay = emb.toString();
+                let embDisplay = emb.toString();
 
                 if (emb > 0) {
                     embDisplay = " " + embDisplay;
@@ -655,7 +664,7 @@ function createInfo($row, $info) {
             }
 
             $addButton.click((e) => {
-                $button = $(e.currentTarget); 
+                let $button = $(e.currentTarget); 
 
                 if (!$button.hasClass("disabled")) {
                     $.ajax({
@@ -702,7 +711,7 @@ function getExpandableBlock($contents, blockClass, callback) {
 }
 
 function getProbability(probability) {
-    prob = probability * 100;
+    let prob = probability * 100;
     prob = prob.toFixed(2);
     return prob + "%";
 }
@@ -717,7 +726,7 @@ function createPhoto(result, $resultsContents, figureClass) {
     //     <img src="../images/verified.png" />
     // </figure>
 
-    pred_name = result.pred_name;
+    let pred_name = result.pred_name;
     let $figure = $("<figure></figure>");
     $figure.addClass(figureClass);
 
@@ -744,7 +753,7 @@ function setPredictionIcon(info, pred_name, $icon) {
         let train_name = info[pred].name;
         
         if (train_name === pred_name) {
-            distance = info[pred].distance;
+            let distance = info[pred].distance;
             setPredictionImage($icon, distance);
             return info[pred];
         }
