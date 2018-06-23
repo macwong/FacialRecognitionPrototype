@@ -1,6 +1,7 @@
 import HelloWorld from './react/helloworld';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PredictionPhoto from './react/prediction_photo';
 
 const electron = require("electron");
 const { remote } = electron;
@@ -153,11 +154,6 @@ $(document).ready(() => {
     const $resultsContainer = $(document).find(".resultsContainer");
     const $history = $(document).find(".history");
     const $info = $(document).find(".info");
-
-    ReactDOM.render(
-        <HelloWorld />,
-        document.getElementById("helloworld")
-    );
     
 
     initApp(() => {
@@ -391,7 +387,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 let $recentHistory = $("<div></div>");
                 
                 for (var i = 0; i < arrayLength; i++) {
-                    createPhoto(result.predictions[i], $resultsContents, "person");
+                    createPhoto(result.predictions[i], $resultsContents);
 
                     if (m_verbose) {
                         if (i == 0) {
@@ -716,50 +712,47 @@ function getProbability(probability) {
     return prob + "%";
 }
 
-function createPhoto(result, $resultsContents, figureClass) {
-    // Person in results on bottom
-    // <figure class="person">
-    //     <img />
-    //     <figcaption class="caption">
-    //         David McCormick
-    //     </figcaption>
-    //     <img src="../images/verified.png" />
-    // </figure>
-
-    let pred_name = result.pred_name;
-    let $figure = $("<figure></figure>");
-    $figure.addClass(figureClass);
-
-    let $image = $("<img />");
-    $image.prop("src", m_dataURI + result.image);
-
-    let $figCaption = $("<figcaption></figcaption>");
-    $figCaption.addClass("caption");
-    $figCaption.text(pred_name);
-
-    let $icon = $("<img />")
-    $icon.addClass("icon");
-    setPredictionIcon(result.pred_info, pred_name, $icon);
-    
-    $figure.append($image);
-    $figure.append($figCaption);
-    $figure.append($icon);
-
-    $resultsContents.append($figure);
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
 }
 
-function setPredictionIcon(info, pred_name, $icon) {
+function createPhoto(result, $resultsContents) {
+    let guid = uuidv4();
+    $resultsContents.append("<div id='" + guid + "'></div>");
+
+    ReactDOM.render(
+        <PredictionPhoto 
+            src={m_dataURI + result.image} 
+            name={result.pred_name} 
+            distance={getIndividualPredictionInfo(result.pred_info, result.pred_name).distance}
+        />,
+        document.getElementById(guid)
+    );
+}
+
+function getIndividualPredictionInfo(info, pred_name) {
     for (var pred in info) {
         let train_name = info[pred].name;
         
         if (train_name === pred_name) {
-            let distance = info[pred].distance;
-            setPredictionImage($icon, distance);
             return info[pred];
         }
     }
 
     return null;
+}
+
+function setPredictionIcon(info, pred_name, $icon) {
+    let individual = getIndividualPredictionInfo(info, pred_name);
+
+    if (individual !== null) {
+        setPredictionImage($icon, individual.distance);
+    }
+
+    return individual;
 }
 
 function getRating(distance) {
