@@ -29,6 +29,10 @@ video.file {
   align-items: initial;
 }
 
+.flex {
+  display: flex;
+}
+
 .canvas {
     display: none;
 }

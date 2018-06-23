@@ -10,12 +10,12 @@ export default class PredictionPhoto extends Component {
             <figure className="person">
                 <img src={this.props.src} />
                 <figcaption className="caption">{this.props.name}</figcaption>
-                <img className="icon" src={this.getPredictionImage(this.props.distance)} />
+                <img className="icon" src={this.getPredictionIcon(this.props.distance)} />
             </figure>
         );
     }
 
-    getPredictionImage(distance) {
+    getPredictionIcon(distance) {
         if (distance < 0.75) {
             return "../images/verified.png";
         }

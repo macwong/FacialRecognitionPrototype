@@ -1,7 +1,7 @@
-import HelloWorld from './react/helloworld';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PredictionPhoto from './react/prediction_photo';
+import Predictions from './react/predictions';
+import Helpers from './helpers';
 
 const electron = require("electron");
 const { remote } = electron;
@@ -383,12 +383,21 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             }
             else {
                 $resultsContents.empty();
-                
-                let $recentHistory = $("<div></div>");
-                
-                for (var i = 0; i < arrayLength; i++) {
-                    createPhoto(result.predictions[i], $resultsContents);
 
+                let guid = uuidv4();
+                $resultsContents.append("<div id='" + guid + "' class='flex'></div>");
+            
+                ReactDOM.render(
+                    <Predictions 
+                        dataURI={m_dataURI}
+                        predictions={result.predictions}
+                    />,
+                    document.getElementById(guid)
+                );
+
+                let $recentHistory = $("<div></div>");
+
+                for (var i = 0; i < arrayLength; i++) {
                     if (m_verbose) {
                         if (i == 0) {
                             let $time = $("<div></div>");
@@ -719,34 +728,8 @@ function uuidv4() {
     });
 }
 
-function createPhoto(result, $resultsContents) {
-    let guid = uuidv4();
-    $resultsContents.append("<div id='" + guid + "'></div>");
-
-    ReactDOM.render(
-        <PredictionPhoto 
-            src={m_dataURI + result.image} 
-            name={result.pred_name} 
-            distance={getIndividualPredictionInfo(result.pred_info, result.pred_name).distance}
-        />,
-        document.getElementById(guid)
-    );
-}
-
-function getIndividualPredictionInfo(info, pred_name) {
-    for (var pred in info) {
-        let train_name = info[pred].name;
-        
-        if (train_name === pred_name) {
-            return info[pred];
-        }
-    }
-
-    return null;
-}
-
 function setPredictionIcon(info, pred_name, $icon) {
-    let individual = getIndividualPredictionInfo(info, pred_name);
+    let individual = Helpers.getIndividualPredictionInfo(info, pred_name);
 
     if (individual !== null) {
         setPredictionImage($icon, individual.distance);
