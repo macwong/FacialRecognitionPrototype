@@ -333,7 +333,6 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
 }
 
 function captureImage(videoEl, canvasEl, $resultsContainer) {
-    var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     var $info = $(document).find(".info");
 
@@ -412,6 +411,18 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     });
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function fadeStuff($resultsOverlay) {
+    $resultsOverlay.fadeTo(7500, 1.0);
+}
+
+function clearOverlay($resultsOverlay) {
+    $resultsOverlay.stop(true).css('opacity', '0.0');
+}
+
 function createPredictions(predictions, success, error) {
     if (m_reactPredictions === null) {
         m_reactPredictions = ReactDOM.render(
@@ -426,18 +437,6 @@ function createPredictions(predictions, success, error) {
     else {
         m_reactPredictions.updatePredictions(predictions, success, error);
     }
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function fadeStuff($resultsOverlay) {
-    $resultsOverlay.fadeTo(7500, 1.0);
-}
-
-function clearOverlay($resultsOverlay) {
-    $resultsOverlay.stop(true).css('opacity', '0.0');
 }
 
 function createHistory(prediction, $info) {
