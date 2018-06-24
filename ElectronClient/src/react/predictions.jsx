@@ -19,7 +19,7 @@ export default class Predictions extends Component {
     }
 
     renderList() {
-        return this.props.predictions.map((pred) => {
+        return this.state.predictions.map((pred) => {
             const distance = Helpers.getIndividualPredictionInfo(pred.pred_info, pred.pred_name).distance;
 
             return (
