@@ -3,3 +3,4 @@ data
 models
 node_modules
 .vscode/settings.json
+ElectronClient/lib

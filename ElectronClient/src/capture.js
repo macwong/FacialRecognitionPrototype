@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Predictions from './react/predictions';
+import History from './react/history';
 import Helpers from './helpers';
 
 const electron = require("electron");
@@ -20,9 +21,11 @@ let m_isVideo = true;
 let m_currentWidth = m_defaultWidth;
 let m_currentHeight = m_defaultHeight;
 let m_currentModel;
-let m_predictionHistory = [];
+let m_predictionHistory = {};
 let m_currentImages = [];
 let m_verbose = false;
+
+let m_reactHistory = null;
 
 function getModels($select) {
     var deferred = $.Deferred();
@@ -332,7 +335,6 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
 function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsContents = $resultsContainer.find(".resultsContents");
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
-    var $history = $(document).find(".history");
     var $info = $(document).find(".info");
 
     m_currentWidth = videoEl.videoWidth;
@@ -395,23 +397,9 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                     document.getElementById(guid)
                 );
 
-                let $recentHistory = $("<div></div>");
-
                 if (m_verbose) {
-                    for (var i = 0; i < arrayLength; i++) {
-                        if (i === 0) {
-                            let $time = $("<div></div>");
-                            $time.addClass("prediction-time");
-                            $time.text(result.predictions[i].pred_time);
-                            $recentHistory.append($time);
-                        } 
-
-                        $recentHistory.append(createHistory(result.predictions[i], $history, $info));
-                    }
-
+                    createHistory(result, $info);
                 }
-                
-                $history.prepend($recentHistory.children());
                 
                 if (m_isVideo && videoEl.src !== "") {
                     fadeStuff($resultsOverlay);
@@ -439,7 +427,6 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
         clearOverlay($resultsOverlay);
-        
         $resultsContents.text(jqXHR.responseJSON.error);
         
         if (m_isVideo) {
@@ -460,94 +447,38 @@ function clearOverlay($resultsOverlay) {
     $resultsOverlay.stop(true).css('opacity', '0.0');
 }
 
-function createHistory(pred_result, $history, $info) {
-    // A row of data in the history column
-    // <div class="row">
-    //     <img class="predicted-image" src="../images/like.png" />
-    //     <div class="row-text">
-    //         <div class="name">David McCormick</div>
-    //         <div class="time">26/02/2018 02:40:55 PM</div>
-    //         <div class="rating">
-    //             <img src="../images/verified.png" />
-    //             <img src="../images/verified.png" />
-    //             <img src="../images/verified.png" />
-    //             <img src="../images/verified.png" />
-    //             <img src="../images/verified.png" />
-    //         </div>
-    //     </div>
-    // </div>
-
-    m_predictionHistory.push(pred_result);
-
-    let $row = $("<div></div>");
-    $row.data("prediction_id", pred_result.prediction_id);
-    $row.addClass("row interactive");
-
-
-    $row.click((e) => {
-        $(e.currentTarget).parent().find(".row").removeClass("selected");
-        $(e.currentTarget).addClass("selected");
-    });
-
-    let $face = $("<img />");
-    $face.addClass("predicted-image");
-    $face.prop("src", m_dataURI + pred_result.image);
-
-    let $rowText = $("<div></div>");
-    $rowText.addClass("row-text");
-    $rowText.text(pred_result.pred_name);
-
-    let $name = $("<div></div>");
-    $name.addClass("name");
-
-    let $modelName = $("<div></div>");
-    $modelName.addClass("time");
-    $modelName.text(pred_result.model_info.model_name);
-
-    let $rating = $("<div></div>");
-    $rating.addClass("rating");
-
-    let $icon = $("<img />");
-    let pred_info = setPredictionIcon(pred_result.pred_info, pred_result.pred_name, $icon);
-
-    let ratingCount = 5;
-
-    if (pred_info !== null) {
-        ratingCount = getRating(pred_info.distance);
+function createHistory(prediction, $info) {
+    if (m_reactHistory === null) {
+        m_reactHistory = ReactDOM.render(
+            <History 
+                predictions={prediction.predictions}
+                $info={$info}
+                infoCallback={createInfo}
+            />,
+            document.getElementById("history")
+        );
+    }
+    else {
+        m_reactHistory.updatePredictions(prediction.predictions);
     }
 
-    $row.append($face);
-    $rowText.append($name);
-    $rowText.append($modelName);
-
-    for (var rate = 0; rate < ratingCount; rate++) {
-        $rating.append($icon.clone());
+    // Store in a dictionary
+    for (var pred in prediction.predictions) {
+        const predValues = prediction.predictions[pred];
+        m_predictionHistory[predValues.prediction_id] = predValues;
     }
-
-    $rowText.append($rating);
-    $row.append($rowText);
-
-    $row.click((e) => {
-        createInfo($(e.currentTarget), $info);
-    });
-
-    return $row;
 }
 
 function createInfo($row, $info) {
     $info.empty();
-
-    let $container = $("<div></div>").load(path.join(__dirname, 'info.html'));
-
+    
     $.get(path.join(__dirname, 'info.html'), (data) => {
         let predictionID = $row.data("prediction_id");
-        let pred_result = $.grep(m_predictionHistory, (prediction) => { return prediction.prediction_id == predictionID });
+        let result = m_predictionHistory[predictionID];
 
-        if (pred_result.length !== 1) {
+        if (result === undefined) {
             return;
         }
-        
-        let result = pred_result[0];
         
         let pred_name = result.pred_name;
         let $contents = $("<div></div>").html(data);
@@ -620,7 +551,7 @@ function createInfo($row, $info) {
                     let rank = Number(infoIndex) + 1;
                     $rowName.find(".top-name-heading").text(rank + ". " + info.name);
     
-                    let rating = getRating(info.distance);
+                    let rating = Helpers.getRating(info.distance);
                     $rowRating.empty();
                     setPredictionImage($ratingImage, info.distance);
     
@@ -735,24 +666,6 @@ function setPredictionIcon(info, pred_name, $icon) {
     }
 
     return individual;
-}
-
-function getRating(distance) {
-    if (distance < 0.75) {
-        return 5;
-    }
-    else if (distance < 0.9) {
-        return 4;
-    }
-    else if (distance < 1.05) {
-        return 3;
-    }
-    else if (distance < 1.2) {
-        return 2;
-    }
-    else {
-        return 1;
-    }
 }
 
 function setPredictionImage($icon, distance) {

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Helpers from '../helpers';
 
 export default class PredictionPhoto extends Component {
     constructor(props) {
@@ -10,27 +11,9 @@ export default class PredictionPhoto extends Component {
             <figure className="person">
                 <img src={this.props.src} />
                 <figcaption className="caption">{this.props.name}</figcaption>
-                <img className="icon" src={this.getPredictionIcon(this.props.distance)} />
+                <img className="icon" src={Helpers.getPredictionIcon(this.props.distance)} />
             </figure>
         );
-    }
-
-    getPredictionIcon(distance) {
-        if (distance < 0.75) {
-            return "../images/verified.png";
-        }
-        else if (distance < 0.9) {
-            return "../images/like.png";
-        }
-        else if (distance < 1.05) {
-            return "../images/maybe.png";
-        }
-        else if (distance < 1.2) {
-            return "../images/noidea.png";
-        }
-        else {
-            return "../images/rotten.png";
-        }
     }
 }
 
