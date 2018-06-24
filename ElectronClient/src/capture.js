@@ -390,10 +390,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 $resultsContents.append("<div id='" + guid + "' class='flex'></div>");
             
                 ReactDOM.render(
-                    <Predictions 
-                        dataURI={m_dataURI}
-                        predictions={result.predictions}
-                    />,
+                    <Predictions predictions={result.predictions} />,
                     document.getElementById(guid)
                 );
 

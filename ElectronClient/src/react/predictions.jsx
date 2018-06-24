@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PredictionPhoto from './prediction_photo';
 import Helpers from '../helpers';
 
 export default class Predictions extends Component {
@@ -17,12 +16,15 @@ export default class Predictions extends Component {
 
     renderList() {
         return this.props.predictions.map((pred) => {
-            return <PredictionPhoto 
-                        key={pred.prediction_id}
-                        src={this.props.dataURI + pred.image} 
-                        name={pred.pred_name} 
-                        distance={Helpers.getIndividualPredictionInfo(pred.pred_info, pred.pred_name).distance}
-                    />
+            const distance = Helpers.getIndividualPredictionInfo(pred.pred_info, pred.pred_name).distance;
+
+            return (
+                <figure key={pred.prediction_id} className="person">
+                    <img src={Helpers.pngSource + pred.image} />
+                    <figcaption className="caption">{pred.pred_name}</figcaption>
+                    <img className="icon" src={Helpers.getPredictionIcon(distance)} />
+                </figure>
+            );
         });
     }
 }
