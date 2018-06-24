@@ -69,7 +69,7 @@ export default class History extends Component {
         this.props.infoCallback($row, this.props.$info);
     }
 
-    updatePredictions(preds) {
+    updateHistory(preds) {
         const newState = [{
             time: preds[0].pred_time,
             predictions: preds

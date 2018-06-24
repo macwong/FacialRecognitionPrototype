@@ -4,6 +4,10 @@ import Helpers from '../helpers';
 export default class Predictions extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            predictions: props.predictions
+        };
     }
 
     render() {
@@ -25,6 +29,12 @@ export default class Predictions extends Component {
                     <img className="icon" src={Helpers.getPredictionIcon(distance)} />
                 </figure>
             );
+        });
+    }
+
+    updatePredictions(preds) {
+        this.setState({
+            predictions: preds
         });
     }
 }

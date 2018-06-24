@@ -25,6 +25,7 @@ let m_predictionHistory = {};
 let m_currentImages = [];
 let m_verbose = false;
 
+let m_reactPredictions = null;
 let m_reactHistory = null;
 
 function getModels($select) {
@@ -384,15 +385,15 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
                 $resultsContents.text("Dude! You're invisible!");
             }
             else {
-                $resultsContents.empty();
-
-                let guid = uuidv4();
-                $resultsContents.append("<div id='" + guid + "' class='flex'></div>");
-            
-                ReactDOM.render(
-                    <Predictions predictions={result.predictions} />,
-                    document.getElementById(guid)
-                );
+                if (m_reactPredictions === null) {
+                    m_reactPredictions = ReactDOM.render(
+                        <Predictions predictions={result.predictions} />,
+                        document.getElementById("resultsContents")
+                    );
+                }
+                else {
+                    m_reactPredictions.updatePredictions(result.predictions);
+                }
 
                 if (m_verbose) {
                     createHistory(result, $info);
@@ -456,7 +457,7 @@ function createHistory(prediction, $info) {
         );
     }
     else {
-        m_reactHistory.updatePredictions(prediction.predictions);
+        m_reactHistory.updateHistory(prediction.predictions);
     }
 
     // Store in a dictionary
@@ -646,13 +647,6 @@ function getProbability(probability) {
     let prob = probability * 100;
     prob = prob.toFixed(2);
     return prob + "%";
-}
-
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
 }
 
 function setPredictionIcon(info, pred_name, $icon) {
