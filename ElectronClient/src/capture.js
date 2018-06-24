@@ -13,7 +13,6 @@ const { dialog } = electron.remote;
 const path = require('path')
 
 const m_endpoint = "http://127.0.0.1:5000/daveface/"
-const m_dataURI = "data:image/png;base64,"
 const m_defaultWidth = 640;
 const m_defaultHeight = 480;
 
@@ -482,7 +481,7 @@ function createInfo($row, $info) {
         let $contents = $("<div></div>").html(data);
         let $figure = $contents.find("figure");
         
-        $figure.find(".profile-pic").prop("src", m_dataURI + result.image);
+        $figure.find(".profile-pic").prop("src", Helpers.pngSource + result.image);
         $figure.find(".caption h2").text(pred_name);
         setPredictionIcon(result.pred_info, pred_name, $figure.find(".icon"));
         
