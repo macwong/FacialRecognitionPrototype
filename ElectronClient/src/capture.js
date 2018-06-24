@@ -376,35 +376,15 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         
     }).done((result) => {
         clearOverlay($resultsOverlay);
+        let success = String.prototype.toLowerCase.call(result.success) === "true";
+        createPredictions(result.predictions, success, result.error);
 
-        if(String.prototype.toLowerCase.call(result.success) === "true") {
-            var arrayLength = result.predictions.length;
-
-            if (arrayLength === 0) {
-                $resultsContents.text("Dude! You're invisible!");
-            }
-            else {
-                if (m_reactPredictions === null) {
-                    m_reactPredictions = ReactDOM.render(
-                        <Predictions predictions={result.predictions} />,
-                        document.getElementById("resultsContents")
-                    );
-                }
-                else {
-                    m_reactPredictions.updatePredictions(result.predictions);
-                }
-
-                if (m_verbose) {
-                    createHistory(result, $info);
-                }
-                
-                if (m_isVideo && videoEl.src !== "") {
-                    fadeStuff($resultsOverlay);
-                }
-            }
+        if (m_verbose) {
+            createHistory(result, $info);
         }
-        else {
-            $resultsContents.text(result.error);
+        
+        if (m_isVideo && videoEl.src !== "") {
+            fadeStuff($resultsOverlay);
         }
 
         if (m_isVideo) {
@@ -424,12 +404,28 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
         clearOverlay($resultsOverlay);
-        $resultsContents.text(jqXHR.responseJSON.error);
-        
+        createPredictions(null, false, jqXHR.responseJSON.error);
+
         if (m_isVideo) {
             captureImage(videoEl, canvasEl, $resultsContainer);
         }
     });
+}
+
+function createPredictions(predictions, success, error) {
+    if (m_reactPredictions === null) {
+        m_reactPredictions = ReactDOM.render(
+            <Predictions 
+                predictions={predictions}
+                success={success}
+                error={error}
+            />,
+            document.getElementById("resultsContents")
+        );
+    }
+    else {
+        m_reactPredictions.updatePredictions(predictions, success, error);
+    }
 }
 
 function sleep(ms) {

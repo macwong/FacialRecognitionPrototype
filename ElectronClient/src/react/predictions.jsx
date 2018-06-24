@@ -6,7 +6,9 @@ export default class Predictions extends Component {
         super(props);
 
         this.state = {
-            predictions: props.predictions
+            predictions: props.predictions,
+            success: props.success,
+            error: props.error
         };
     }
 
@@ -19,22 +21,36 @@ export default class Predictions extends Component {
     }
 
     renderList() {
-        return this.state.predictions.map((pred) => {
-            const distance = Helpers.getIndividualPredictionInfo(pred.pred_info, pred.pred_name).distance;
-
+        if (!this.state.success) {
             return (
-                <figure key={pred.prediction_id} className="person">
-                    <img src={Helpers.pngSource + pred.image} />
-                    <figcaption className="caption">{pred.pred_name}</figcaption>
-                    <img className="icon" src={Helpers.getPredictionIcon(distance)} />
-                </figure>
+                <div>{this.state.error}</div>
             );
-        });
+        }
+        else if (!this.state.predictions || this.state.predictions.length === 0) {
+            return (
+                <div>Dude! You're invisible!</div>
+            );
+        }
+        else {
+            return this.state.predictions.map((pred) => {
+                const distance = Helpers.getIndividualPredictionInfo(pred.pred_info, pred.pred_name).distance;
+
+                return (
+                    <figure key={pred.prediction_id} className="person">
+                        <img src={Helpers.pngSource + pred.image} />
+                        <figcaption className="caption">{pred.pred_name}</figcaption>
+                        <img className="icon" src={Helpers.getPredictionIcon(distance)} />
+                    </figure>
+                );
+            });
+        }
     }
 
-    updatePredictions(preds) {
+    updatePredictions(preds, success, error) {
         this.setState({
-            predictions: preds
+            predictions: preds,
+            success: success,
+            error: error
         });
     }
 }
