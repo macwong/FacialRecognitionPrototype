@@ -64,7 +64,7 @@ export default class History extends Component {
 
     onRowClick(e) {
         let $row = $(e.currentTarget);
-        $row.parent().find(".row").removeClass("selected");
+        $row.closest("#history").find(".row").removeClass("selected");
         $row.addClass("selected");
         this.props.infoCallback($row, this.props.$info);
     }
