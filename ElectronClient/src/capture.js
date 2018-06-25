@@ -464,12 +464,17 @@ function createHistory(prediction, $info) {
 }
 
 function createInfo(predictionID) {
-    m_reactInfo = ReactDOM.render(
-        <Info
-            prediction={m_predictionHistory[predictionID]}
-        />,
-        document.getElementById("info")
-    );
+    if (m_reactInfo === null) {
+        m_reactInfo = ReactDOM.render(
+            <Info
+                prediction={m_predictionHistory[predictionID]}
+            />,
+            document.getElementById("info")
+        );
+    }
+    else {
+        m_reactInfo.updateInfo(m_predictionHistory[predictionID]);
+    }
     // $info.empty();
     
     // $.get(path.join(__dirname, 'info.html'), (data) => {

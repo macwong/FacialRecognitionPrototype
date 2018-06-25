@@ -18,13 +18,13 @@ export default class Info extends Component {
         }
 
         return (
-            <div class="info">
+            <div className="info">
                 <figure className="profile">
                     <img className="profile-pic" src={Helpers.pngSource + pred.image} />
                     <figcaption className="caption">
-                        <h2>David McCormick</h2>
+                        <h2>{pred.pred_name}</h2>
                     </figcaption>
-                    <img className="icon" src="../images/verified.png" />
+                    <img className="icon" src={Helpers.getPredictionIcon(Helpers.getIndividualPredictionInfo(pred.pred_info, pred.pred_name).distance)} />
                 </figure>
                 <div className="scores">
                     <div className="Rtable Rtable--2cols Rtable--collapse">
@@ -107,5 +107,11 @@ export default class Info extends Component {
                 </div>
             </div>
         );
+    }
+
+    updateInfo(preds) {
+        this.setState({
+            prediction: preds
+        });
     }
 }
