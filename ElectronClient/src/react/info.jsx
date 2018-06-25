@@ -93,7 +93,7 @@ export default class Info extends Component {
                             }
 
                             return (
-                                <span className="emb">{embDisplay}</span>
+                                <span key={index} className="emb">{embDisplay}</span>
                             );
                         })
                     }
@@ -105,6 +105,47 @@ export default class Info extends Component {
                         <h3>Top Predictions</h3>
                     </div>
                     <div className="block-details">
+                    {
+                        pred.pred_info.map((infoItem, index) => {
+                            let rating = Helpers.getRating(infoItem.distance);
+                            let imgSrc = Helpers.getPredictionIcon(infoItem.distance);
+
+                            return (
+                            <div key={index + 1} className="row">
+                                <div className="top-name">
+                                    <span className="top-name-heading">{(index + 1) + ". " + infoItem.name}</span>
+                                    <span className="rating">
+                                    {
+                                        [...Array(rating).keys()].map((val) => {
+                                            return <img key={val} src={imgSrc} />
+                                        })
+                                    }
+                                    </span>
+                                </div>
+                                <div className="more">
+                                    <label>Training Images:</label>
+                                    <div className="training-images">
+                                    {
+                                        infoItem.photo_path.map((photo, index) => {
+                                            return <img key={index} src={photo} />
+                                        })
+                                    }
+                                    </div>
+                                    <div className="top-scores">
+                                        <ul>
+                                            <li>
+                                                <label>Probability:</label><span class="probability"></span>
+                                            </li>
+                                            <li>
+                                                <label>Distance:</label><span class="distance"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            );
+                        })
+                    }
                     </div>
                 </div>
                 <div className="block add-face collapsed">
