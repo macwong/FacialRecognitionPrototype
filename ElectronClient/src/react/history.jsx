@@ -66,7 +66,8 @@ export default class History extends Component {
         let $row = $(e.currentTarget);
         $row.closest("#history").find(".row").removeClass("selected");
         $row.addClass("selected");
-        this.props.infoCallback($row, this.props.$info);
+        let predictionID = $row.data("prediction_id");
+        this.props.infoCallback(predictionID);
     }
 
     updateHistory(preds) {
