@@ -51,5 +51,11 @@ export default class Helpers {
             return "../images/rotten.png";
         }
     }
+
+    static getProbability(probability) {
+        let prob = probability * 100;
+        prob = prob.toFixed(2);
+        return prob + "%";
+    }
 }
 

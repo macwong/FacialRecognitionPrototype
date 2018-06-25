@@ -475,6 +475,7 @@ function createInfo(predictionID) {
     else {
         m_reactInfo.updateInfo(m_predictionHistory[predictionID]);
     }
+
     // $info.empty();
     
     // $.get(path.join(__dirname, 'info.html'), (data) => {
@@ -648,12 +649,6 @@ function getExpandableBlock($contents, blockClass, callback) {
     });
 
     callback($block, $details);
-}
-
-function getProbability(probability) {
-    let prob = probability * 100;
-    prob = prob.toFixed(2);
-    return prob + "%";
 }
 
 function setPredictionIcon(info, pred_name, $icon) {

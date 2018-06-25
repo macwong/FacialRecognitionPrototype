@@ -12,6 +12,7 @@ export default class Info extends Component {
 
     render() {
         const pred = this.state.prediction;
+        const model_info = pred.model_info;
 
         if (pred === undefined) {
             return <div></div>;
@@ -30,12 +31,12 @@ export default class Info extends Component {
                     <div className="Rtable Rtable--2cols Rtable--collapse">
                         <div className="table-header Rtable-cell Rtable-cell--alignCenter"><h3>Probability</h3></div>
                         <div className="table-cell probability Rtable-cell Rtable-cell--alignCenter">
-                        5%
+                        {Helpers.getProbability(pred.probability)}
                         </div>
 
                         <div className="table-header Rtable-cell Rtable-cell--alignCenter"><h3>Distance</h3></div>
                         <div className="table-cell distance Rtable-cell Rtable-cell--alignCenter">
-                        0.75
+                       {pred.distance.toFixed(2)}
                         </div>
                     </div>
                 </div>
@@ -47,23 +48,29 @@ export default class Info extends Component {
                     <div className="block-details">
                         <ul>
                             <li>
-                                <label>Name:</label><span className="model-name">Model name</span>
+                                <label>Name:</label><span className="model-name">{model_info.model_name}</span>
                             </li>
                             <li>
-                                <label>Total People:</label><span className="total-people">Total people</span>
+                                <label>Total People:</label><span className="total-people">{model_info.total_people}</span>
                             </li>
                             <li>
-                                <label>Total Images:</label><span className="training-images">Training images</span>
+                                <label>Total Images:</label><span className="training-images">{model_info.training_images}</span>
                             </li>
                             <li>
                                 <label>Algorithm:</label>
-                                <div className="algorithm">Algorithm</div>
+                                <div className="algorithm">{model_info.algorithm}</div>
                             </li>
                             <li>
                                 <label>People:</label>
                                 <div>
                                     <ul className="nice-list people-list">
-                                        <li>List Item</li>
+                                        {
+                                            model_info.class_names.map((cName, index) => {
+                                                return (
+                                                    <li key={index}>{cName}</li>
+                                                );
+                                            })
+                                        }
                                     </ul>
                                 </div>
                             </li>
@@ -76,7 +83,20 @@ export default class Info extends Component {
                         <h3>Embeddings</h3>
                     </div>
                     <div className="block-details">
-                        <span className="emb">0.5435345</span>
+                    {
+                        pred.embeddings.map((emb, index) => {
+                            emb = emb.toFixed(5);
+                            let embDisplay = emb.toString();
+
+                            if (emb > 0) {
+                                embDisplay = " " + embDisplay;
+                            }
+
+                            return (
+                                <span className="emb">{embDisplay}</span>
+                            );
+                        })
+                    }
                     </div>
                 </div>
                 <div className="block top-predictions collapsed">
