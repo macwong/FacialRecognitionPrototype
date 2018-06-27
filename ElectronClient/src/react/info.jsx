@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Helpers from '../helpers';
 import $ from '../jquery';
 import path from 'path';
+import Block from './block';
 
 export default class Info extends Component {
     
@@ -46,6 +47,9 @@ export default class Info extends Component {
                         </div>
                     </div>
                 </div>
+                <Block 
+                    title={"Model Info"}
+                />
                 <div className="block model-info collapsed">
                     <div 
                         className="expandable"
