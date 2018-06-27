@@ -8,7 +8,7 @@ export default class Block extends Component {
 
     render() {
         return (
-            <div className="block model-info collapsed">
+            <div className={`block ${this.props.containerClass} collapsed`}>
                 <div 
                     className="expandable"
                     onClick={this.onBlockClick.bind(this)}

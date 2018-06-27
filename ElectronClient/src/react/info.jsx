@@ -3,6 +3,7 @@ import Helpers from '../helpers';
 import $ from '../jquery';
 import path from 'path';
 import ModelInfoBlock from './InfoBlocks/modelinfoblock';
+import EmbeddingsBlock from './InfoBlocks/embeddingsblock';
 
 export default class Info extends Component {
     
@@ -47,35 +48,16 @@ export default class Info extends Component {
                         </div>
                     </div>
                 </div>
-                <ModelInfoBlock 
+                <ModelInfoBlock
+                    containerClass="model_info"
                     title="Model Info"
                     model_info={model_info}
                 />
-                <div className="block embeddings collapsed">
-                    <div 
-                        className="expandable"
-                        onClick={this.onBlockClick.bind(this)}
-                    >
-                        <img className="expand-icon" src="../images/arrow-down.png" />
-                        <h3>Embeddings</h3>
-                    </div>
-                    <div className="block-details">
-                    {
-                        pred.embeddings.map((emb, index) => {
-                            emb = emb.toFixed(5);
-                            let embDisplay = emb.toString();
-
-                            if (emb > 0) {
-                                embDisplay = " " + embDisplay;
-                            }
-
-                            return (
-                                <span key={index} className="emb">{embDisplay}</span>
-                            );
-                        })
-                    }
-                    </div>
-                </div>
+                <EmbeddingsBlock 
+                    containerClass="embeddings"
+                    title="Embeddings"
+                    prediction={pred}
+                />
                 <div className="block top-predictions collapsed">
                     <div 
                         className="expandable"
