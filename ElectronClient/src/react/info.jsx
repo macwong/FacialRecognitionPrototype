@@ -47,7 +47,10 @@ export default class Info extends Component {
                     </div>
                 </div>
                 <div className="block model-info collapsed">
-                    <div className="expandable">
+                    <div 
+                        className="expandable"
+                        onClick={this.onBlockClick.bind(this)}
+                    >
                         <img className="expand-icon" src="../images/arrow-down.png" />
                         <h3>Model Info</h3>
                     </div>
@@ -188,6 +191,21 @@ export default class Info extends Component {
 
     handleChange(e) {
         this.setState({ addFace: e.target.value });
+    }
+
+    onBlockClick(e) {
+        let $expandable = $(e.currentTarget);
+        let $block = $expandable.closest(".block");
+        let $details = $block.find(".block-details");
+
+        if ($block.hasClass("collapsed")) {
+            $block.removeClass("collapsed");
+            $details.slideDown();
+        }
+        else {
+            $block.addClass("collapsed");
+            $details.slideUp();
+        }
     }
 
     onAddNewFaceClick(e) {
