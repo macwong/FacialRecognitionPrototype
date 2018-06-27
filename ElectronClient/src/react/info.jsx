@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Helpers from '../helpers';
 import $ from '../jquery';
 import path from 'path';
-import Block from './block';
+import ModelInfoBlock from './InfoBlocks/modelinfoblock';
 
 export default class Info extends Component {
     
@@ -47,49 +47,10 @@ export default class Info extends Component {
                         </div>
                     </div>
                 </div>
-                <Block 
-                    title={"Model Info"}
+                <ModelInfoBlock 
+                    title="Model Info"
+                    model_info={model_info}
                 />
-                <div className="block model-info collapsed">
-                    <div 
-                        className="expandable"
-                        onClick={this.onBlockClick.bind(this)}
-                    >
-                        <img className="expand-icon" src="../images/arrow-down.png" />
-                        <h3>Model Info</h3>
-                    </div>
-                    <div className="block-details">
-                        <ul>
-                            <li>
-                                <label>Name:</label><span className="model-name">{model_info.model_name}</span>
-                            </li>
-                            <li>
-                                <label>Total People:</label><span className="total-people">{model_info.total_people}</span>
-                            </li>
-                            <li>
-                                <label>Total Images:</label><span className="training-images">{model_info.training_images}</span>
-                            </li>
-                            <li>
-                                <label>Algorithm:</label>
-                                <div className="algorithm">{model_info.algorithm}</div>
-                            </li>
-                            <li>
-                                <label>People:</label>
-                                <div>
-                                    <ul className="nice-list people-list">
-                                        {
-                                            model_info.class_names.map((cName, index) => {
-                                                return (
-                                                    <li key={index}>{cName}</li>
-                                                );
-                                            })
-                                        }
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
                 <div className="block embeddings collapsed">
                     <div 
                         className="expandable"
