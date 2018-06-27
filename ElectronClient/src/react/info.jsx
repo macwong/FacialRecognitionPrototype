@@ -4,13 +4,15 @@ import $ from '../jquery';
 import path from 'path';
 
 export default class Info extends Component {
+    
     constructor(props) {
         super(props);
-
+        
+        this.infoMessage = "Clicking \"Add\" will add this person to the training data.";
         this.state = {
             prediction: props.prediction,
             addFace: "",
-            infoMessage: "Clicking \"Add\" will add this person to the training data."
+            infoMessage: this.infoMessage
         }
     }
 
@@ -217,7 +219,7 @@ export default class Info extends Component {
         this.setState({
             prediction: preds,
             addFace: "",
-            infoMessage: "Clicking \"Add\" will add this person to the training data."
+            infoMessage: this.infoMessage
         });
     }
 }
