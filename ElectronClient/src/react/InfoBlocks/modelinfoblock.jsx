@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
 import Block from '../block';
 
-export default class ModelInfoBlock extends Block {
+export default class ModelInfoBlock extends Component {
     constructor(props) {
         super(props);
     }
 
-    renderBlockDetails() {
+    render() {
         const model_info = this.props.model_info;
 
         return (
+            <Block title="Model Info" containerClass="model_info">
             <ul>
                 <li>
                     <label>Name:</label><span className="model-name">{model_info.model_name}</span>
@@ -39,6 +40,7 @@ export default class ModelInfoBlock extends Block {
                     </div>
                 </li>
             </ul>
+            </Block>
         );
     }
 }

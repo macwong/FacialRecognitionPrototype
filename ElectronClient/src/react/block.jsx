@@ -17,7 +17,7 @@ export default class Block extends Component {
                     <h3>{this.props.title}</h3>
                 </div>
                 <div className="block-details">
-                    {this.renderBlockDetails()}
+                    {this.props.children}
                 </div>
             </div>
         );
@@ -36,11 +36,5 @@ export default class Block extends Component {
             $block.addClass("collapsed");
             $details.slideUp();
         }
-    }
-
-    renderBlockDetails() {
-        return (
-            <div>Test</div>
-        );
     }
 }

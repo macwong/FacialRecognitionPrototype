@@ -4,6 +4,7 @@ import $ from '../jquery';
 import path from 'path';
 import ModelInfoBlock from './InfoBlocks/modelinfoblock';
 import EmbeddingsBlock from './InfoBlocks/embeddingsblock';
+import TopPredictionsBlock from './InfoBlocks/embeddingsblock';
 
 export default class Info extends Component {
     
@@ -48,16 +49,9 @@ export default class Info extends Component {
                         </div>
                     </div>
                 </div>
-                <ModelInfoBlock
-                    containerClass="model_info"
-                    title="Model Info"
-                    model_info={model_info}
-                />
-                <EmbeddingsBlock 
-                    containerClass="embeddings"
-                    title="Embeddings"
-                    prediction={pred}
-                />
+                <ModelInfoBlock model_info={model_info} />
+                <EmbeddingsBlock embeddings={pred.embeddings} />
+                <TopPredictionsBlock pred_info={pred.pred_info} />
                 <div className="block top-predictions collapsed">
                     <div 
                         className="expandable"
