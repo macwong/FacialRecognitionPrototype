@@ -87,7 +87,10 @@ export default class Info extends Component {
                     </div>
                 </div>
                 <div className="block embeddings collapsed">
-                    <div className="expandable">
+                    <div 
+                        className="expandable"
+                        onClick={this.onBlockClick.bind(this)}
+                    >
                         <img className="expand-icon" src="../images/arrow-down.png" />
                         <h3>Embeddings</h3>
                     </div>
@@ -109,7 +112,10 @@ export default class Info extends Component {
                     </div>
                 </div>
                 <div className="block top-predictions collapsed">
-                    <div className="expandable">
+                    <div 
+                        className="expandable"
+                        onClick={this.onBlockClick.bind(this)}
+                    >
                         <img className="expand-icon" src="../images/arrow-down.png" />
                         <h3>Top Predictions</h3>
                     </div>
@@ -158,7 +164,10 @@ export default class Info extends Component {
                     </div>
                 </div>
                 <div className="block add-face collapsed">
-                    <div className="expandable">
+                    <div 
+                        className="expandable"
+                        onClick={this.onBlockClick.bind(this)}
+                    >
                         <img className="expand-icon" src="../images/arrow-down.png" />
                         <h3>Add Face</h3>
                     </div>
