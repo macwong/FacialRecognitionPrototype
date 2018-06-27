@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import Helpers from '../helpers';
+import $ from '../jquery';
+import path from 'path';
 
 export default class Info extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            prediction: props.prediction
+            prediction: props.prediction,
+            addFace: "",
+            infoMessage: "Clicking \"Add\" will add this person to the training data."
         }
     }
 
@@ -134,10 +138,10 @@ export default class Info extends Component {
                                     <div className="top-scores">
                                         <ul>
                                             <li>
-                                                <label>Probability:</label><span class="probability"></span>
+                                                <label>Probability:</label><span className="probability">{Helpers.getProbability(infoItem.probability)}</span>
                                             </li>
                                             <li>
-                                                <label>Distance:</label><span class="distance"></span>
+                                                <label>Distance:</label><span className="distance">{infoItem.distance.toFixed(2)}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -155,14 +159,24 @@ export default class Info extends Component {
                     </div>
                     <div className="block-details">
                         <div className="editable-dropdown">
-                            <input className="input" list="names" name="name" />
+                            <input 
+                                onChange={ this.handleChange.bind(this) }
+                                value={this.state.addFace} 
+                                className="input" list="names" name="name" 
+                            />
                             <datalist id="names" className="data-list">
-                                <option value="Diep Nguyen" />
+                            {
+                                model_info.class_names.map((name) => {
+                                    return (
+                                        <option key={name} value={name} />
+                                    );
+                                })
+                            }
                             </datalist>
                         </div>
                         <div className="add-container">
-                            <button className="add-new-face">Add</button>
-                            <div className="add-info">Clicking "Add" will add this person to the training data.</div>
+                            <button className="add-new-face" onClick={this.onAddNewFaceClick.bind(this)}>Add</button>
+                            <div className="add-info">{this.state.infoMessage}</div>
                         </div>
                     </div>
                 </div>
@@ -170,9 +184,40 @@ export default class Info extends Component {
         );
     }
 
+    handleChange(e) {
+        this.setState({ addFace: e.target.value });
+    }
+
+    onAddNewFaceClick(e) {
+        let $button = $(e.currentTarget); 
+        let model_name = this.state.prediction.model_info.model_name;
+
+        if (!$button.hasClass("disabled")) {
+            $.ajax({
+                url: path.join(Helpers.endpoint, "addface"),
+                type: "POST",
+                data: JSON.stringify({
+                    image: this.state.prediction.image,
+                    model: model_name,
+                    name: this.state.addFace
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType:"json"
+            }).done(() => {
+                this.setState({
+                    infoMessage: "New face added!"
+                });
+            });
+
+            $button.addClass("disabled");
+        }
+    }
+
     updateInfo(preds) {
         this.setState({
-            prediction: preds
+            prediction: preds,
+            addFace: "",
+            infoMessage: "Clicking \"Add\" will add this person to the training data."
         });
     }
 }
