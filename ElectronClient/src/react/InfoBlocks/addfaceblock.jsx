@@ -1,0 +1,75 @@
+import React, {Component} from 'react';
+import Block from '../block';
+
+export default class AddFaceBlock extends Component {
+    constructor(props) {
+        super(props);
+
+        this.infoMessage = "Clicking \"Add\" will add this person to the training data.";
+
+        this.state = {
+            model_info: props.model_info,
+            addFace: "",
+            infoMessage: this.infoMessage,
+            image: this.props.image
+        }
+    }
+
+    render() {
+        return (
+            <Block title="Add Face" containerClass="add-face">
+                <div className="editable-dropdown">
+                    <input 
+                        onChange={ this.handleChange.bind(this) }
+                        value={this.state.addFace} 
+                        className="input" list="names" name="name" 
+                    />
+                    <datalist id="names" className="data-list">
+                    {
+                        this.state.model_info.class_names.map((name) => {
+                            return (
+                                <option key={name} value={name} />
+                            );
+                        })
+                    }
+                    </datalist>
+                </div>
+                <div className="add-container">
+                    <button className="add-new-face" onClick={this.onAddNewFaceClick.bind(this)}>Add</button>
+                    <div className="add-info">{this.state.infoMessage}</div>
+                </div>
+            </Block>
+        );
+    }
+
+    handleChange(e) {
+        this.setState({ addFace: e.target.value });
+    }
+
+    onAddNewFaceClick(e) {
+        let $button = $(e.currentTarget); 
+        let model_name = this.state.model_info.model_name;
+
+        if (!$button.hasClass("disabled")) {
+            $.ajax({
+                url: path.join(Helpers.endpoint, "addface"),
+                type: "POST",
+                data: JSON.stringify({
+                    image: this.state.image,
+                    model: model_name,
+                    name: this.state.addFace
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType:"json"
+            }).done(() => {
+                this.setState({
+                    infoMessage: "New face added!"
+                });
+            });
+
+            $button.addClass("disabled");
+        }
+    }
+
+
+}

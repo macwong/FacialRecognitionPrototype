@@ -8,7 +8,6 @@ export default class EmbeddingsBlock extends Component {
 
     render() {
         const embeddings = this.props.embeddings;
-        console.log(embeddings);
         
         if (embeddings) {
             return (
