@@ -328,7 +328,6 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
             }
         })();
 
-        // ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
         fadeStuff($resultsContainer.find(".resultsOverlay"));
         captureImage(videoEl, canvasEl, $resultsContainer);
     }
