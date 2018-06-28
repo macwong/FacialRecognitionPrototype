@@ -1,8 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Predictions from './react/predictions';
-import History from './react/history';
-import Info from './react/info';
 import Viewer from './react/viewer';
 import Globals from './globals';
 import Helpers from './helpers';
@@ -15,15 +12,6 @@ const fs = require("fs");
 const $ = require("./jquery")
 const { dialog } = electron.remote;
 const path = require('path')
-
-let m_isVideo = true;
-let m_predictionHistory = {};
-let m_currentImages = [];
-let m_verbose = false;
-
-let m_reactPredictions = null;
-let m_reactHistory = null;
-let m_reactInfo = null;
 
 let m_imageProcessor = null;
 
@@ -163,7 +151,7 @@ $(document).ready(() => {
     const $history = $(document).find(".history");
     const $info = $(document).find(".info");
     
-    m_imageProcessor = new ImageProcessor(videoEl, canvasEl, $resultsContainer, m_isVideo, {}, m_verbose, m_currentImages, $(document).find('#info'));
+    m_imageProcessor = new ImageProcessor(videoEl, canvasEl, $resultsContainer.find(".resultsOverlay"), true, {}, false, [], $(document).find('#info'));
 
     initApp(() => {
         $resultsContainer.find(".resultsContents").text("Loading...");
@@ -176,12 +164,12 @@ $(document).ready(() => {
         if ($inputCheckbox.is(":checked")) {
             $history.show();
             $info.show();
-            m_verbose = true;
+            m_imageProcessor.verbose = true;
         }
         else {
             $history.hide();
             $info.hide();
-            m_verbose = false;
+            m_imageProcessor.verbose = false;
         }
     });
 
@@ -204,7 +192,7 @@ $(document).ready(() => {
             if ($parent.hasClass("option-live") || $parent.hasClass("option-video")) {
                 $video.show();
                 $(canvasEl).hide();
-                m_isVideo = true;
+                m_imageProcessor.isVideo = true;
 
                 if ($parent.hasClass("option-live")) {
                     getVideoStream(videoEl, canvasEl, $resultsContainer);
@@ -227,7 +215,7 @@ $(document).ready(() => {
                 $video.prop("src", "");
                 $video.removeAttr("src");
                 $(canvasEl).show();
-                m_isVideo = false;
+                m_imageProcessor.isVideo = false;
             }
         }
     });
@@ -276,66 +264,66 @@ function openImage(videoEl, canvasEl, $resultsContainer) {
             properties: ['openFile', 'multiSelections']
         },
         function (filePaths) {
-            m_currentImages = filePaths;
-            updateImage(canvasEl, videoEl, $resultsContainer);
+            m_imageProcessor.currentImages = filePaths;
+            m_imageProcessor.updateImage();
         }
     );
 }
 
-function updateImage(canvasEl, videoEl, $resultsContainer) {
-    var ctx = canvasEl.getContext('2d');
-    var img = new Image();
-    img.onload = function() {
-        var canvasLeft = 0;
-        var canvasTop = 0;
-        var imageWidth = img.width;
-        var imageHeight = img.height;
+// function updateImage(canvasEl, videoEl, $resultsContainer) {
+//     var ctx = canvasEl.getContext('2d');
+//     var img = new Image();
+//     img.onload = function() {
+//         var canvasLeft = 0;
+//         var canvasTop = 0;
+//         var imageWidth = img.width;
+//         var imageHeight = img.height;
 
-        var ratio = 0;
+//         var ratio = 0;
 
-        // Check if the current width is larger than the max
-        if(imageWidth > Globals.defaultWidth){
-            ratio = Globals.defaultWidth / imageWidth;   // get ratio for scaling image
-            $(this).css("width", Globals.defaultWidth); // Set new width
-            $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
-            imageHeight = imageHeight * ratio;    // Reset height to match scaled image
-            imageWidth = imageWidth * ratio;    // Reset width to match scaled image
-        }
+//         // Check if the current width is larger than the max
+//         if(imageWidth > Globals.defaultWidth){
+//             ratio = Globals.defaultWidth / imageWidth;   // get ratio for scaling image
+//             $(this).css("width", Globals.defaultWidth); // Set new width
+//             $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
+//             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+//             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+//         }
         
-        // Check if current height is larger than max
-        if(imageHeight > Globals.defaultHeight){
-            ratio = Globals.defaultHeight / imageHeight; // get ratio for scaling image
-            $(this).css("height", Globals.defaultHeight);   // Set new height
-            $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
-            imageWidth = imageWidth * ratio;    // Reset width to match scaled image
-            imageHeight = imageHeight * ratio;    // Reset height to match scaled image
-        }
+//         // Check if current height is larger than max
+//         if(imageHeight > Globals.defaultHeight){
+//             ratio = Globals.defaultHeight / imageHeight; // get ratio for scaling image
+//             $(this).css("height", Globals.defaultHeight);   // Set new height
+//             $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
+//             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+//             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+//         }
         
-        canvasLeft = (Globals.defaultWidth - imageWidth) / 2;
-        canvasTop = (Globals.defaultHeight - imageHeight) / 2;
+//         canvasLeft = (Globals.defaultWidth - imageWidth) / 2;
+//         canvasTop = (Globals.defaultHeight - imageHeight) / 2;
         
-        let opacity = 0;
+//         let opacity = 0;
         
-        (function fadeIn() {
-            ctx.clearRect(0, 0, Globals.defaultWidth, Globals.defaultHeight);
-            ctx.globalAlpha = opacity;
-            ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
-            opacity += 0.015;
-            if (opacity < 1) {
-                requestAnimationFrame(fadeIn);
-            }
-        })();
+//         (function fadeIn() {
+//             ctx.clearRect(0, 0, Globals.defaultWidth, Globals.defaultHeight);
+//             ctx.globalAlpha = opacity;
+//             ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
+//             opacity += 0.015;
+//             if (opacity < 1) {
+//                 requestAnimationFrame(fadeIn);
+//             }
+//         })();
 
-        Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
-        // captureImage(videoEl, canvasEl, $resultsContainer);
-        m_imageProcessor.captureImage();
-    }
+//         Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
+//         // captureImage(videoEl, canvasEl, $resultsContainer);
+//         m_imageProcessor.captureImage();
+//     }
 
-    if (m_currentImages !== null && m_currentImages !== undefined) {
-        img.src = m_currentImages[0];
-        $(canvasEl).data("file_source", m_currentImages[0]);
-    }
-}
+//     if (m_imageProcessor.currentImages !== null && m_imageProcessor.currentImages !== undefined) {
+//         img.src = m_imageProcessor.currentImages[0];
+//         $(canvasEl).data("file_source", m_imageProcessor.currentImages[0]);
+//     }
+// }
 
 // function captureImage(videoEl, canvasEl, $resultsContainer) {
 //     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
@@ -414,54 +402,54 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
 //     });
 // }
 
-function createPredictions(predictions, success, error) {
-    if (m_reactPredictions === null) {
-        m_reactPredictions = ReactDOM.render(
-            <Predictions 
-                predictions={predictions}
-                success={success}
-                error={error}
-            />,
-            document.getElementById("resultsContents")
-        );
-    }
-    else {
-        m_reactPredictions.updatePredictions(predictions, success, error);
-    }
-}
+// function createPredictions(predictions, success, error) {
+//     if (m_reactPredictions === null) {
+//         m_reactPredictions = ReactDOM.render(
+//             <Predictions 
+//                 predictions={predictions}
+//                 success={success}
+//                 error={error}
+//             />,
+//             document.getElementById("resultsContents")
+//         );
+//     }
+//     else {
+//         m_reactPredictions.updatePredictions(predictions, success, error);
+//     }
+// }
 
-function createHistory(prediction, $info) {
-    if (m_reactHistory === null) {
-        m_reactHistory = ReactDOM.render(
-            <History 
-                predictions={prediction.predictions}
-                $info={$info}
-                infoCallback={createInfo}
-            />,
-            document.getElementById("history")
-        );
-    }
-    else {
-        m_reactHistory.updateHistory(prediction.predictions);
-    }
+// function createHistory(prediction, $info) {
+//     if (m_reactHistory === null) {
+//         m_reactHistory = ReactDOM.render(
+//             <History 
+//                 predictions={prediction.predictions}
+//                 $info={$info}
+//                 infoCallback={createInfo}
+//             />,
+//             document.getElementById("history")
+//         );
+//     }
+//     else {
+//         m_reactHistory.updateHistory(prediction.predictions);
+//     }
 
-    // Store in a dictionary
-    for (var pred in prediction.predictions) {
-        const predValues = prediction.predictions[pred];
-        m_predictionHistory[predValues.prediction_id] = predValues;
-    }
-}
+//     // Store in a dictionary
+//     for (var pred in prediction.predictions) {
+//         const predValues = prediction.predictions[pred];
+//         m_predictionHistory[predValues.prediction_id] = predValues;
+//     }
+// }
 
-function createInfo(predictionID) {
-    if (m_reactInfo === null) {
-        m_reactInfo = ReactDOM.render(
-            <Info
-                prediction={m_predictionHistory[predictionID]}
-            />,
-            document.getElementById("info")
-        );
-    }
-    else {
-        m_reactInfo.updateInfo(m_predictionHistory[predictionID]);
-    }
-}
+// function createInfo(predictionID) {
+//     if (m_reactInfo === null) {
+//         m_reactInfo = ReactDOM.render(
+//             <Info
+//                 prediction={m_predictionHistory[predictionID]}
+//             />,
+//             document.getElementById("info")
+//         );
+//     }
+//     else {
+//         m_reactInfo.updateInfo(m_predictionHistory[predictionID]);
+//     }
+// }

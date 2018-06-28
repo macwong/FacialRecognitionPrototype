@@ -9,10 +9,10 @@ import History from './react/history';
 import Info from './react/info';
 
 export class ImageProcessor {
-    constructor(videoEl, canvasEl, $resultsContainer, isVideo, currentModel, verbose, currentImages, $info) {
+    constructor(videoEl, canvasEl, $resultsOverlay, isVideo, currentModel, verbose, currentImages, $info) {
         this.videoEl = videoEl;
         this.canvasEl = canvasEl;
-        this.$resultsContainer = $resultsContainer;
+        this.$resultsOverlay = $resultsOverlay;
         this.isVideo = isVideo;
         this.currentModel = currentModel;
         this.verbose = verbose;
@@ -27,8 +27,6 @@ export class ImageProcessor {
     }
 
     captureImage() {
-        var $resultsOverlay = this.$resultsContainer.find(".resultsOverlay");
-    
         let currentWidth = this.videoEl.videoWidth;
     
         if (currentWidth === 0) {
@@ -67,7 +65,7 @@ export class ImageProcessor {
             dataType:"json",
             
         }).done((result) => {
-            Helpers.clearOverlay($resultsOverlay);
+            Helpers.clearOverlay(this.$resultsOverlay);
             let success = String.prototype.toLowerCase.call(result.success) === "true";
             this.createPredictions(result.predictions, success, result.error);
     
@@ -76,12 +74,12 @@ export class ImageProcessor {
             }
             
             if (this.isVideo && this.videoEl.src !== "") {
-                Helpers.fadeStuff($resultsOverlay);
+                Helpers.fadeStuff(this.$resultsOverlay);
             }
     
             if (this.isVideo) {
                 // When one request is done, do it all over again...
-                this.captureImage(this.videoEl, this.canvasEl, this.$resultsContainer);
+                this.captureImage();
             }
             else {
                 if (this.currentImages !== null && this.currentImages !== undefined && this.currentImages.length > 0) {
@@ -93,11 +91,11 @@ export class ImageProcessor {
                 }
             }
         }).fail((jqXHR, textStatus, errorThrown) => {
-            Helpers.clearOverlay($resultsOverlay);
+            Helpers.clearOverlay(this.$resultsOverlay);
             this.createPredictions(null, false, jqXHR.responseJSON.error);
     
             if (this.isVideo) {
-                this.captureImage(this.videoEl, this.canvasEl, this.$resultsContainer);
+                this.captureImage();
             }
         });
     }
@@ -105,7 +103,7 @@ export class ImageProcessor {
     updateImage() {
         var ctx = this.canvasEl.getContext('2d');
         var img = new Image();
-        img.onload = function() {
+        img.onload = () => {
             var canvasLeft = 0;
             var canvasTop = 0;
             var imageWidth = img.width;
@@ -116,8 +114,8 @@ export class ImageProcessor {
             // Check if the current width is larger than the max
             if(imageWidth > Globals.defaultWidth){
                 ratio = Globals.defaultWidth / imageWidth;   // get ratio for scaling image
-                $(this).css("width", Globals.defaultWidth); // Set new width
-                $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
+                $(img).css("width", Globals.defaultWidth); // Set new width
+                $(img).css("height", imageHeight * ratio);  // Scale height based on ratio
                 imageHeight = imageHeight * ratio;    // Reset height to match scaled image
                 imageWidth = imageWidth * ratio;    // Reset width to match scaled image
             }
@@ -125,8 +123,8 @@ export class ImageProcessor {
             // Check if current height is larger than max
             if(imageHeight > Globals.defaultHeight){
                 ratio = Globals.defaultHeight / imageHeight; // get ratio for scaling image
-                $(this).css("height", Globals.defaultHeight);   // Set new height
-                $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
+                $(img).css("height", Globals.defaultHeight);   // Set new height
+                $(img).css("width", imageWidth * ratio);    // Scale width based on ratio
                 imageWidth = imageWidth * ratio;    // Reset width to match scaled image
                 imageHeight = imageHeight * ratio;    // Reset height to match scaled image
             }
@@ -146,7 +144,8 @@ export class ImageProcessor {
                 }
             })();
     
-            Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
+            Helpers.fadeStuff(this.$resultsOverlay);
+
             this.captureImage();
         }
     
