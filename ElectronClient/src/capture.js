@@ -17,7 +17,6 @@ const { dialog } = electron.remote;
 const path = require('path')
 
 let m_isVideo = true;
-let m_currentModel;
 let m_predictionHistory = {};
 let m_currentImages = [];
 let m_verbose = false;
@@ -58,10 +57,10 @@ function initApp(callback) {
     getModels($select).then(() => {
         $models.html($select);
 
-        m_currentModel = $select.find("option:first").val();
+        m_imageProcessor.currentModel = $select.find("option:first").val();
 
         $select.change((e) => {
-            m_currentModel = $select.val();
+            m_imageProcessor.currentModel = $select.val();
         })
 
         $('.add-model').on('click', (e) => {
@@ -124,7 +123,7 @@ function initApp(callback) {
                         });
 
                         getModels($select).then(() => {
-                            $select.val(m_currentModel);
+                            $select.val(m_imageProcessor.currentModel);
                         });
                     }).fail((jqXHR, textStatus, errorThrown) => {
                         $loading.removeClass("is-visible");
@@ -164,10 +163,9 @@ $(document).ready(() => {
     const $history = $(document).find(".history");
     const $info = $(document).find(".info");
     
+    m_imageProcessor = new ImageProcessor(videoEl, canvasEl, $resultsContainer, m_isVideo, {}, m_verbose, m_currentImages, $(document).find('#info'));
 
     initApp(() => {
-        m_imageProcessor = new ImageProcessor(videoEl, canvasEl, $resultsContainer, m_isVideo, m_currentModel, m_verbose, m_currentImages, $(document).find('#info'));
-
         $resultsContainer.find(".resultsContents").text("Loading...");
         getVideoStream(videoEl, canvasEl, $resultsContainer);
     });
@@ -339,82 +337,82 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
     }
 }
 
-function captureImage(videoEl, canvasEl, $resultsContainer) {
-    var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
-    var $info = $(document).find(".info");
+// function captureImage(videoEl, canvasEl, $resultsContainer) {
+//     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
+//     var $info = $(document).find(".info");
 
-    let currentWidth = videoEl.videoWidth;
+//     let currentWidth = videoEl.videoWidth;
 
-    if (currentWidth === 0) {
-        currentWidth = Globals.defaultWidth;
-    }
+//     if (currentWidth === 0) {
+//         currentWidth = Globals.defaultWidth;
+//     }
 
-    let currentHeight = videoEl.videoHeight;
+//     let currentHeight = videoEl.videoHeight;
 
-    if (currentHeight === 0) {
-        currentHeight = Globals.defaultHeight;
-    }
+//     if (currentHeight === 0) {
+//         currentHeight = Globals.defaultHeight;
+//     }
 
-    var dataURL = $(canvasEl).data("file_source");
+//     var dataURL = $(canvasEl).data("file_source");
 
-    if (m_isVideo) {
-        if (videoEl.src === "") {
-            console.log(videoEl.src);
-            return;
-        }
+//     if (m_isVideo) {
+//         if (videoEl.src === "") {
+//             console.log(videoEl.src);
+//             return;
+//         }
 
-        canvasEl.width = currentWidth;
-        canvasEl.height = currentHeight;
-        canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
-        var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
-    }
+//         canvasEl.width = currentWidth;
+//         canvasEl.height = currentHeight;
+//         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+//         var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
+//     }
 
-    $.ajax({
-        url: path.join(Globals.endpoint, "predict"),
-        type: "POST",
-        data: JSON.stringify({
-            image: dataURL,
-            model: m_currentModel,
-            verbose: m_verbose
-        }),
-        contentType: "application/json; charset=utf-8",
-        dataType:"json",
+//     $.ajax({
+//         url: path.join(Globals.endpoint, "predict"),
+//         type: "POST",
+//         data: JSON.stringify({
+//             image: dataURL,
+//             model: m_currentModel,
+//             verbose: m_verbose
+//         }),
+//         contentType: "application/json; charset=utf-8",
+//         dataType:"json",
         
-    }).done((result) => {
-        Helpers.clearOverlay($resultsOverlay);
-        let success = String.prototype.toLowerCase.call(result.success) === "true";
-        createPredictions(result.predictions, success, result.error);
+//     }).done((result) => {
+//         Helpers.clearOverlay($resultsOverlay);
+//         let success = String.prototype.toLowerCase.call(result.success) === "true";
+//         createPredictions(result.predictions, success, result.error);
 
-        if (m_verbose) {
-            createHistory(result, $info);
-        }
+//         if (m_verbose) {
+//             createHistory(result, $info);
+//         }
         
-        if (m_isVideo && videoEl.src !== "") {
-            Helpers.fadeStuff($resultsOverlay);
-        }
+//         if (m_isVideo && videoEl.src !== "") {
+//             Helpers.fadeStuff($resultsOverlay);
+//         }
 
-        if (m_isVideo) {
-            // When one request is done, do it all over again...
-            captureImage(videoEl, canvasEl, $resultsContainer);
-        }
-        else {
-            if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
-                m_currentImages.shift();
+//         if (m_isVideo) {
+//             // When one request is done, do it all over again...
+//             captureImage(videoEl, canvasEl, $resultsContainer);
+//         }
+//         else {
+//             if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
+//                 m_currentImages.shift();
 
-                Helpers.sleep(2000).then(() => {
-                    updateImage(canvasEl, videoEl, $resultsContainer)
-                });
-            }
-        }
-    }).fail((jqXHR, textStatus, errorThrown) => {
-        Helpers.clearOverlay($resultsOverlay);
-        createPredictions(null, false, jqXHR.responseJSON.error);
+//                 Helpers.sleep(2000).then(() => {
+//                     updateImage(canvasEl, videoEl, $resultsContainer)
+//                 });
+//             }
+//         }
+//     }).fail((jqXHR, textStatus, errorThrown) => {
+//         Helpers.clearOverlay($resultsOverlay);
+//         createPredictions(null, false, jqXHR.responseJSON.error);
 
-        if (m_isVideo) {
-            captureImage(videoEl, canvasEl, $resultsContainer);
-        }
-    });
-}
+//         if (m_isVideo) {
+//             captureImage(videoEl, canvasEl, $resultsContainer);
+//         }
+//     });
+// }
 
 function createPredictions(predictions, success, error) {
     if (m_reactPredictions === null) {
