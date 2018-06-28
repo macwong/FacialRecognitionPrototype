@@ -392,9 +392,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         else {
             if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
                 m_currentImages.shift();
-            }
-
-            if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
+                
                 sleep(2000).then(() => {
                     updateImage(canvasEl, videoEl, $resultsContainer)
                 });
