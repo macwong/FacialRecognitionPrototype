@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Predictions from './react/predictions';
 import History from './react/history';
 import Info from './react/info';
+import Viewer from './react/viewer';
 import Helpers from './helpers';
 
 const electron = require("electron");
@@ -153,6 +154,11 @@ function getVideoStream(videoEl, canvasEl, $resultsContainer) {
 }
 
 $(document).ready(() => {
+    ReactDOM.render(
+        <Viewer />,
+        document.getElementById("viewerContainer")
+    );
+
     const videoEl = document.getElementById("video");
     const canvasEl = document.getElementById("canvas");
     const $resultsContainer = $(document).find(".resultsContainer");
