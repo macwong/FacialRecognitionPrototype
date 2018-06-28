@@ -56,5 +56,13 @@ export default class Helpers {
     static clearOverlay($resultsOverlay) {
         $resultsOverlay.stop(true).css('opacity', '0.0');
     }
+
+    static fadeStuff($resultsOverlay) {
+        $resultsOverlay.fadeTo(7500, 1.0);
+    }
+
+    static sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 }
 

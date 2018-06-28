@@ -253,7 +253,7 @@ function openVideo(videoEl, canvasEl, $resultsContainer) {
         function (filePaths) {
             $(videoEl).prop("controls", true);
             
-            fadeStuff($resultsContainer.find(".resultsOverlay"));
+            Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
             captureImage(videoEl, canvasEl, $resultsContainer);
 
             videoEl.src = filePaths[0];
@@ -322,7 +322,7 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
             }
         })();
 
-        fadeStuff($resultsContainer.find(".resultsOverlay"));
+        Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
         captureImage(videoEl, canvasEl, $resultsContainer);
     }
 
@@ -383,7 +383,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         }
         
         if (m_isVideo && videoEl.src !== "") {
-            fadeStuff($resultsOverlay);
+            Helpers.fadeStuff($resultsOverlay);
         }
 
         if (m_isVideo) {
@@ -394,7 +394,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
                 m_currentImages.shift();
 
-                sleep(2000).then(() => {
+                Helpers.sleep(2000).then(() => {
                     updateImage(canvasEl, videoEl, $resultsContainer)
                 });
             }
@@ -407,14 +407,6 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             captureImage(videoEl, canvasEl, $resultsContainer);
         }
     });
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function fadeStuff($resultsOverlay) {
-    $resultsOverlay.fadeTo(7500, 1.0);
 }
 
 function createPredictions(predictions, success, error) {
