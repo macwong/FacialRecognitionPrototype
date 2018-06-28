@@ -1,17 +1,28 @@
 import React, {Component} from 'react';
 import Block from '../block';
+import $ from 'jquery';
+import path from 'path';
+import Helpers from '../../helpers';
 
 export default class AddFaceBlock extends Component {
     constructor(props) {
         super(props);
 
-        this.infoMessage = "Clicking \"Add\" will add this person to the training data.";
-
         this.state = {
-            model_info: props.model_info,
             addFace: "",
-            infoMessage: this.infoMessage,
-            image: this.props.image
+            buttonClass: "add-new-face",
+            infoMessage: "Clicking \"Add\" will add this person to the training data."
+        };
+    }
+
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        if (this.props.addFace !== prevProps.addFace) {
+            this.setState({
+                addFace: "",
+                buttonClass: "add-new-face",
+                infoMessage: "Clicking \"Add\" will add this person to the training data."
+            })
         }
     }
 
@@ -26,7 +37,7 @@ export default class AddFaceBlock extends Component {
                     />
                     <datalist id="names" className="data-list">
                     {
-                        this.state.model_info.class_names.map((name) => {
+                        this.props.model_info.class_names.map((name) => {
                             return (
                                 <option key={name} value={name} />
                             );
@@ -35,7 +46,7 @@ export default class AddFaceBlock extends Component {
                     </datalist>
                 </div>
                 <div className="add-container">
-                    <button className="add-new-face" onClick={this.onAddNewFaceClick.bind(this)}>Add</button>
+                    <button className={this.state.buttonClass} onClick={this.onAddNewFaceClick.bind(this)}>Add</button>
                     <div className="add-info">{this.state.infoMessage}</div>
                 </div>
             </Block>
@@ -48,14 +59,14 @@ export default class AddFaceBlock extends Component {
 
     onAddNewFaceClick(e) {
         let $button = $(e.currentTarget); 
-        let model_name = this.state.model_info.model_name;
+        let model_name = this.props.model_info.model_name;
 
         if (!$button.hasClass("disabled")) {
             $.ajax({
                 url: path.join(Helpers.endpoint, "addface"),
                 type: "POST",
                 data: JSON.stringify({
-                    image: this.state.image,
+                    image: this.props.image,
                     model: model_name,
                     name: this.state.addFace
                 }),
@@ -67,7 +78,9 @@ export default class AddFaceBlock extends Component {
                 });
             });
 
-            $button.addClass("disabled");
+            this.setState({
+                buttonClass: this.state.buttonClass + " disabled"
+            });
         }
     }
 

@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import Helpers from '../helpers';
-import $ from '../jquery';
-import path from 'path';
 import ModelInfoBlock from './InfoBlocks/modelinfoblock';
 import EmbeddingsBlock from './InfoBlocks/embeddingsblock';
 import TopPredictionsBlock from './InfoBlocks/toppredictionsblock';
@@ -52,7 +50,8 @@ export default class Info extends Component {
                 <TopPredictionsBlock pred_info={pred.pred_info} />
                 <AddFaceBlock 
                     model_info={pred.model_info} 
-                    pred_info={pred.image} 
+                    image={pred.image}
+                    addFace={pred.pred_name}
                 />
             </div>
         );
