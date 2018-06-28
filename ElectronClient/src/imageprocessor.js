@@ -1,7 +1,14 @@
 import Globals from './globals';
+import Helpers from './helpers';
 import $ from 'jquery';
+import path from 'path';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Predictions from './react/predictions';
+import History from './react/history';
+import Info from './react/info';
 
-export default class ImageProcessor {
+export class ImageProcessor {
     constructor(videoEl, canvasEl, $resultsContainer, isVideo, currentModel, verbose, currentImages, $info) {
         this.videoEl = videoEl;
         this.canvasEl = canvasEl;
@@ -11,6 +18,8 @@ export default class ImageProcessor {
         this.verbose = verbose;
         this.currentImages = currentImages;
         this.$info = $info;
+
+        this.predictionHistory = {};
 
         this.reactPredictions = null;
         this.reactHistory = null;
@@ -169,7 +178,7 @@ export default class ImageProcessor {
                 <History 
                     predictions={prediction.predictions}
                     $info={$info}
-                    infoCallback={createInfo}
+                    infoCallback={this.createInfo}
                 />,
                 document.getElementById("history")
             );
@@ -181,7 +190,7 @@ export default class ImageProcessor {
         // Store in a dictionary
         for (var pred in prediction.predictions) {
             const predValues = prediction.predictions[pred];
-            m_predictionHistory[predValues.prediction_id] = predValues;
+            this.predictionHistory[predValues.prediction_id] = predValues;
         }
     }
     
@@ -189,13 +198,13 @@ export default class ImageProcessor {
         if (this.reactInfo === null) {
             this.reactInfo = ReactDOM.render(
                 <Info
-                    prediction={m_predictionHistory[predictionID]}
+                    prediction={this.predictionHistory[predictionID]}
                 />,
                 document.getElementById("info")
             );
         }
         else {
-            this.reactInfo.updateInfo(m_predictionHistory[predictionID]);
+            this.reactInfo.updateInfo(this.predictionHistory[predictionID]);
         }
     }
 }

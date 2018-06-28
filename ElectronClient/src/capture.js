@@ -6,6 +6,7 @@ import Info from './react/info';
 import Viewer from './react/viewer';
 import Globals from './globals';
 import Helpers from './helpers';
+import { ImageProcessor } from './imageprocessor';
 
 const electron = require("electron");
 const { remote } = electron;
@@ -24,6 +25,8 @@ let m_verbose = false;
 let m_reactPredictions = null;
 let m_reactHistory = null;
 let m_reactInfo = null;
+
+let m_imageProcessor = null;
 
 function getModels($select) {
     var deferred = $.Deferred();
@@ -141,8 +144,8 @@ function getVideoStream(videoEl, canvasEl, $resultsContainer) {
         videoEl.src = URL.createObjectURL(stream);
 
         videoEl.onloadedmetadata = (e) => {
-            captureImage(videoEl, canvasEl, $resultsContainer);
-
+            // captureImage(videoEl, canvasEl, $resultsContainer);
+            m_imageProcessor.captureImage();
         };
     }).catch(() =>  {
         alert('could not connect stream');
@@ -163,6 +166,8 @@ $(document).ready(() => {
     
 
     initApp(() => {
+        m_imageProcessor = new ImageProcessor(videoEl, canvasEl, $resultsContainer, m_isVideo, m_currentModel, m_verbose, m_currentImages, $(document).find('#info'));
+
         $resultsContainer.find(".resultsContents").text("Loading...");
         getVideoStream(videoEl, canvasEl, $resultsContainer);
     });
@@ -254,7 +259,8 @@ function openVideo(videoEl, canvasEl, $resultsContainer) {
             $(videoEl).prop("controls", true);
             
             Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
-            captureImage(videoEl, canvasEl, $resultsContainer);
+            // captureImage(videoEl, canvasEl, $resultsContainer);
+            m_imageProcessor.captureImage();
 
             videoEl.src = filePaths[0];
         }
@@ -323,7 +329,8 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
         })();
 
         Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
-        captureImage(videoEl, canvasEl, $resultsContainer);
+        // captureImage(videoEl, canvasEl, $resultsContainer);
+        m_imageProcessor.captureImage();
     }
 
     if (m_currentImages !== null && m_currentImages !== undefined) {
