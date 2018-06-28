@@ -4,7 +4,7 @@ import Predictions from './react/predictions';
 import History from './react/history';
 import Info from './react/info';
 import Viewer from './react/viewer';
-import Helpers from './helpers';
+import Globals from './globals';
 
 const electron = require("electron");
 const { remote } = electron;
@@ -28,7 +28,7 @@ function getModels($select) {
     var deferred = $.Deferred();
 
     $.ajax({
-        url: path.join(Helpers.endpoint, "getmodels"),
+        url: path.join(Globals.endpoint, "getmodels"),
         type: "GET",
         dataType:"json"
     }).done((result) => {
@@ -100,7 +100,7 @@ function initApp(callback) {
                     $loading.addClass("is-visible");
 
                     $.ajax({
-                        url: path.join(Helpers.endpoint, "train"),
+                        url: path.join(Globals.endpoint, "train"),
                         type: "POST",
                         data: JSON.stringify({
                             input_folder_path: $folderLocation.val(),
@@ -215,8 +215,8 @@ $(document).ready(() => {
                 if ($video.hasClass("file")) {
                     $video.removeClass("file");
 
-                    canvasEl.width = Helpers.defaultWidth;
-                    canvasEl.height = Helpers.defaultHeight;
+                    canvasEl.width = Globals.defaultWidth;
+                    canvasEl.height = Globals.defaultHeight;
                 }
                 
                 $video.hide();
@@ -289,30 +289,30 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
         var ratio = 0;
 
         // Check if the current width is larger than the max
-        if(imageWidth > Helpers.defaultWidth){
-            ratio = Helpers.defaultWidth / imageWidth;   // get ratio for scaling image
-            $(this).css("width", Helpers.defaultWidth); // Set new width
+        if(imageWidth > Globals.defaultWidth){
+            ratio = Globals.defaultWidth / imageWidth;   // get ratio for scaling image
+            $(this).css("width", Globals.defaultWidth); // Set new width
             $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
         }
         
         // Check if current height is larger than max
-        if(imageHeight > Helpers.defaultHeight){
-            ratio = Helpers.defaultHeight / imageHeight; // get ratio for scaling image
-            $(this).css("height", Helpers.defaultHeight);   // Set new height
+        if(imageHeight > Globals.defaultHeight){
+            ratio = Globals.defaultHeight / imageHeight; // get ratio for scaling image
+            $(this).css("height", Globals.defaultHeight);   // Set new height
             $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
         }
         
-        canvasLeft = (Helpers.defaultWidth - imageWidth) / 2;
-        canvasTop = (Helpers.defaultHeight - imageHeight) / 2;
+        canvasLeft = (Globals.defaultWidth - imageWidth) / 2;
+        canvasTop = (Globals.defaultHeight - imageHeight) / 2;
         
         let opacity = 0;
         
         (function fadeIn() {
-            ctx.clearRect(0, 0, Helpers.defaultWidth, Helpers.defaultHeight);
+            ctx.clearRect(0, 0, Globals.defaultWidth, Globals.defaultHeight);
             ctx.globalAlpha = opacity;
             ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
             opacity += 0.015;
@@ -338,13 +338,13 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     let currentWidth = videoEl.videoWidth;
 
     if (currentWidth === 0) {
-        currentWidth = Helpers.defaultWidth;
+        currentWidth = Globals.defaultWidth;
     }
 
     let currentHeight = videoEl.videoHeight;
 
     if (currentHeight === 0) {
-        currentHeight = Helpers.defaultHeight;
+        currentHeight = Globals.defaultHeight;
     }
 
     var dataURL = $(canvasEl).data("file_source");
@@ -362,7 +362,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     }
 
     $.ajax({
-        url: path.join(Helpers.endpoint, "predict"),
+        url: path.join(Globals.endpoint, "predict"),
         type: "POST",
         data: JSON.stringify({
             image: dataURL,

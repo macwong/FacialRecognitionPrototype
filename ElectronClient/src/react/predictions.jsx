@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Helpers from '../helpers';
+import Globals from '../globals';
 
 export default class Predictions extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ export default class Predictions extends Component {
 
                 return (
                     <figure key={pred.prediction_id} className="person">
-                        <img src={Helpers.pngSource + pred.image} />
+                        <img src={Globals.pngSource + pred.image} />
                         <figcaption className="caption">{pred.pred_name}</figcaption>
                         <img className="icon" src={Helpers.getPredictionIcon(distance)} />
                     </figure>

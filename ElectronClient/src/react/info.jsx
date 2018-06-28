@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Helpers from '../helpers';
+import Globals from '../globals';
 import ModelInfoBlock from './InfoBlocks/modelinfoblock';
 import EmbeddingsBlock from './InfoBlocks/embeddingsblock';
 import TopPredictionsBlock from './InfoBlocks/toppredictionsblock';
@@ -26,7 +27,7 @@ export default class Info extends Component {
         return (
             <div className="info">
                 <figure className="profile">
-                    <img className="profile-pic" src={Helpers.pngSource + pred.image} />
+                    <img className="profile-pic" src={Globals.pngSource + pred.image} />
                     <figcaption className="caption">
                         <h2>{pred.pred_name}</h2>
                     </figcaption>

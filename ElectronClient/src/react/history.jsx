@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Helpers from '../helpers';
+import Globals from '../globals';
 import $ from '../jquery';
 
 export default class History extends Component {
@@ -34,7 +35,7 @@ export default class History extends Component {
                     data-prediction_id={pred.prediction_id}
                     onClick={this.onRowClick.bind(this)}
                 >
-                    <img className="predicted-image" src={Helpers.pngSource + pred.image} />
+                    <img className="predicted-image" src={Globals.pngSource + pred.image} />
                     <div className="row-text">
                         <div className="name">{pred.pred_name}</div>
                         <div className="time">{pred.model_info.model_name}</div>

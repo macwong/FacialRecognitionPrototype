@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Block from '../block';
 import $ from 'jquery';
 import path from 'path';
-import Helpers from '../../helpers';
+import Globals from '../../globals';
 
 export default class AddFaceBlock extends Component {
     constructor(props) {
@@ -63,7 +63,7 @@ export default class AddFaceBlock extends Component {
 
         if (!$button.hasClass("disabled")) {
             $.ajax({
-                url: path.join(Helpers.endpoint, "addface"),
+                url: path.join(Globals.endpoint, "addface"),
                 type: "POST",
                 data: JSON.stringify({
                     image: this.props.image,
