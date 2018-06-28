@@ -14,9 +14,6 @@ const $ = require("./jquery")
 const { dialog } = electron.remote;
 const path = require('path')
 
-const m_defaultWidth = 640;
-const m_defaultHeight = 480;
-
 let m_isVideo = true;
 let m_currentModel;
 let m_predictionHistory = {};
@@ -218,8 +215,8 @@ $(document).ready(() => {
                 if ($video.hasClass("file")) {
                     $video.removeClass("file");
 
-                    canvasEl.width = m_defaultWidth;
-                    canvasEl.height = m_defaultHeight;
+                    canvasEl.width = Helpers.defaultWidth;
+                    canvasEl.height = Helpers.defaultHeight;
                 }
                 
                 $video.hide();
@@ -292,30 +289,30 @@ function updateImage(canvasEl, videoEl, $resultsContainer) {
         var ratio = 0;
 
         // Check if the current width is larger than the max
-        if(imageWidth > m_defaultWidth){
-            ratio = m_defaultWidth / imageWidth;   // get ratio for scaling image
-            $(this).css("width", m_defaultWidth); // Set new width
+        if(imageWidth > Helpers.defaultWidth){
+            ratio = Helpers.defaultWidth / imageWidth;   // get ratio for scaling image
+            $(this).css("width", Helpers.defaultWidth); // Set new width
             $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
         }
         
         // Check if current height is larger than max
-        if(imageHeight > m_defaultHeight){
-            ratio = m_defaultHeight / imageHeight; // get ratio for scaling image
-            $(this).css("height", m_defaultHeight);   // Set new height
+        if(imageHeight > Helpers.defaultHeight){
+            ratio = Helpers.defaultHeight / imageHeight; // get ratio for scaling image
+            $(this).css("height", Helpers.defaultHeight);   // Set new height
             $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
         }
         
-        canvasLeft = (m_defaultWidth - imageWidth) / 2;
-        canvasTop = (m_defaultHeight - imageHeight) / 2;
+        canvasLeft = (Helpers.defaultWidth - imageWidth) / 2;
+        canvasTop = (Helpers.defaultHeight - imageHeight) / 2;
         
         let opacity = 0;
         
         (function fadeIn() {
-            ctx.clearRect(0, 0, m_defaultWidth, m_defaultHeight);
+            ctx.clearRect(0, 0, Helpers.defaultWidth, Helpers.defaultHeight);
             ctx.globalAlpha = opacity;
             ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
             opacity += 0.015;
@@ -341,13 +338,13 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     let currentWidth = videoEl.videoWidth;
 
     if (currentWidth === 0) {
-        currentWidth = m_defaultWidth;
+        currentWidth = Helpers.defaultWidth;
     }
 
     let currentHeight = videoEl.videoHeight;
 
     if (currentHeight === 0) {
-        currentHeight = m_defaultHeight;
+        currentHeight = Helpers.defaultHeight;
     }
 
     var dataURL = $(canvasEl).data("file_source");
