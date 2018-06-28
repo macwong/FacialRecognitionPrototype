@@ -18,8 +18,6 @@ const m_defaultWidth = 640;
 const m_defaultHeight = 480;
 
 let m_isVideo = true;
-let m_currentWidth = m_defaultWidth;
-let m_currentHeight = m_defaultHeight;
 let m_currentModel;
 let m_predictionHistory = {};
 let m_currentImages = [];
@@ -222,8 +220,6 @@ $(document).ready(() => {
 
                     canvasEl.width = m_defaultWidth;
                     canvasEl.height = m_defaultHeight;
-                    m_currentWidth = m_defaultWidth;
-                    m_currentHeight = m_defaultHeight;
                 }
                 
                 $video.hide();
@@ -342,16 +338,16 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
     var $info = $(document).find(".info");
 
-    m_currentWidth = videoEl.videoWidth;
+    let currentWidth = videoEl.videoWidth;
 
-    if (m_currentWidth === 0) {
-        m_currentWidth = m_defaultWidth;
+    if (currentWidth === 0) {
+        currentWidth = m_defaultWidth;
     }
 
-    m_currentHeight = videoEl.videoHeight;
+    let currentHeight = videoEl.videoHeight;
 
-    if (m_currentHeight === 0) {
-        m_currentHeight = m_defaultHeight;
+    if (currentHeight === 0) {
+        currentHeight = m_defaultHeight;
     }
 
     var dataURL = $(canvasEl).data("file_source");
@@ -362,8 +358,8 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
             return;
         }
 
-        canvasEl.width = m_currentWidth;
-        canvasEl.height = m_currentHeight;
+        canvasEl.width = currentWidth;
+        canvasEl.height = currentHeight;
         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
         var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
     }
