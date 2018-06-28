@@ -5,6 +5,7 @@ import History from './react/history';
 import Info from './react/info';
 import Viewer from './react/viewer';
 import Globals from './globals';
+import Helpers from './helpers';
 
 const electron = require("electron");
 const { remote } = electron;
@@ -373,7 +374,7 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         dataType:"json",
         
     }).done((result) => {
-        clearOverlay($resultsOverlay);
+        Helpers.clearOverlay($resultsOverlay);
         let success = String.prototype.toLowerCase.call(result.success) === "true";
         createPredictions(result.predictions, success, result.error);
 
@@ -392,14 +393,14 @@ function captureImage(videoEl, canvasEl, $resultsContainer) {
         else {
             if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
                 m_currentImages.shift();
-                
+
                 sleep(2000).then(() => {
                     updateImage(canvasEl, videoEl, $resultsContainer)
                 });
             }
         }
     }).fail((jqXHR, textStatus, errorThrown) => {
-        clearOverlay($resultsOverlay);
+        Helpers.clearOverlay($resultsOverlay);
         createPredictions(null, false, jqXHR.responseJSON.error);
 
         if (m_isVideo) {
@@ -414,10 +415,6 @@ function sleep(ms) {
 
 function fadeStuff($resultsOverlay) {
     $resultsOverlay.fadeTo(7500, 1.0);
-}
-
-function clearOverlay($resultsOverlay) {
-    $resultsOverlay.stop(true).css('opacity', '0.0');
 }
 
 function createPredictions(predictions, success, error) {

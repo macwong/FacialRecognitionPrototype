@@ -10,7 +10,6 @@ export default class Helpers {
     
         return null;
     }
-
     
     static getRating(distance) {
         if (distance < 0.75) {
@@ -52,6 +51,10 @@ export default class Helpers {
         let prob = probability * 100;
         prob = prob.toFixed(2);
         return prob + "%";
+    }
+
+    static clearOverlay($resultsOverlay) {
+        $resultsOverlay.stop(true).css('opacity', '0.0');
     }
 }
 
