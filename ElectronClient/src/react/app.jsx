@@ -34,6 +34,10 @@ export default class App extends Component {
         this.reactPredictions = null;
         this.reactHistory = null;
         this.reactInfo = null;
+
+        this.state = {
+            predictions: []
+        };
     }
 
     render() {
@@ -42,6 +46,10 @@ export default class App extends Component {
                 <div className="videoContainer">
                     <div className="column column-one">
                         <div id="history" className="history">
+                            <History 
+                                predictions={this.state.predictions}
+                                infoCallback={this.createInfo.bind(this)}
+                            />
                         </div>
                     </div>
                     <div className="column column-two">
@@ -350,7 +358,7 @@ export default class App extends Component {
             this.createPredictions(result.predictions, success, result.error);
     
             if (this.verbose) {
-                this.createHistory(result, this.$info);
+                this.createHistory(result);
             }
             
             if (this.isVideo && this.videoEl.src !== "") {
@@ -451,20 +459,10 @@ export default class App extends Component {
         }
     }
     
-    createHistory(prediction, $info) {
-        if (this.reactHistory === null) {
-            this.reactHistory = ReactDOM.render(
-                <History 
-                    predictions={prediction.predictions}
-                    $info={$info}
-                    infoCallback={this.createInfo.bind(this)}
-                />,
-                document.getElementById("history")
-            );
-        }
-        else {
-            this.reactHistory.updateHistory(prediction.predictions);
-        }
+    createHistory(prediction) {
+        this.setState({
+            predictions: prediction.predictions
+        });
     
         // Store in a dictionary
         for (var pred in prediction.predictions) {

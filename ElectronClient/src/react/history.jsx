@@ -8,14 +8,22 @@ export default class History extends Component {
         super(props);
 
         this.state = {
-            predictionList: [{
-                time: this.props.predictions[0].pred_time,
-                predictions: this.props.predictions
-            }]
+            predictionList: []
         };
     }
 
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        if (this.props.predictions !== prevProps.predictions) {
+            this.updateHistory(this.props.predictions);
+        }
+    }
+
     render() {
+        if (this.state.predictionList.length === 0) {
+            return <div></div>;
+        }
+
         return this.state.predictionList.map((predItem) => {
             return (
                 <div key={predItem.time + predItem.predictions[0].prediction_id}>
