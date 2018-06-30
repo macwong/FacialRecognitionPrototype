@@ -131,7 +131,6 @@ function getVideoStream(videoEl, canvasEl, $resultsContainer) {
         videoEl.src = URL.createObjectURL(stream);
 
         videoEl.onloadedmetadata = (e) => {
-            // captureImage(videoEl, canvasEl, $resultsContainer);
             m_imageProcessor.captureImage();
         };
     }).catch(() =>  {
@@ -227,7 +226,7 @@ $(document).ready(() => {
     });
 
     $(canvasEl).click((e) => {
-        openImage(videoEl, canvasEl, $resultsContainer);
+        openImage();
     });
 });
 
@@ -245,7 +244,6 @@ function openVideo(videoEl, canvasEl, $resultsContainer) {
             $(videoEl).prop("controls", true);
             
             Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
-            // captureImage(videoEl, canvasEl, $resultsContainer);
             m_imageProcessor.captureImage();
 
             videoEl.src = filePaths[0];
@@ -253,7 +251,7 @@ function openVideo(videoEl, canvasEl, $resultsContainer) {
     );    
 }
 
-function openImage(videoEl, canvasEl, $resultsContainer) {
+function openImage() {
     dialog.showOpenDialog(
         remote.getCurrentWindow(),
         {
@@ -269,187 +267,3 @@ function openImage(videoEl, canvasEl, $resultsContainer) {
         }
     );
 }
-
-// function updateImage(canvasEl, videoEl, $resultsContainer) {
-//     var ctx = canvasEl.getContext('2d');
-//     var img = new Image();
-//     img.onload = function() {
-//         var canvasLeft = 0;
-//         var canvasTop = 0;
-//         var imageWidth = img.width;
-//         var imageHeight = img.height;
-
-//         var ratio = 0;
-
-//         // Check if the current width is larger than the max
-//         if(imageWidth > Globals.defaultWidth){
-//             ratio = Globals.defaultWidth / imageWidth;   // get ratio for scaling image
-//             $(this).css("width", Globals.defaultWidth); // Set new width
-//             $(this).css("height", imageHeight * ratio);  // Scale height based on ratio
-//             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
-//             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
-//         }
-        
-//         // Check if current height is larger than max
-//         if(imageHeight > Globals.defaultHeight){
-//             ratio = Globals.defaultHeight / imageHeight; // get ratio for scaling image
-//             $(this).css("height", Globals.defaultHeight);   // Set new height
-//             $(this).css("width", imageWidth * ratio);    // Scale width based on ratio
-//             imageWidth = imageWidth * ratio;    // Reset width to match scaled image
-//             imageHeight = imageHeight * ratio;    // Reset height to match scaled image
-//         }
-        
-//         canvasLeft = (Globals.defaultWidth - imageWidth) / 2;
-//         canvasTop = (Globals.defaultHeight - imageHeight) / 2;
-        
-//         let opacity = 0;
-        
-//         (function fadeIn() {
-//             ctx.clearRect(0, 0, Globals.defaultWidth, Globals.defaultHeight);
-//             ctx.globalAlpha = opacity;
-//             ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
-//             opacity += 0.015;
-//             if (opacity < 1) {
-//                 requestAnimationFrame(fadeIn);
-//             }
-//         })();
-
-//         Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
-//         // captureImage(videoEl, canvasEl, $resultsContainer);
-//         m_imageProcessor.captureImage();
-//     }
-
-//     if (m_imageProcessor.currentImages !== null && m_imageProcessor.currentImages !== undefined) {
-//         img.src = m_imageProcessor.currentImages[0];
-//         $(canvasEl).data("file_source", m_imageProcessor.currentImages[0]);
-//     }
-// }
-
-// function captureImage(videoEl, canvasEl, $resultsContainer) {
-//     var $resultsOverlay = $resultsContainer.find(".resultsOverlay");
-//     var $info = $(document).find(".info");
-
-//     let currentWidth = videoEl.videoWidth;
-
-//     if (currentWidth === 0) {
-//         currentWidth = Globals.defaultWidth;
-//     }
-
-//     let currentHeight = videoEl.videoHeight;
-
-//     if (currentHeight === 0) {
-//         currentHeight = Globals.defaultHeight;
-//     }
-
-//     var dataURL = $(canvasEl).data("file_source");
-
-//     if (m_isVideo) {
-//         if (videoEl.src === "") {
-//             console.log(videoEl.src);
-//             return;
-//         }
-
-//         canvasEl.width = currentWidth;
-//         canvasEl.height = currentHeight;
-//         canvasEl.getContext('2d').drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
-//         var dataURL = canvasEl.toDataURL('image/jpeg', 1.0);
-//     }
-
-//     $.ajax({
-//         url: path.join(Globals.endpoint, "predict"),
-//         type: "POST",
-//         data: JSON.stringify({
-//             image: dataURL,
-//             model: m_currentModel,
-//             verbose: m_verbose
-//         }),
-//         contentType: "application/json; charset=utf-8",
-//         dataType:"json",
-        
-//     }).done((result) => {
-//         Helpers.clearOverlay($resultsOverlay);
-//         let success = String.prototype.toLowerCase.call(result.success) === "true";
-//         createPredictions(result.predictions, success, result.error);
-
-//         if (m_verbose) {
-//             createHistory(result, $info);
-//         }
-        
-//         if (m_isVideo && videoEl.src !== "") {
-//             Helpers.fadeStuff($resultsOverlay);
-//         }
-
-//         if (m_isVideo) {
-//             // When one request is done, do it all over again...
-//             captureImage(videoEl, canvasEl, $resultsContainer);
-//         }
-//         else {
-//             if (m_currentImages !== null && m_currentImages !== undefined && m_currentImages.length > 0) {
-//                 m_currentImages.shift();
-
-//                 Helpers.sleep(2000).then(() => {
-//                     updateImage(canvasEl, videoEl, $resultsContainer)
-//                 });
-//             }
-//         }
-//     }).fail((jqXHR, textStatus, errorThrown) => {
-//         Helpers.clearOverlay($resultsOverlay);
-//         createPredictions(null, false, jqXHR.responseJSON.error);
-
-//         if (m_isVideo) {
-//             captureImage(videoEl, canvasEl, $resultsContainer);
-//         }
-//     });
-// }
-
-// function createPredictions(predictions, success, error) {
-//     if (m_reactPredictions === null) {
-//         m_reactPredictions = ReactDOM.render(
-//             <Predictions 
-//                 predictions={predictions}
-//                 success={success}
-//                 error={error}
-//             />,
-//             document.getElementById("resultsContents")
-//         );
-//     }
-//     else {
-//         m_reactPredictions.updatePredictions(predictions, success, error);
-//     }
-// }
-
-// function createHistory(prediction, $info) {
-//     if (m_reactHistory === null) {
-//         m_reactHistory = ReactDOM.render(
-//             <History 
-//                 predictions={prediction.predictions}
-//                 $info={$info}
-//                 infoCallback={createInfo}
-//             />,
-//             document.getElementById("history")
-//         );
-//     }
-//     else {
-//         m_reactHistory.updateHistory(prediction.predictions);
-//     }
-
-//     // Store in a dictionary
-//     for (var pred in prediction.predictions) {
-//         const predValues = prediction.predictions[pred];
-//         m_predictionHistory[predValues.prediction_id] = predValues;
-//     }
-// }
-
-// function createInfo(predictionID) {
-//     if (m_reactInfo === null) {
-//         m_reactInfo = ReactDOM.render(
-//             <Info
-//                 prediction={m_predictionHistory[predictionID]}
-//             />,
-//             document.getElementById("info")
-//         );
-//     }
-//     else {
-//         m_reactInfo.updateInfo(m_predictionHistory[predictionID]);
-//     }
-// }
