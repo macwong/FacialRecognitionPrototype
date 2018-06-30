@@ -11,9 +11,7 @@ export default class App extends Component {
                         </div>
                     </div>
                     <div className="column column-two">
-                        <div id="viewerContainer">
-                            <Viewer />
-                        </div>
+                        <Viewer />
                     </div>
                     <div className="column column-three">
                         <div id="info">
