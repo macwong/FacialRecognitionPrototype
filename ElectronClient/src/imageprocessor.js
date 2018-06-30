@@ -43,7 +43,6 @@ export class ImageProcessor {
     
         if (this.isVideo) {
             if (this.videoEl.src === "") {
-                console.log(this.videoEl.src);
                 return;
             }
     
@@ -177,7 +176,7 @@ export class ImageProcessor {
                 <History 
                     predictions={prediction.predictions}
                     $info={$info}
-                    infoCallback={this.createInfo}
+                    infoCallback={this.createInfo.bind(this)}
                 />,
                 document.getElementById("history")
             );
@@ -195,6 +194,7 @@ export class ImageProcessor {
     
     createInfo(predictionID) {
         if (this.reactInfo === null) {
+            
             this.reactInfo = ReactDOM.render(
                 <Info
                     prediction={this.predictionHistory[predictionID]}
