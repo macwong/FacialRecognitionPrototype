@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Viewer from './react/viewer';
-const $ = require("./jquery")
+import App from './react/app';
+import $ from 'jquery';
 
 $(document).ready(() => {
     ReactDOM.render(
-        <Viewer />,
-        document.getElementById("viewerContainer")
+        <App />,
+        document.getElementById("container")
     );
 });
 

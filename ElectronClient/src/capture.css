@@ -37,6 +37,10 @@ video.file {
     display: none;
 }
 
+.history {
+  display: none;
+}
+
 .container {
   display: flex;
 }
