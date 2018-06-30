@@ -1,25 +1,39 @@
 import React, {Component} from 'react';
 import Viewer from './viewer';
-import { ImageProcessor } from '../imageprocessor';
 import Globals from '../globals';
 import Helpers from '../helpers';
 import electron from 'electron';
 import {remote} from 'electron';
 import $ from 'jquery';
 
+import ReactDOM from 'react-dom';
+import Predictions from './predictions';
+import History from './history';
+import Info from './info';
+import path from 'path';
+
 const { dialog } = electron.remote;
-const path = require('path')
 
 export default class App extends Component {
     constructor(props) {
         super(props);
 
-        this.imageProcessor = null;
         this.videoEl = null;
         this.canvasEl = null;
         this.$resultsContainer = null;
         this.$history = null;
         this.$info = null;
+
+        this.$resultsOverlay = null;
+        this.isVideo = true;
+        this.currentModel = "";
+        this.verbose = false;
+        this.currentImages = [];
+        this.predictionHistory = {};
+
+        this.reactPredictions = null;
+        this.reactHistory = null;
+        this.reactInfo = null;
     }
 
     render() {
@@ -52,13 +66,7 @@ export default class App extends Component {
         this.$resultsContainer = $(document.getElementById("resultsContainer"));
         this.$history = $(document.getElementById("history"));
         this.$info = $(document.getElementById("info"));
-
-        this.imageProcessor = new ImageProcessor(
-            this.videoEl, 
-            this.canvasEl, 
-            this.$resultsContainer.find(".resultsOverlay"), 
-            this.$info
-        );
+        this.$resultsOverlay = this.$resultsContainer.find(".resultsOverlay");
 
         this.initApp(() => {
             this.$resultsContainer.find(".resultsContents").text("Loading...");
@@ -71,12 +79,12 @@ export default class App extends Component {
             if ($inputCheckbox.is(":checked")) {
                 this.$history.show();
                 this.$info.show();
-                this.imageProcessor.verbose = true;
+                this.verbose = true;
             }
             else {
                 this.$history.hide();
                 this.$info.hide();
-                this.imageProcessor.verbose = false;
+                this.verbose = false;
             }
         });
     
@@ -99,7 +107,7 @@ export default class App extends Component {
                 if ($parent.hasClass("option-live") || $parent.hasClass("option-video")) {
                     $video.show();
                     $(this.canvasEl).hide();
-                    this.imageProcessor.isVideo = true;
+                    this.isVideo = true;
     
                     if ($parent.hasClass("option-live")) {
                         this.getVideoStream();
@@ -122,7 +130,7 @@ export default class App extends Component {
                     $video.prop("src", "");
                     $video.removeAttr("src");
                     $(this.canvasEl).show();
-                    this.imageProcessor.isVideo = false;
+                    this.isVideo = false;
                 }
             }
         });
@@ -145,10 +153,10 @@ export default class App extends Component {
         this.getModels($select).then(() => {
             $models.html($select);
     
-            this.imageProcessor.currentModel = $select.find("option:first").val();
+            this.currentModel = $select.find("option:first").val();
     
             $select.change((e) => {
-                this.imageProcessor.currentModel = $select.val();
+                this.currentModel = $select.val();
             })
     
             $('.add-model').on('click', (e) => {
@@ -211,7 +219,7 @@ export default class App extends Component {
                             });
     
                             this.getModels($select).then(() => {
-                                $select.val(this.imageProcessor.currentModel);
+                                $select.val(this.currentModel);
                             });
                         }).fail((jqXHR, textStatus, errorThrown) => {
                             $loading.removeClass("is-visible");
@@ -231,7 +239,7 @@ export default class App extends Component {
             this.videoEl.src = URL.createObjectURL(stream);
     
             this.videoEl.onloadedmetadata = (e) => {
-                this.imageProcessor.captureImage();
+                this.captureImage();
             };
         }).catch(() =>  {
             alert('could not connect stream');
@@ -275,7 +283,7 @@ export default class App extends Component {
                 $(this.videoEl).prop("controls", true);
                 
                 Helpers.fadeStuff(this.$resultsContainer.find(".resultsOverlay"));
-                this.imageProcessor.captureImage();
+                this.captureImage();
     
                 this.videoEl.src = filePaths[0];
             }
@@ -293,9 +301,190 @@ export default class App extends Component {
                 properties: ['openFile', 'multiSelections']
             },
             (filePaths) => {
-                this.imageProcessor.currentImages = filePaths;
-                this.imageProcessor.updateImage();
+                this.currentImages = filePaths;
+                this.updateImage();
             }
         );
-    }   
+    }
+    
+    captureImage() {
+        let currentWidth = this.videoEl.videoWidth;
+    
+        if (currentWidth === 0) {
+            currentWidth = Globals.defaultWidth;
+        }
+    
+        let currentHeight = this.videoEl.videoHeight;
+    
+        if (currentHeight === 0) {
+            currentHeight = Globals.defaultHeight;
+        }
+    
+        var dataURL = $(this.canvasEl).data("file_source");
+    
+        if (this.isVideo) {
+            if (this.videoEl.src === "") {
+                return;
+            }
+    
+            this.canvasEl.width = currentWidth;
+            this.canvasEl.height = currentHeight;
+            this.canvasEl.getContext('2d').drawImage(this.videoEl, 0, 0, this.canvasEl.width, this.canvasEl.height);
+            var dataURL = this.canvasEl.toDataURL('image/jpeg', 1.0);
+        }
+    
+        $.ajax({
+            url: path.join(Globals.endpoint, "predict"),
+            type: "POST",
+            data: JSON.stringify({
+                image: dataURL,
+                model: this.currentModel,
+                verbose: this.verbose
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType:"json",
+            
+        }).done((result) => {
+            Helpers.clearOverlay(this.$resultsOverlay);
+            let success = String.prototype.toLowerCase.call(result.success) === "true";
+            this.createPredictions(result.predictions, success, result.error);
+    
+            if (this.verbose) {
+                this.createHistory(result, this.$info);
+            }
+            
+            if (this.isVideo && this.videoEl.src !== "") {
+                Helpers.fadeStuff(this.$resultsOverlay);
+            }
+    
+            if (this.isVideo) {
+                // When one request is done, do it all over again...
+                this.captureImage();
+            }
+            else {
+                if (this.currentImages !== null && this.currentImages !== undefined && this.currentImages.length > 0) {
+                    this.currentImages.shift();
+                    
+                    Helpers.sleep(2000).then(() => {
+                        this.updateImage();
+                    });
+                }
+            }
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            Helpers.clearOverlay(this.$resultsOverlay);
+            this.createPredictions(null, false, jqXHR.responseJSON.error);
+    
+            if (this.isVideo) {
+                this.captureImage();
+            }
+        });
+    }
+
+    updateImage() {
+        var ctx = this.canvasEl.getContext('2d');
+        var img = new Image();
+        img.onload = () => {
+            var canvasLeft = 0;
+            var canvasTop = 0;
+            var imageWidth = img.width;
+            var imageHeight = img.height;
+    
+            var ratio = 0;
+    
+            // Check if the current width is larger than the max
+            if(imageWidth > Globals.defaultWidth){
+                ratio = Globals.defaultWidth / imageWidth;   // get ratio for scaling image
+                $(img).css("width", Globals.defaultWidth); // Set new width
+                $(img).css("height", imageHeight * ratio);  // Scale height based on ratio
+                imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+                imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+            }
+            
+            // Check if current height is larger than max
+            if(imageHeight > Globals.defaultHeight){
+                ratio = Globals.defaultHeight / imageHeight; // get ratio for scaling image
+                $(img).css("height", Globals.defaultHeight);   // Set new height
+                $(img).css("width", imageWidth * ratio);    // Scale width based on ratio
+                imageWidth = imageWidth * ratio;    // Reset width to match scaled image
+                imageHeight = imageHeight * ratio;    // Reset height to match scaled image
+            }
+            
+            canvasLeft = (Globals.defaultWidth - imageWidth) / 2;
+            canvasTop = (Globals.defaultHeight - imageHeight) / 2;
+            
+            let opacity = 0;
+            
+            (function fadeIn() {
+                ctx.clearRect(0, 0, Globals.defaultWidth, Globals.defaultHeight);
+                ctx.globalAlpha = opacity;
+                ctx.drawImage(img, canvasLeft, canvasTop, imageWidth, imageHeight);
+                opacity += 0.015;
+                if (opacity < 1) {
+                    requestAnimationFrame(fadeIn);
+                }
+            })();
+    
+            Helpers.fadeStuff(this.$resultsOverlay);
+
+            this.captureImage();
+        }
+    
+        if (this.currentImages !== null && this.currentImages !== undefined) {
+            img.src = this.currentImages[0];
+            $(this.canvasEl).data("file_source", this.currentImages[0]);
+        }
+    }
+    
+    createPredictions(predictions, success, error) {
+        if (this.reactPredictions === null) {
+            this.reactPredictions = ReactDOM.render(
+                <Predictions 
+                    predictions={predictions}
+                    success={success}
+                    error={error}
+                />,
+                document.getElementById("resultsContents")
+            );
+        }
+        else {
+            this.reactPredictions.updatePredictions(predictions, success, error);
+        }
+    }
+    
+    createHistory(prediction, $info) {
+        if (this.reactHistory === null) {
+            this.reactHistory = ReactDOM.render(
+                <History 
+                    predictions={prediction.predictions}
+                    $info={$info}
+                    infoCallback={this.createInfo.bind(this)}
+                />,
+                document.getElementById("history")
+            );
+        }
+        else {
+            this.reactHistory.updateHistory(prediction.predictions);
+        }
+    
+        // Store in a dictionary
+        for (var pred in prediction.predictions) {
+            const predValues = prediction.predictions[pred];
+            this.predictionHistory[predValues.prediction_id] = predValues;
+        }
+    }
+    
+    createInfo(predictionID) {
+        if (this.reactInfo === null) {
+            
+            this.reactInfo = ReactDOM.render(
+                <Info
+                    prediction={this.predictionHistory[predictionID]}
+                />,
+                document.getElementById("info")
+            );
+        }
+        else {
+            this.reactInfo.updateInfo(this.predictionHistory[predictionID]);
+        }
+    }
 }
