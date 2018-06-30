@@ -126,7 +126,7 @@ function initApp(callback) {
     });
 }
 
-function getVideoStream(videoEl, canvasEl, $resultsContainer) {
+function getVideoStream(videoEl) {
     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
         videoEl.src = URL.createObjectURL(stream);
 
@@ -150,11 +150,16 @@ $(document).ready(() => {
     const $history = $(document).find(".history");
     const $info = $(document).find(".info");
     
-    m_imageProcessor = new ImageProcessor(videoEl, canvasEl, $resultsContainer.find(".resultsOverlay"), true, {}, false, [], $(document).find('#info'));
+    m_imageProcessor = new ImageProcessor(
+        videoEl, 
+        canvasEl, 
+        $resultsContainer.find(".resultsOverlay"), 
+        document.getElementById('info')
+    );
 
     initApp(() => {
         $resultsContainer.find(".resultsContents").text("Loading...");
-        getVideoStream(videoEl, canvasEl, $resultsContainer);
+        getVideoStream(videoEl);
     });
 
     $(document).find(".input-checkbox").change((e) => {
@@ -194,7 +199,7 @@ $(document).ready(() => {
                 m_imageProcessor.isVideo = true;
 
                 if ($parent.hasClass("option-live")) {
-                    getVideoStream(videoEl, canvasEl, $resultsContainer);
+                    getVideoStream(videoEl);
                 }
                 else {
                     $video.addClass("file");

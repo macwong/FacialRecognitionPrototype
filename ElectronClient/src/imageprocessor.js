@@ -9,15 +9,15 @@ import History from './react/history';
 import Info from './react/info';
 
 export class ImageProcessor {
-    constructor(videoEl, canvasEl, $resultsOverlay, isVideo, currentModel, verbose, currentImages, $info) {
+    constructor(videoEl, canvasEl, resultsOverlay, info) {
         this.videoEl = videoEl;
         this.canvasEl = canvasEl;
-        this.$resultsOverlay = $resultsOverlay;
-        this.isVideo = isVideo;
-        this.currentModel = currentModel;
-        this.verbose = verbose;
-        this.currentImages = currentImages;
-        this.$info = $info;
+        this.$resultsOverlay = $(resultsOverlay);
+        this.$info = $(info);
+        this.isVideo = true;
+        this.currentModel = {};
+        this.verbose = false;
+        this.currentImages = [];
 
         this.predictionHistory = {};
 
