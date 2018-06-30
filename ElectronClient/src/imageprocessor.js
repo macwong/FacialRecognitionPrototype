@@ -15,7 +15,7 @@ export class ImageProcessor {
         this.$resultsOverlay = $(resultsOverlay);
         this.$info = $(info);
         this.isVideo = true;
-        this.currentModel = {};
+        this.currentModel = "";
         this.verbose = false;
         this.currentImages = [];
 

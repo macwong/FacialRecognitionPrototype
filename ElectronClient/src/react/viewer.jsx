@@ -48,7 +48,7 @@ export default class Viewer extends Component {
 
         this.initApp(() => {
             this.$resultsContainer.find(".resultsContents").text("Loading...");
-            this.getVideoStream(this.videoEl);
+            this.getVideoStream();
         });
     
         $(document).find(".input-checkbox").change((e) => {
@@ -88,7 +88,7 @@ export default class Viewer extends Component {
                     this.imageProcessor.isVideo = true;
     
                     if ($parent.hasClass("option-live")) {
-                        this.getVideoStream(this.videoEl);
+                        this.getVideoStream();
                     }
                     else {
                         $video.addClass("file");
@@ -115,7 +115,7 @@ export default class Viewer extends Component {
     
         $(this.videoEl).click((e) => {
             if ($(e.currentTarget).hasClass("file")) {
-                this.openVideo(this.videoEl, this.canvasEl, this.$resultsContainer);
+                this.openVideo();
             }
         });
     
@@ -212,11 +212,11 @@ export default class Viewer extends Component {
         });
     }
     
-    getVideoStream(videoEl) {
+    getVideoStream() {
         navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-            videoEl.src = URL.createObjectURL(stream);
+            this.videoEl.src = URL.createObjectURL(stream);
     
-            videoEl.onloadedmetadata = (e) => {
+            this.videoEl.onloadedmetadata = (e) => {
                 this.imageProcessor.captureImage();
             };
         }).catch(() =>  {
@@ -247,7 +247,7 @@ export default class Viewer extends Component {
         return deferred.promise();
     }
 
-    openVideo(videoEl, canvasEl, $resultsContainer) {
+    openVideo() {
         dialog.showOpenDialog(
             remote.getCurrentWindow(),
             {
@@ -258,12 +258,12 @@ export default class Viewer extends Component {
                 properties: ['openFile']
             },
             (filePaths) => {
-                $(videoEl).prop("controls", true);
+                $(this.videoEl).prop("controls", true);
                 
-                Helpers.fadeStuff($resultsContainer.find(".resultsOverlay"));
+                Helpers.fadeStuff(this.$resultsContainer.find(".resultsOverlay"));
                 this.imageProcessor.captureImage();
     
-                videoEl.src = filePaths[0];
+                this.videoEl.src = filePaths[0];
             }
         );    
     }
