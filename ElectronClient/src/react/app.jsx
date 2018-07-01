@@ -446,7 +446,6 @@ export default class App extends Component {
     }
     
     createPredictions(predictions, success, error) {
-        console.log(predictions, success, error);
         this.setState({
             predictions: predictions,
             success: success,
