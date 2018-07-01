@@ -108,10 +108,7 @@ export default class AddModel extends Component {
 
     componentDidMount() {
         let $modal = $("#addModel");
-        let $name = $modal.find(".model-name");
         let $folderLocation = $modal.find(".folder-location");
-        let $algorithm = $modal.find(".algorithm");
-        let $loading = $modal.find(".loading");
 
         $modal.find(".choose-folder").click((e) => {
             dialog.showOpenDialog(
@@ -124,37 +121,12 @@ export default class AddModel extends Component {
             );
         });
 
+        $modal.find(".modal-toggle").click((e) => {
+            this.props.cancelCallback();
+        });
+
         $modal.find(".model-add").click((e) => {
-            $loading.addClass("is-visible");
-
-            $.ajax({
-                url: path.join(Globals.endpoint, "train"),
-                type: "POST",
-                data: JSON.stringify({
-                    input_folder_path: $folderLocation.val(),
-                    model_folder_name: $name.val(),
-                    model_type: $algorithm.val()
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType:"json",
-                
-            }).done((result) => {
-                $loading.removeClass("is-visible");
-                $modal.removeClass('is-visible');
-            
-                $modal.on('transitionend', (e) => {
-                    //when transition is finished you remove the element.
-                    $modal.remove();
-                });
-
-                Helpers.getModels($select).then(() => {
-                    $select.val(this.state.currentModel);
-                });
-            }).fail((jqXHR, textStatus, errorThrown) => {
-                $loading.removeClass("is-visible");
-                let $errorMsg = $modal.find(".error-message");
-                $errorMsg.text(jqXHR.responseJSON.error);
-            });
+            this.props.addCallback($modal);
         });
     }
 }

@@ -23,6 +23,7 @@ export default class App extends Component {
         this.$resultsContainer = null;
         this.$history = null;
         this.$info = null;
+        this.$models = null;
 
         this.$resultsOverlay = null;
         this.isVideo = true;
@@ -69,7 +70,12 @@ export default class App extends Component {
                     success={this.state.success}
                     error={this.state.error}
                 />
-                <AddModel show={this.state.addModelShow} currentModel={this.state.currentModel} />
+                <AddModel 
+                    show={this.state.addModelShow} 
+                    currentModel={this.state.currentModel} 
+                    addCallback={this.addModelCallback.bind(this)}
+                    cancelCallback={this.cancelAddModelCallback.bind(this)}
+                />
             </div>
         );
     }
@@ -159,12 +165,58 @@ export default class App extends Component {
         });
     }
 
+    addModelCallback($modal) {
+        let $name = $modal.find(".model-name");
+        let $folderLocation = $modal.find(".folder-location");
+        let $algorithm = $modal.find(".algorithm");
+        let $loading = $modal.find(".loading");
+
+        $loading.addClass("is-visible");
+
+        $.ajax({
+            url: path.join(Globals.endpoint, "train"),
+            type: "POST",
+            data: JSON.stringify({
+                input_folder_path: $folderLocation.val(),
+                model_folder_name: $name.val(),
+                model_type: $algorithm.val()
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType:"json",
+            
+        }).done((result) => {
+            $loading.removeClass("is-visible");
+            $modal.removeClass('is-visible');
+        
+            $modal.on('transitionend', (e) => {
+                //when transition is finished you remove the element.
+                $modal.remove();
+            });
+
+            let $select = this.$models.find("select");
+
+            Helpers.getModels($select).then(() => {
+                $select.val(this.state.currentModel);
+            });
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            $loading.removeClass("is-visible");
+            let $errorMsg = $modal.find(".error-message");
+            $errorMsg.text(jqXHR.responseJSON.error);
+        });
+    }
+
+    cancelAddModelCallback() {
+        this.setState({
+            addModelShow: false
+        })
+    }
+
     initApp(callback) {
-        let $models = $(document).find(".models");
+        this.$models = $(document).find(".models");
         let $select = $("<select></select>");
     
         Helpers.getModels($select).then(() => {
-            $models.html($select);
+            this.$models.html($select);
     
             this.currentModel = $select.find("option:first").val();
     
@@ -173,16 +225,8 @@ export default class App extends Component {
             })
 
             $('.add-model').click((e) => {
-                let $modal = $('#addModel');
-                
                 this.setState({
                     addModelShow: true
-                });
-
-                $modal.find(".modal-toggle").click((e) => {
-                    this.setState({
-                        addModelShow: false
-                    })
                 });
             });
     
