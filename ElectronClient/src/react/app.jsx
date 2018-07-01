@@ -6,7 +6,6 @@ import electron from 'electron';
 import {remote} from 'electron';
 import $ from 'jquery';
 
-import ReactDOM from 'react-dom';
 import Predictions from './predictions';
 import History from './history';
 import Info from './info';
@@ -357,7 +356,7 @@ export default class App extends Component {
         }).done((result) => {
             Helpers.clearOverlay(this.$resultsOverlay);
             let success = String.prototype.toLowerCase.call(result.success) === "true";
-            this.createPredictions(result.predictions, success, result.error);
+            this.updatePredictions(result.predictions, success, result.error);
     
             if (this.verbose) {
                 this.updateHistory(result);
@@ -382,7 +381,7 @@ export default class App extends Component {
             }
         }).fail((jqXHR, textStatus, errorThrown) => {
             Helpers.clearOverlay(this.$resultsOverlay);
-            this.createPredictions(null, false, jqXHR.responseJSON.error);
+            this.updatePredictions(null, false, jqXHR.responseJSON.error);
     
             if (this.isVideo) {
                 this.captureImage();
@@ -445,7 +444,7 @@ export default class App extends Component {
         }
     }
     
-    createPredictions(predictions, success, error) {
+    updatePredictions(predictions, success, error) {
         this.setState({
             predictions: predictions,
             success: success,
