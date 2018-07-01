@@ -10,6 +10,7 @@ import Predictions from './predictions';
 import History from './history';
 import Info from './info';
 import path from 'path';
+import AddModel from './addmodel';
 
 const { dialog } = electron.remote;
 
@@ -38,6 +39,7 @@ export default class App extends Component {
             historyPredictions: [],
             predictions: [],
             selectedPrediction: null,
+            addModelShow: false,
             success: false,
             error: "Loading..."
         };
@@ -67,6 +69,7 @@ export default class App extends Component {
                     success={this.state.success}
                     error={this.state.error}
                 />
+                <AddModel show={this.state.addModelShow} />
             </div>
         );
     }
@@ -168,77 +171,89 @@ export default class App extends Component {
             $select.change((e) => {
                 this.currentModel = $select.val();
             })
-    
+
             $('.add-model').on('click', (e) => {
-                e.preventDefault();
-    
-                $.get(path.join(__dirname, 'modal.html'), (data) => {
-                    let $modal = $(data);
-                    let $name = $modal.find(".model-name");
-                    let $folderLocation = $modal.find(".folder-location");
-                    let $algorithm = $modal.find(".algorithm");
-                    let $loading = $modal.find(".loading");
-    
-                    $(document.body).append($modal);
-    
-                    setTimeout(() => {
-                        $modal.addClass('is-visible');
-                    }, 50);
-    
-                    $modal.find(".modal-toggle").click((e) => {
-                        $modal.removeClass('is-visible');
-                        
-                        $modal.on('transitionend', (e) => {
-                            //when transition is finished you remove the element.
-                            $modal.remove();
-                        });
-                    });
-    
-                    $modal.find(".choose-folder").click((e) => {
-                        dialog.showOpenDialog(
-                            remote.getCurrentWindow(), {
-                                properties: ['openDirectory']
-                            },
-                            (filePaths) => {
-                                $folderLocation.val(filePaths[0]);
-                            }
-                        );
-                    });
-    
-                    $modal.find(".model-add").click((e) => {
-                        $loading.addClass("is-visible");
-    
-                        $.ajax({
-                            url: path.join(Globals.endpoint, "train"),
-                            type: "POST",
-                            data: JSON.stringify({
-                                input_folder_path: $folderLocation.val(),
-                                model_folder_name: $name.val(),
-                                model_type: $algorithm.val()
-                            }),
-                            contentType: "application/json; charset=utf-8",
-                            dataType:"json",
-                            
-                        }).done((result) => {
-                            $loading.removeClass("is-visible");
-                            $modal.removeClass('is-visible');
-                        
-                            $modal.on('transitionend', (e) => {
-                                //when transition is finished you remove the element.
-                                $modal.remove();
-                            });
-    
-                            this.getModels($select).then(() => {
-                                $select.val(this.currentModel);
-                            });
-                        }).fail((jqXHR, textStatus, errorThrown) => {
-                            $loading.removeClass("is-visible");
-                            let $errorMsg = $modal.find(".error-message");
-                            $errorMsg.text(jqXHR.responseJSON.error);
-                        });
-                    });
+                this.setState({
+                    addModelShow: true
                 });
+
+                // let $modal = $(document.getElementById('addModel'));
+
+                // setTimeout(() => {
+                //     $modal.addClass('is-visible');
+                // }, 50);
             });
+    
+            // $('.add-model').on('click', (e) => {
+            //     e.preventDefault();
+    
+            //     $.get(path.join(__dirname, 'modal.html'), (data) => {
+            //         let $modal = $(data);
+            //         let $name = $modal.find(".model-name");
+            //         let $folderLocation = $modal.find(".folder-location");
+            //         let $algorithm = $modal.find(".algorithm");
+            //         let $loading = $modal.find(".loading");
+    
+            //         $(document.body).append($modal);
+    
+            //         setTimeout(() => {
+            //             $modal.addClass('is-visible');
+            //         }, 50);
+    
+            //         $modal.find(".modal-toggle").click((e) => {
+            //             $modal.removeClass('is-visible');
+                        
+            //             $modal.on('transitionend', (e) => {
+            //                 //when transition is finished you remove the element.
+            //                 $modal.remove();
+            //             });
+            //         });
+    
+            //         $modal.find(".choose-folder").click((e) => {
+            //             dialog.showOpenDialog(
+            //                 remote.getCurrentWindow(), {
+            //                     properties: ['openDirectory']
+            //                 },
+            //                 (filePaths) => {
+            //                     $folderLocation.val(filePaths[0]);
+            //                 }
+            //             );
+            //         });
+    
+            //         $modal.find(".model-add").click((e) => {
+            //             $loading.addClass("is-visible");
+    
+            //             $.ajax({
+            //                 url: path.join(Globals.endpoint, "train"),
+            //                 type: "POST",
+            //                 data: JSON.stringify({
+            //                     input_folder_path: $folderLocation.val(),
+            //                     model_folder_name: $name.val(),
+            //                     model_type: $algorithm.val()
+            //                 }),
+            //                 contentType: "application/json; charset=utf-8",
+            //                 dataType:"json",
+                            
+            //             }).done((result) => {
+            //                 $loading.removeClass("is-visible");
+            //                 $modal.removeClass('is-visible');
+                        
+            //                 $modal.on('transitionend', (e) => {
+            //                     //when transition is finished you remove the element.
+            //                     $modal.remove();
+            //                 });
+    
+            //                 this.getModels($select).then(() => {
+            //                     $select.val(this.currentModel);
+            //                 });
+            //             }).fail((jqXHR, textStatus, errorThrown) => {
+            //                 $loading.removeClass("is-visible");
+            //                 let $errorMsg = $modal.find(".error-message");
+            //                 $errorMsg.text(jqXHR.responseJSON.error);
+            //             });
+            //         });
+            //     });
+            // });
     
             callback();
         });
