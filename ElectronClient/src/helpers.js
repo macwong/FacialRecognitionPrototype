@@ -53,8 +53,7 @@ export default class Helpers {
 
     static getProbability(probability) {
         let prob = probability * 100;
-        prob = prob.toFixed(2);
-        return prob + "%";
+        return prob.toFixed(2) + "%";
     }
 
     static clearOverlay($resultsOverlay) {

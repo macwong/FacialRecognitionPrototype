@@ -12,7 +12,7 @@ export default class Controls extends Component {
                     </div>
                 </div>
                 <div className="segmented">
-                    <label className="checked option-live"><input type="radio" name="segmented" defaultChecked="true" />Live</label>
+                    <label className="checked option-live"><input type="radio" name="segmented" defaultChecked={true} />Live</label>
                     <label className="option-video"><input type="radio" name="segmented" />Video</label>
                     <label className="option-image"><input type="radio" name="segmented" />Image</label>
                 </div>

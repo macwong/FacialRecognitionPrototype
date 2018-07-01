@@ -213,6 +213,10 @@ export default class App extends Component {
         this.$models = $(document).find(".models");
         let $select = $("<select></select>");
     
+        // Updating a dropdown that is about three component levels deep...
+        // This is about as anti-pattern as it gets for React.
+        // TODO: Add a global state management layer such as Redux, 
+        // then I can manage this code from within the Controls component, but still have global state. 
         Helpers.getModels($select).then(() => {
             this.$models.html($select);
     
