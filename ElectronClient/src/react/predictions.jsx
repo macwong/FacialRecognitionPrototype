@@ -13,10 +13,23 @@ export default class Predictions extends Component {
         };
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.predictions !== prevProps.predictions) {
+            this.setState({
+                predictions: this.props.predictions,
+                success: this.props.success,
+                error: this.props.error
+            });
+        }
+    }
+
     render() {
         return (
-            <div className="flex">
-                {this.renderList()}
+            <div id="resultsContainer" className="resultsContainer">
+                <div id="resultsContents" className="resultsContents">
+                    {this.renderList()}
+                </div>
+                <div id="resultsOverlay" className="resultsOverlay"></div>
             </div>
         );
     }

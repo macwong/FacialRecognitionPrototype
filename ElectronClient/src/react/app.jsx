@@ -37,7 +37,9 @@ export default class App extends Component {
 
         this.state = {
             predictions: [],
-            selectedPrediction: null
+            selectedPrediction: null,
+            success: false,
+            error: "Loading..."
         };
     }
 
@@ -48,7 +50,7 @@ export default class App extends Component {
                     <div className="column column-one">
                         <History 
                             predictions={this.state.predictions}
-                            infoCallback={this.createInfo.bind(this)}
+                            infoCallback={this.updateInfo.bind(this)}
                         />
                     </div>
                     <div className="column column-two">
@@ -60,10 +62,11 @@ export default class App extends Component {
                         />
                     </div>
                 </div>
-                <div id="resultsContainer" className="resultsContainer">
-                    <div id="resultsContents" className="resultsContents"></div>
-                    <div id="resultsOverlay" className="resultsOverlay"></div>
-                </div>
+                <Predictions 
+                    predictions={this.state.predictions}
+                    success={this.state.success}
+                    error={this.state.error}
+                />
             </div>
         );
     }
@@ -77,7 +80,6 @@ export default class App extends Component {
         this.$resultsOverlay = this.$resultsContainer.find(".resultsOverlay");
 
         this.initApp(() => {
-            this.$resultsContainer.find(".resultsContents").text("Loading...");
             this.getVideoStream();
         });
     
@@ -358,7 +360,7 @@ export default class App extends Component {
             this.createPredictions(result.predictions, success, result.error);
     
             if (this.verbose) {
-                this.createHistory(result);
+                this.updateHistory(result);
             }
             
             if (this.isVideo && this.videoEl.src !== "") {
@@ -444,22 +446,15 @@ export default class App extends Component {
     }
     
     createPredictions(predictions, success, error) {
-        if (this.reactPredictions === null) {
-            this.reactPredictions = ReactDOM.render(
-                <Predictions 
-                    predictions={predictions}
-                    success={success}
-                    error={error}
-                />,
-                document.getElementById("resultsContents")
-            );
-        }
-        else {
-            this.reactPredictions.updatePredictions(predictions, success, error);
-        }
+        console.log(predictions, success, error);
+        this.setState({
+            predictions: predictions,
+            success: success,
+            error: error
+        });
     }
     
-    createHistory(prediction) {
+    updateHistory(prediction) {
         this.setState({
             predictions: prediction.predictions
         });
@@ -471,7 +466,7 @@ export default class App extends Component {
         }
     }
     
-    createInfo(predictionID) {
+    updateInfo(predictionID) {
         this.setState({
             selectedPrediction: this.predictionHistory[predictionID]
         });
