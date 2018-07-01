@@ -7,7 +7,6 @@ import TopPredictionsBlock from './InfoBlocks/toppredictionsblock';
 import AddFaceBlock from './InfoBlocks/addfaceblock';
 
 export default class Info extends Component {
-    
     constructor(props) {
         super(props);
         
@@ -16,13 +15,22 @@ export default class Info extends Component {
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.prediction !== prevProps.prediction) {
+            this.setState({
+                prediction: this.props.prediction
+            });
+        }
+    }
+
     render() {
         const pred = this.state.prediction;
-        const model_info = pred.model_info;
 
-        if (pred === undefined) {
+        if (pred == null || pred === undefined) {
             return <div></div>;
         }
+
+        const model_info = pred.model_info;
 
         return (
             <div className="info">
@@ -56,11 +64,5 @@ export default class Info extends Component {
                 />
             </div>
         );
-    }
-
-    updateInfo(preds) {
-        this.setState({
-            prediction: preds
-        });
     }
 }

@@ -36,7 +36,8 @@ export default class App extends Component {
         this.reactInfo = null;
 
         this.state = {
-            predictions: []
+            predictions: [],
+            selectedPrediction: null
         };
     }
 
@@ -55,6 +56,9 @@ export default class App extends Component {
                     </div>
                     <div className="column column-three">
                         <div id="info">
+                            <Info
+                                prediction={this.state.selectedPrediction}
+                            />
                         </div>
                     </div>
                 </div>
@@ -470,17 +474,8 @@ export default class App extends Component {
     }
     
     createInfo(predictionID) {
-        if (this.reactInfo === null) {
-            
-            this.reactInfo = ReactDOM.render(
-                <Info
-                    prediction={this.predictionHistory[predictionID]}
-                />,
-                document.getElementById("info")
-            );
-        }
-        else {
-            this.reactInfo.updateInfo(this.predictionHistory[predictionID]);
-        }
+        this.setState({
+            selectedPrediction: this.predictionHistory[predictionID]
+        });
     }
 }
