@@ -21,17 +21,21 @@ export default class History extends Component {
 
     render() {
         if (this.state.predictionList.length === 0) {
-            return <div></div>;
+            return <div id="history" className="history"></div>;
         }
 
-        return this.state.predictionList.map((predItem) => {
-            return (
-                <div key={predItem.time + predItem.predictions[0].prediction_id}>
-                    <div className="prediction-time">{predItem.time}</div>
-                    {this.renderList(predItem)}
-                </div>
-            );
-        });
+        return (
+            <div id="history" className="history">
+                {this.state.predictionList.map((predItem) => {
+                    return (
+                        <div key={predItem.time + predItem.predictions[0].prediction_id}>
+                            <div className="prediction-time">{predItem.time}</div>
+                            {this.renderList(predItem)}
+                        </div>
+                    );
+                })}
+            </div>
+        );
     }
 
     renderList(predItem) {

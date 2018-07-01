@@ -45,12 +45,10 @@ export default class App extends Component {
             <div className="container">
                 <div className="videoContainer">
                     <div className="column column-one">
-                        <div id="history" className="history">
-                            <History 
-                                predictions={this.state.predictions}
-                                infoCallback={this.createInfo.bind(this)}
-                            />
-                        </div>
+                        <History 
+                            predictions={this.state.predictions}
+                            infoCallback={this.createInfo.bind(this)}
+                        />
                     </div>
                     <div className="column column-two">
                         <Viewer />
