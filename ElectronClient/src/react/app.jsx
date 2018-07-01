@@ -27,7 +27,6 @@ export default class App extends Component {
 
         this.$resultsOverlay = null;
         this.isVideo = true;
-        this.currentModel = "";
         this.verbose = false;
         this.currentImages = [];
         this.predictionHistory = {};
@@ -39,6 +38,7 @@ export default class App extends Component {
         this.state = {
             historyPredictions: [],
             predictions: [],
+            currentModel: "",
             selectedPrediction: null,
             addModelShow: false,
             success: false,
@@ -218,10 +218,14 @@ export default class App extends Component {
         Helpers.getModels($select).then(() => {
             this.$models.html($select);
     
-            this.currentModel = $select.find("option:first").val();
+            this.setState({
+                currentModel: $select.find("option:first").val()
+            });
     
             $select.change((e) => {
-                this.currentModel = $select.val();
+                this.setState({
+                    currentModel: $select.val()
+                });
             })
 
             $('.add-model').click((e) => {
@@ -386,7 +390,7 @@ export default class App extends Component {
             type: "POST",
             data: JSON.stringify({
                 image: dataURL,
-                model: this.currentModel,
+                model: this.state.currentModel,
                 verbose: this.verbose
             }),
             contentType: "application/json; charset=utf-8",
@@ -477,7 +481,7 @@ export default class App extends Component {
             this.captureImage();
         }
     
-        if (this.currentImages !== null && this.currentImages !== undefined) {
+        if (this.currentImages !== null && this.currentImages !== undefined && this.currentImages.length > 0) {
             img.src = this.currentImages[0];
             $(this.canvasEl).data("file_source", this.currentImages[0]);
         }
