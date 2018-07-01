@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Helpers from '../helpers';
-import Globals from '../globals';
+import Helpers from '../js/helpers';
+import Globals from '../js/globals';
 
 export default class Predictions extends Component {
     constructor(props) {

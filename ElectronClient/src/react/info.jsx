@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Helpers from '../helpers';
-import Globals from '../globals';
+import Helpers from '../js/helpers';
+import Globals from '../js/globals';
 import ModelInfoBlock from './InfoBlocks/modelinfoblock';
 import EmbeddingsBlock from './InfoBlocks/embeddingsblock';
 import TopPredictionsBlock from './InfoBlocks/toppredictionsblock';

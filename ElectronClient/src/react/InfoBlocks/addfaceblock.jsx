@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Block from '../block';
 import $ from 'jquery';
 import path from 'path';
-import Globals from '../../globals';
+import Globals from '../../js/globals';
 
 export default class AddFaceBlock extends Component {
     constructor(props) {

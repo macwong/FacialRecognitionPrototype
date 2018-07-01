@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Block from '../block';
-import Helpers from '../../helpers';
+import Helpers from '../../js/helpers';
 
 export default class TopPredictionsBlock extends Component {
     constructor(props) {

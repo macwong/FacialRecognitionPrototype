@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Globals from '../globals';
-import Helpers from '../helpers';
+import Globals from '../js/globals';
+import Helpers from '../js/helpers';
 import electron from 'electron';
 import {remote} from 'electron';
 import $ from 'jquery';

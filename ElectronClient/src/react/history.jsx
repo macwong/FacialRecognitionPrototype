@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Helpers from '../helpers';
-import Globals from '../globals';
-import $ from '../jquery';
+import Helpers from '../js/helpers';
+import Globals from '../js/globals';
+import $ from '../js/jquery';
 
 export default class History extends Component {
     constructor(props) {
