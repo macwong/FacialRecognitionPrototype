@@ -35,6 +35,7 @@ export default class App extends Component {
         this.reactInfo = null;
 
         this.state = {
+            historyPredictions: [],
             predictions: [],
             selectedPrediction: null,
             success: false,
@@ -48,7 +49,7 @@ export default class App extends Component {
                 <div className="videoContainer">
                     <div className="column column-one">
                         <History 
-                            predictions={this.state.predictions}
+                            predictions={this.state.historyPredictions}
                             infoCallback={this.updateInfo.bind(this)}
                         />
                     </div>
@@ -454,7 +455,7 @@ export default class App extends Component {
     
     updateHistory(prediction) {
         this.setState({
-            predictions: prediction.predictions
+            historyPredictions: prediction.predictions
         });
     
         // Store in a dictionary
