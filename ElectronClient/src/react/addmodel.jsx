@@ -1,25 +1,34 @@
 import React, {Component} from 'react';
+import Globals from '../globals';
+import Helpers from '../helpers';
+import electron from 'electron';
+import {remote} from 'electron';
+import $ from 'jquery';
+import path from 'path';
+const { dialog } = electron.remote;
 
 export default class AddModel extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            containerCSS: this.getCSS(props.show)
+            show: false,
+            currentModel: ""
         };
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.show !== prevProps.show) {
             this.setState({
-                containerCSS: this.getCSS(this.props.show)
+                show: this.props.show,
+                currentModel: this.props.currentModel
             });
         }
     }
 
     render() {
         return (
-            <div className={this.state.containerCSS} id="addModel">
+            <div className={this.getCSS(this.state.show)} id="addModel">
                 <div className="modal-overlay modal-toggle"></div>
                 <div className="modal-wrapper modal-transition">
                     <div className="modal-header">
@@ -95,5 +104,57 @@ export default class AddModel extends Component {
 
         return containerCSS;
 
+    }
+
+    componentDidMount() {
+        let $modal = $("#addModel");
+        let $name = $modal.find(".model-name");
+        let $folderLocation = $modal.find(".folder-location");
+        let $algorithm = $modal.find(".algorithm");
+        let $loading = $modal.find(".loading");
+
+        $modal.find(".choose-folder").click((e) => {
+            dialog.showOpenDialog(
+                remote.getCurrentWindow(), {
+                    properties: ['openDirectory']
+                },
+                (filePaths) => {
+                    $folderLocation.val(filePaths[0]);
+                }
+            );
+        });
+
+        $modal.find(".model-add").click((e) => {
+            $loading.addClass("is-visible");
+
+            $.ajax({
+                url: path.join(Globals.endpoint, "train"),
+                type: "POST",
+                data: JSON.stringify({
+                    input_folder_path: $folderLocation.val(),
+                    model_folder_name: $name.val(),
+                    model_type: $algorithm.val()
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType:"json",
+                
+            }).done((result) => {
+                $loading.removeClass("is-visible");
+                $modal.removeClass('is-visible');
+            
+                $modal.on('transitionend', (e) => {
+                    //when transition is finished you remove the element.
+                    $modal.remove();
+                });
+
+                Helpers.getModels($select).then(() => {
+                    $select.val(this.state.currentModel);
+                });
+            }).fail((jqXHR, textStatus, errorThrown) => {
+                $loading.removeClass("is-visible");
+                let $errorMsg = $modal.find(".error-message");
+                $errorMsg.text(jqXHR.responseJSON.error);
+            });
+        });
     }
 }

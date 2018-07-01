@@ -1,3 +1,7 @@
+import Globals from './globals';
+import path from 'path';
+import $ from 'jquery';
+
 export default class Helpers {
     static getIndividualPredictionInfo(info, pred_name) {
         for (var pred in info) {
@@ -63,6 +67,30 @@ export default class Helpers {
 
     static sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    
+    static getModels($select) {
+        var deferred = $.Deferred();
+    
+        $.ajax({
+            url: path.join(Globals.endpoint, "getmodels"),
+            type: "GET",
+            dataType:"json"
+        }).done((result) => {
+            $select.empty();
+    
+            for (var i = 0; i < result.models.length; i++) {
+                let $option = $("<option></option>");
+                $option.text(result.models[i]);
+                $option.val(result.models[i]);
+                $select.append($option);
+            }
+    
+            deferred.resolve();
+        });
+    
+        return deferred.promise();
     }
 }
 

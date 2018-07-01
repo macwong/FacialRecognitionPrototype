@@ -69,7 +69,7 @@ export default class App extends Component {
                     success={this.state.success}
                     error={this.state.error}
                 />
-                <AddModel show={this.state.addModelShow} />
+                <AddModel show={this.state.addModelShow} currentModel={this.state.currentModel} />
             </div>
         );
     }
@@ -163,7 +163,7 @@ export default class App extends Component {
         let $models = $(document).find(".models");
         let $select = $("<select></select>");
     
-        this.getModels($select).then(() => {
+        Helpers.getModels($select).then(() => {
             $models.html($select);
     
             this.currentModel = $select.find("option:first").val();
@@ -172,16 +172,18 @@ export default class App extends Component {
                 this.currentModel = $select.val();
             })
 
-            $('.add-model').on('click', (e) => {
+            $('.add-model').click((e) => {
+                let $modal = $('#addModel');
+                
                 this.setState({
                     addModelShow: true
                 });
 
-                // let $modal = $(document.getElementById('addModel'));
-
-                // setTimeout(() => {
-                //     $modal.addClass('is-visible');
-                // }, 50);
+                $modal.find(".modal-toggle").click((e) => {
+                    this.setState({
+                        addModelShow: false
+                    })
+                });
             });
     
             // $('.add-model').on('click', (e) => {
@@ -269,29 +271,6 @@ export default class App extends Component {
         }).catch(() =>  {
             alert('could not connect stream');
         });
-    }
-    
-    getModels($select) {
-        var deferred = $.Deferred();
-    
-        $.ajax({
-            url: path.join(Globals.endpoint, "getmodels"),
-            type: "GET",
-            dataType:"json"
-        }).done((result) => {
-            $select.empty();
-    
-            for (var i = 0; i < result.models.length; i++) {
-                let $option = $("<option></option>");
-                $option.text(result.models[i]);
-                $option.val(result.models[i]);
-                $select.append($option);
-            }
-    
-            deferred.resolve();
-        });
-    
-        return deferred.promise();
     }
 
     openVideo() {
