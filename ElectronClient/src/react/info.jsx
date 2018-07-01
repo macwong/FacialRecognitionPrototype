@@ -27,13 +27,13 @@ export default class Info extends Component {
         const pred = this.state.prediction;
 
         if (pred == null || pred === undefined) {
-            return <div></div>;
+            return <div id="info"></div>;
         }
 
         const model_info = pred.model_info;
 
         return (
-            <div className="info">
+            <div id="info" className="info">
                 <figure className="profile">
                     <img className="profile-pic" src={Globals.pngSource + pred.image} />
                     <figcaption className="caption">

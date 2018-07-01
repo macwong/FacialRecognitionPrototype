@@ -55,11 +55,9 @@ export default class App extends Component {
                         <Viewer />
                     </div>
                     <div className="column column-three">
-                        <div id="info">
-                            <Info
-                                prediction={this.state.selectedPrediction}
-                            />
-                        </div>
+                        <Info
+                            prediction={this.state.selectedPrediction}
+                        />
                     </div>
                 </div>
                 <div id="resultsContainer" className="resultsContainer">
