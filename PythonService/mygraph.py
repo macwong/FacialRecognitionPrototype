@@ -31,13 +31,12 @@ class MyGraph():
                     tf.import_graph_def(graph_def, name='')
                     
                 self.sess = tf.Session(graph=graph)
-
                 with tf.Graph().as_default():
                     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.25)
                     mtcnn_sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
                     with mtcnn_sess.as_default():
                         self.pnet, self.rnet, self.onet = detect_face.create_mtcnn(mtcnn_sess, None)
-                
+
                 self.images_placeholder = graph.get_tensor_by_name("input:0")
                 self.embeddings = graph.get_tensor_by_name("embeddings:0")
                 self.phase_train_placeholder = graph.get_tensor_by_name("phase_train:0")
@@ -49,6 +48,8 @@ class MyGraph():
                 MyGraph.pnet = self.pnet
                 MyGraph.rnet = self.rnet
                 MyGraph.onet = self.onet
+            else:
+                print("Failed to create tensorflow graph!")
                 
         else:
             self.sess = MyGraph.my_sess

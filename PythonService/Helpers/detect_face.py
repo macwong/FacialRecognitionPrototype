@@ -207,9 +207,9 @@ class Network(object):
     """
     @layer
     def softmax(self, target, axis, name=None):
-        max_axis = tf.reduce_max(target, axis, keep_dims=True)
+        max_axis = tf.reduce_max(target, axis, keepdims=True)
         target_exp = tf.exp(target-max_axis)
-        normalize = tf.reduce_sum(target_exp, axis, keep_dims=True)
+        normalize = tf.reduce_sum(target_exp, axis, keepdims=True)
         softmax = tf.div(target_exp, normalize, name)
         return softmax
     
@@ -778,4 +778,3 @@ def imresample(img, sz):
 #             for a3 in range(0,3):
 #                 im_data[a1,a2,a3] = img[int(floor(a1*dy)),int(floor(a2*dx)),a3]
 #     return im_data
-

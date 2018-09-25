@@ -1,3 +1,4 @@
 {
-	"python.pythonPath": "C:/Users/Dave/Anaconda3/envs/tensorflow-gpu/python"
+	"python.pythonPath": "C:\\Users\\davea\\Anaconda3\\envs\\tensorflow\\python.exe",
+	"python.linting.pylintEnabled": false
 }
